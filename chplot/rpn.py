@@ -27,12 +27,12 @@ def compute_rpn_unsafe(rpn_tokens: list[str], x: float, variable: str = 'x') -> 
         else:
             param_count, func = FUNCTIONS[token]
 
-            # Seperate both cases because l[-0:] is all the list and not an empty one
-            if param_count > 0:
-                parameters = stack[-param_count:]
-                stack = stack[:-param_count]
-            else:
-                parameters = []
+            if param_count == 0:
+                stack.append(func)
+                continue
+
+            parameters = stack[-param_count:]
+            stack = stack[:-param_count]
 
             try:
                 result = func(*parameters)
@@ -60,13 +60,14 @@ def compute_rpn_safe(rpn_tokens: list[str], x: float, variable: str = 'x') -> fl
             param_count, func = FUNCTIONS[token]
 
             # Seperate both cases because l[-0:] is all the list and not an empty one
-            if param_count > 0:
-                if len(stack) < param_count:
-                    raise WrongExpressionError(f"not enough parameters for function '{token}' : {len(stack)} found, {param_count} expected.")
-                parameters = stack[-param_count:]
-                stack = stack[:-param_count]
-            else:
-                parameters = []
+            if param_count == 0:
+                stack.append(func)
+                continue
+
+            if len(stack) < param_count:
+                raise WrongExpressionError(f"not enough parameters for function '{token}' : {len(stack)} found, {param_count} expected.")
+            parameters = stack[-param_count:]
+            stack = stack[:-param_count]
 
             try:
                 result = func(*parameters)
