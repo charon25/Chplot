@@ -13,9 +13,9 @@ setuptools.setup(
 	python_requires=">=3.9",
 	url="TODO",
 	license="MIT",
-	packages=['chplot'],
+	packages=setuptools.find_packages(),
 	download_url="TODO",
 	install_requires=[
 		'shunting_yard>=1.0.2'
-	]
+	],
 )

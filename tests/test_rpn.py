@@ -39,3 +39,7 @@ class TestRpnList(unittest.TestCase):
         rpn = "pi x +"
         self.assertAlmostEqual(compute_rpn_unsafe(rpn.split(' '), 1), 1 + math.pi)
 
+    def test_math_functions(self):
+        rpn = "2 sqrt"
+        self.assertAlmostEqual(compute_rpn_unsafe(rpn.split(' '), 1), math.sqrt(2))
+
