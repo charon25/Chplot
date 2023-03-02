@@ -1,6 +1,6 @@
 import math
 
-from chplot.functions.utils import FunctionDict, get_function_dictionary
+from chplot.functions.utils import FunctionDict, get_functions_from_module, get_renamed_functions_from_module
 
 
 _MATH_MODULE_FUNCTION_NAMES: tuple[int, str] = [
@@ -21,4 +21,9 @@ _MATH_MODULE_FUNCTION_NAMES: tuple[int, str] = [
     (1, 'trunc')
 ]
 
-MATH_MODULE_FUNCTION_DICT: FunctionDict = get_function_dictionary(math, _MATH_MODULE_FUNCTION_NAMES)
+_MATH_MODULE_FUNCTION_RENAMED: FunctionDict = {
+    'ln': (1, 'log')
+}
+
+MATH_MODULE_FUNCTION_DICT: FunctionDict = get_functions_from_module(math, _MATH_MODULE_FUNCTION_NAMES)
+MATH_MODULE_FUNCTION_DICT.update(get_renamed_functions_from_module(_MATH_MODULE_FUNCTION_RENAMED))
