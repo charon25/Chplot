@@ -12,14 +12,14 @@ _SCIPY_SPECIAL_MODULE_FUNCTION_NAMES: tuple[int, str] = [
     (2, 'beta'), (3, 'betainc'), (3, 'betaincinv'),
     (1, 'psi'), (1, 'digamma')
 ]
-_SCIPY_SPECIAL_MODULE_FUNCTION_RENAMED: FunctionDict = {
-    'W': (1, 'lambertW'),
+_SCIPY_SPECIAL_MODULE_FUNCTION_RENAMED: tuple[str, int, str] = {
+    ('W', 1, 'lambertW'),
 }
 
 try:
     import scipy.special
-    SCIPY_SPECIAL_MODULE_FUNCTION_DICT: FunctionDict = get_functions_from_module(scipy.special, _SCIPY_SPECIAL_MODULE_FUNCTION_NAMES)
-    SCIPY_SPECIAL_MODULE_FUNCTION_DICT.update(get_renamed_functions_from_module(_SCIPY_SPECIAL_MODULE_FUNCTION_RENAMED))
+    SCIPY_SPECIAL_FUNCTIONS: FunctionDict = get_functions_from_module(scipy.special, _SCIPY_SPECIAL_MODULE_FUNCTION_NAMES)
+    SCIPY_SPECIAL_FUNCTIONS.update(get_renamed_functions_from_module(scipy.special, _SCIPY_SPECIAL_MODULE_FUNCTION_RENAMED))
 except ModuleNotFoundError:
     logger.info('Scipy is not installed, will continue without its functions.')
-    SCIPY_SPECIAL_MODULE_FUNCTION_DICT: FunctionDict = {}
+    SCIPY_SPECIAL_FUNCTIONS: FunctionDict = {}

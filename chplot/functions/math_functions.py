@@ -21,9 +21,9 @@ _MATH_MODULE_FUNCTION_NAMES: tuple[int, str] = [
     (1, 'trunc')
 ]
 
-_MATH_MODULE_FUNCTION_RENAMED: FunctionDict = {
-    'ln': (1, 'log')
+_MATH_MODULE_FUNCTION_RENAMED: tuple[str, int, str] = {
+    ('ln', 1, 'log')
 }
 
-MATH_MODULE_FUNCTION_DICT: FunctionDict = get_functions_from_module(math, _MATH_MODULE_FUNCTION_NAMES)
-MATH_MODULE_FUNCTION_DICT.update(get_renamed_functions_from_module(_MATH_MODULE_FUNCTION_RENAMED))
+MATH_FUNCTIONS: FunctionDict = get_functions_from_module(math, _MATH_MODULE_FUNCTION_NAMES)
+MATH_FUNCTIONS.update(get_renamed_functions_from_module(math, _MATH_MODULE_FUNCTION_RENAMED))
