@@ -54,22 +54,6 @@ def _ifn(x: float, _true: float, _false: float) -> float:
 def _ifz(x: float, _true: float, _false: float) -> float:
     return _true if math.isclose(x, 0) else _false
 
-def _norm_pdf(x: float, mu: float, sigma: float) -> float:
-    # 2.5066282746310002 = sqrt(2*pi)
-    return math.exp(-0.5 * ((x - mu) / sigma)**2) / (sigma * 2.5066282746310002)
-
-def _unit_norm_pdf(x: float) -> float:
-    # 2.5066282746310002 = sqrt(2*pi)
-    return math.exp(-0.5 * x * x) / 2.5066282746310002
-
-def _norm_cdf(x: float, mu: float, sigma: float) -> float:
-    # 1.4142135623730951 = sqrt(2)
-    return 0.5 * (1 + math.erf((x - mu) / (sigma * 1.4142135623730951)))
-
-def _unit_norm_cdf(x: float) -> float:
-    # 1.4142135623730951 = sqrt(2)
-    return 0.5 * (1 + math.erf(x / 1.4142135623730951))
-
 
 OTHER_FUNCTIONS: FunctionDict = {
     'relu': (1, _relu),
@@ -105,10 +89,4 @@ OTHER_FUNCTIONS: FunctionDict = {
     'if': (3, _if),
     'ifn': (3, _ifn),
     'ifz': (3, _ifz),
-
-    # Normal distribution
-    'normpdf': (3, _norm_pdf),
-    'unormpdf': (1, _unit_norm_pdf),
-    'normcdf': (3, _norm_cdf),
-    'unormcdf': (1, _unit_norm_cdf),
 }

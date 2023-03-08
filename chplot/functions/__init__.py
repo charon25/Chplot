@@ -5,6 +5,7 @@ from operator import add, mul, neg, pos, sub, truediv
 from chplot.functions.constants import CONSTANTS_FUNCTIONS
 from chplot.functions.math_functions import MATH_FUNCTIONS
 from chplot.functions.other_functions import OTHER_FUNCTIONS
+from chplot.functions.probability_functions import PROBABILITY_FUNCTIONS
 from chplot.functions.scipy_functions import SCIPY_SPECIAL_FUNCTIONS
 from chplot.functions.utils import FunctionDict
 
@@ -26,6 +27,6 @@ FUNCTIONS: FunctionDict = {
     #
     **MATH_FUNCTIONS,
     **SCIPY_SPECIAL_FUNCTIONS,
-    **OTHER_FUNCTIONS
-
+    **OTHER_FUNCTIONS,
+    **PROBABILITY_FUNCTIONS,
 }
