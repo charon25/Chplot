@@ -9,7 +9,7 @@ class NotEnoughParametersError(Exception):
     pass
 class TooManyResultsError(Exception):
     pass
-class UnknownFunction(Exception):
+class UnknownFunctionError(Exception):
     pass
 
 
@@ -28,7 +28,7 @@ def check_rpn_validity(rpn_tokens: list[str], variable: str = 'x') -> bool:
             stack.append(0)
         else:
             if not token in FUNCTIONS:
-                raise UnknownFunction(f'unknown function : {token}')
+                raise UnknownFunctionError(f"unknown function : '{token}'")
 
             param_count, func = FUNCTIONS[token]
 

@@ -20,6 +20,9 @@ def _sign(x: float) -> float:
 def _lerp(x: float, xa: float, xb: float, ya: float, yb: float) -> float:
     return ya + ((x - xa) / (xb - xa)) * (yb - ya)
 
+def _lerpt(t: float, mn: float, mx: float) -> float:
+    return mx + t * (mx - mn)
+
 def _heaviside(x: float) -> float:
     if x < 0:
         return 0
@@ -66,6 +69,7 @@ OTHER_FUNCTIONS: FunctionDict = {
     'sgn': (1, _sign),
 
     'lerp': (5, _lerp),
+    'lerpt': (3, _lerpt),
 
     'sinc': (1, _sinc),
     'nsinc': (1, _norm_sinc),

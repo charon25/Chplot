@@ -87,7 +87,7 @@ try:
         'khi2cdf': (2, _chi2_cdf),
         # Gamma distribution
         'gammapdf': (3, _gamma_pdf),
-        'gammecdf': (3, _gamma_cdf),
+        'gammacdf': (3, _gamma_cdf),
     }
 
 except (ModuleNotFoundError, ImportError):

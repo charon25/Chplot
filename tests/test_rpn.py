@@ -1,7 +1,59 @@
 import math
 import unittest
 
-from chplot.rpn import compute_rpn_list, compute_rpn_unsafe
+from chplot.rpn import NotEnoughParametersError, TooManyResultsError, UnknownFunctionError, check_rpn_validity, compute_rpn_list, compute_rpn_unsafe
+
+
+class TestRpnValidity(unittest.TestCase):
+
+    def test_no_problems(self):
+        rpn = "1 1 +"
+        self.assertTrue(check_rpn_validity(rpn.split(' ')))
+
+    def test_unknown_function(self):
+        rpn = "1 unknown_func"
+        error_message = "unknown function : 'unknown_func'"
+        with self.assertRaisesRegex(UnknownFunctionError, error_message) as ex:
+            check_rpn_validity(rpn.split(' '))
+
+    def test_not_enough_parameters(self):
+        rpn = "1 +"
+        error_message = "not enough parameters for function '\+' : 1 found, 2 expected."
+        with self.assertRaisesRegex(NotEnoughParametersError, error_message) as ex:
+            check_rpn_validity(rpn.split(' '))
+
+    def test_too_many_results(self):
+        rpn = "1 1"
+        error_message = "expression does not give only one result."
+        with self.assertRaisesRegex(TooManyResultsError, error_message) as ex:
+            check_rpn_validity(rpn.split(' '))
+
+class TestRpnUnsafe(unittest.TestCase):
+
+    def test_constants(self):
+        rpn = "pi x +"
+        self.assertAlmostEqual(compute_rpn_unsafe(rpn.split(' '), 1), 1 + math.pi)
+
+    def test_math_functions(self):
+        rpn = "2 sqrt"
+        self.assertAlmostEqual(compute_rpn_unsafe(rpn.split(' '), 1), math.sqrt(2))
+
+    def test_scipy_functions(self):
+        rpn = "2 zeta"
+        self.assertAlmostEqual(compute_rpn_unsafe(rpn.split(' '), 1), 1.6449340668482264)
+
+    def test_probability_functions(self):
+        rpn = "0 0 1 normcdf"
+        self.assertAlmostEqual(compute_rpn_unsafe(rpn.split(' '), 1), 0.5)
+
+    def test_probability_scipy_functions(self):
+        rpn = "0.5 1 3 gammacdf"
+        self.assertAlmostEqual(compute_rpn_unsafe(rpn.split(' '), 1), 0.7768698398515702)
+
+    def test_other_functions(self):
+        rpn = "1.2 1 2 10 20 lerp"
+        self.assertAlmostEqual(compute_rpn_unsafe(rpn.split(' '), 1), 12)
+
 
 class TestRpnList(unittest.TestCase):
 
@@ -35,11 +87,10 @@ class TestRpnList(unittest.TestCase):
 
         self.assertListEqual(list(compute_rpn_list(rpn, inputs)), [-5.0, -10.0, math.nan, 10.0, 5.0])
 
-    def test_constants(self):
-        rpn = "pi x +"
-        self.assertAlmostEqual(compute_rpn_unsafe(rpn.split(' '), 1), 1 + math.pi)
+    def test_rpn_inf_to_nan(self):
+        rpn = "x zeta"
+        inputs = [1, 2, 3]
 
-    def test_math_functions(self):
-        rpn = "2 sqrt"
-        self.assertAlmostEqual(compute_rpn_unsafe(rpn.split(' '), 1), math.sqrt(2))
+        # The values are zeta(2) and zeta(3)
+        self.assertListEqual(list(compute_rpn_list(rpn, inputs)), [math.nan, 1.6449340668482264, 1.2020569031595942])
 
