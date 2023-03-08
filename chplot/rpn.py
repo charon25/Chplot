@@ -42,7 +42,7 @@ def check_rpn_validity(rpn_tokens: list[str], variable: str = 'x') -> bool:
             stack = stack[:-param_count]
 
             try:
-                result = func(*parameters)
+                result = float(func(*parameters))
             except Exception:
                 result = 0
 
@@ -56,7 +56,8 @@ def check_rpn_validity(rpn_tokens: list[str], variable: str = 'x') -> bool:
 
 def compute_rpn_unsafe(rpn_tokens: list[str], x: float, variable: str = 'x') -> float:
     """Compute the value of a RPN expression where every occurence of variable (default 'x') is replaced by the given value.
-    This function can crash as it will not check for problems. Use compute_rpn_safe for this case."""
+    Will return math.nan if either a function raises an exception (e.g. division by zero) or if the result is infinite (e.g. zeta(1)).
+    This function can crash as it will not check for problems. Use check_rpn_validity first to know if the RPN is valid."""
     stack: list[float] = []
 
     for token in rpn_tokens:
@@ -76,17 +77,15 @@ def compute_rpn_unsafe(rpn_tokens: list[str], x: float, variable: str = 'x') -> 
             stack = stack[:-param_count]
 
             try:
-                result = func(*parameters)
+                # Converts the result of the function/operation to a float
+                # It's faster to try to convert and raise an Exception that to check the type
+                # if we have a lot more right cases than wrong cases
+                stack.append(float(func(*parameters)))
             except Exception:
                 return math.nan
 
-            stack.append(result)
-
-    result = stack[0]
-    if math.isinf(result):
-        return math.nan
-
-    return result
+    # Convert inf to nan so that max and min does not return inf or -inf
+    return stack[0] if not math.isinf(stack[0]) else math.nan
 
 
 def compute_rpn_list(rpn: str, inputs: float, variable: str = 'x') -> Iterator[float]:
