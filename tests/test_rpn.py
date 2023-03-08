@@ -1,32 +1,29 @@
 import math
 import unittest
 
-from chplot.rpn import NotEnoughParametersError, TooManyResultsError, UnknownFunctionError, check_rpn_validity, compute_rpn_list, compute_rpn_unsafe
+from chplot.rpn import compute_rpn_list, compute_rpn_unsafe, is_rpn_valid
 
 
 class TestRpnValidity(unittest.TestCase):
 
     def test_no_problems(self):
         rpn = "1 1 +"
-        self.assertTrue(check_rpn_validity(rpn.split(' ')))
+        self.assertTrue(is_rpn_valid(rpn.split(' ')))
 
     def test_unknown_function(self):
         rpn = "1 unknown_func"
         error_message = "unknown function : 'unknown_func'"
-        with self.assertRaisesRegex(UnknownFunctionError, error_message) as ex:
-            check_rpn_validity(rpn.split(' '))
+        self.assertTupleEqual(is_rpn_valid(rpn.split(' ')), (False, error_message))
 
     def test_not_enough_parameters(self):
         rpn = "1 +"
-        error_message = "not enough parameters for function '\+' : 1 found, 2 expected."
-        with self.assertRaisesRegex(NotEnoughParametersError, error_message) as ex:
-            check_rpn_validity(rpn.split(' '))
+        error_message = "not enough parameters for function '+' : 1 found, 2 expected."
+        self.assertTupleEqual(is_rpn_valid(rpn.split(' ')), (False, error_message))
 
     def test_too_many_results(self):
         rpn = "1 1"
         error_message = "expression does not give only one result."
-        with self.assertRaisesRegex(TooManyResultsError, error_message) as ex:
-            check_rpn_validity(rpn.split(' '))
+        self.assertTupleEqual(is_rpn_valid(rpn.split(' ')), (False, error_message))
 
 class TestRpnUnsafe(unittest.TestCase):
 

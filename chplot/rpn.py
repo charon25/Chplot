@@ -1,23 +1,16 @@
 import math
-from typing import Iterator
+from typing import Iterator, Optional
 
 
 from chplot.functions import FUNCTIONS #TODO changer l'origine pour ajouter constantes/fonctions custom
 
 
-class NotEnoughParametersError(Exception):
-    pass
-class TooManyResultsError(Exception):
-    pass
-class UnknownFunctionError(Exception):
-    pass
-
-
 NUMBER_CHARS = '0123456789.'
 
 
-def check_rpn_validity(rpn_tokens: list[str], variable: str = 'x') -> bool:
-    """Check if the given RPN is a valid one. If yes, return True. If no, will raise an exception (UnknownFunction, NotEnoughParametersError or TooManyResultsError)."""
+def is_rpn_valid(rpn_tokens: list[str], variable: str = 'x') -> tuple[bool, Optional[str]]:
+    """Check if the given RPN is a valid one.
+    Return a tuple containing a boolean indicating the validity of the RPN, and then the error message if it is not valid."""
     stack: list[float] = []
 
     for token in rpn_tokens:
@@ -28,7 +21,7 @@ def check_rpn_validity(rpn_tokens: list[str], variable: str = 'x') -> bool:
             stack.append(0)
         else:
             if not token in FUNCTIONS:
-                raise UnknownFunctionError(f"unknown function : '{token}'")
+                return (False, f"unknown function : '{token}'")
 
             param_count, func = FUNCTIONS[token]
 
@@ -37,7 +30,8 @@ def check_rpn_validity(rpn_tokens: list[str], variable: str = 'x') -> bool:
                 continue
 
             if len(stack) < param_count:
-                raise NotEnoughParametersError(f"not enough parameters for function '{token}' : {len(stack)} found, {param_count} expected.")
+                return (False, f"not enough parameters for function '{token}' : {len(stack)} found, {param_count} expected.")
+
             parameters = stack[-param_count:]
             stack = stack[:-param_count]
 
@@ -49,9 +43,9 @@ def check_rpn_validity(rpn_tokens: list[str], variable: str = 'x') -> bool:
             stack.append(result)
 
     if len(stack) > 1:
-        raise TooManyResultsError(f"expression does not give only one result.")
+        return (False, f"expression does not give only one result.")
 
-    return True
+    return (True, None)
 
 
 def compute_rpn_unsafe(rpn_tokens: list[str], x: float, variable: str = 'x') -> float:
@@ -93,5 +87,3 @@ def compute_rpn_list(rpn: str, inputs: float, variable: str = 'x') -> Iterator[f
 
     for x in inputs:
         yield compute_rpn_unsafe(rpn_tokens, x, variable)
-
-
