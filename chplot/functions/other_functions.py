@@ -45,6 +45,15 @@ def _triangle(x: float) -> float:
         return 0
     return 1 - abs(x)
 
+def _if(x: float, _true: float, _false: float) -> float:
+    return _true if x > 0 else _false
+
+def _ifn(x: float, _true: float, _false: float) -> float:
+    return _true if x < 0 else _false
+
+def _ifz(x: float, _true: float, _false: float) -> float:
+    return _true if math.isclose(x, 0) else _false
+
 def _norm_pdf(x: float, mu: float, sigma: float) -> float:
     # 2.5066282746310002 = sqrt(2*pi)
     return math.exp(-0.5 * ((x - mu) / sigma)**2) / (sigma * 2.5066282746310002)
@@ -92,6 +101,10 @@ OTHER_FUNCTIONS: FunctionDict = {
     'max': (2, max),
     'max3': (3, max),
     'max4': (4, max),
+
+    'if': (3, _if),
+    'ifn': (3, _ifn),
+    'ifz': (3, _ifz),
 
     # Normal distribution
     'normpdf': (3, _norm_pdf),
