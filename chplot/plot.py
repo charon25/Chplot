@@ -11,7 +11,9 @@ from shunting_yard import MismatchedBracketsError, shunting_yard
 from chplot.rpn import compute_rpn_list, get_rpn_errors
 
 
+
 GraphList = list[tuple[str, list[float]]]
+
 
 @dataclass
 class PlotParameters:
@@ -19,8 +21,10 @@ class PlotParameters:
     variable: Optional[str]
 
     x_lim: Optional[tuple[float, float]]
+    is_x_log: Optional[bool]
     y_lim: Optional[tuple[float, float]]
     must_contains_zero: Optional[bool]
+    is_y_log: Optional[bool]
     n_points: Optional[int]
     is_integer: Optional[bool]
 
@@ -29,11 +33,14 @@ DEFAULT_PARAMETERS = PlotParameters(
     expressions=[],
     variable='x',
     x_lim=(0.0, 1.0),
+    is_x_log=False,
     y_lim=None,
     must_contains_zero=False,
+    is_y_log=False,
     n_points=10000,
     is_integer=False,
 )
+
 
 
 def _set_default_values(parameters: PlotParameters) -> None:
@@ -43,19 +50,48 @@ def _set_default_values(parameters: PlotParameters) -> None:
             setattr(parameters, fieldname, getattr(DEFAULT_PARAMETERS, fieldname))
 
 
-def _generate_inputs(parameters: PlotParameters) -> np.ndarray:
+
+def _get_x_lims(parameters: PlotParameters) -> tuple[float, float]:
     x_min, x_max = parameters.x_lim
     if x_max < x_min:
         logger.warning('the upper x bound (%s) is inferior to the lower x bound (%s), they will be swapped.', x_max, x_min)
+        return (x_max, x_min)
+
+    return (x_min, x_max)
+
+
+
+def _get_x_lims_graph(parameters: PlotParameters) -> tuple[float, float]:
+    x_min, x_max = parameters.x_lim
+    if x_max < x_min:
         x_min, x_max = x_max, x_min
 
-    inputs = np.linspace(x_min, x_max, parameters.n_points, endpoint=True)
+    if not parameters.is_x_log:
+        return (x_min, x_max)
+
+    # If the x-axis is on a log-scale and x_min < 0, we force it to be smallest meaningful positive number:
+    # the min of 1 and the smallest positive input
+    if x_min <= 0 < x_max:
+        logger.warning('x-axis scale is logarithmic, but lower x bound (%s) is negative: x-axis will be truncated to positive values', x_min)
+        return (min(1, x_max / parameters.n_points), x_max)
+
+    if x_max <= 0:
+        logger.error('x-axis scale is logarithmic, but both lower (%s) and upper (%s) x bounds are negative: cannot graph anything', x_min, x_max)
+
+    # Both bounds are already > 0
+    return (x_min, x_max)
+
+
+
+def _generate_inputs(parameters: PlotParameters) -> np.ndarray:
+    inputs = np.linspace(*_get_x_lims(parameters), parameters.n_points, endpoint=True)
 
     if not parameters.is_integer:
         return inputs
 
     # Some points may repeat, so we keep only the unique to avoid doing useless work
     return np.unique(np.round(inputs))
+
 
 
 def _generate_graphs(parameters: PlotParameters, inputs: np.ndarray) -> GraphList:
@@ -74,8 +110,9 @@ def _generate_graphs(parameters: PlotParameters, inputs: np.ndarray) -> GraphLis
 
         y = compute_rpn_list(rpn, inputs, variable=parameters.variable)
         graphs.append((expression, y))
-    
+
     return graphs
+
 
 
 def _get_y_lims(parameters: PlotParameters) -> tuple[float, float]:
@@ -96,7 +133,7 @@ def _get_y_lims(parameters: PlotParameters) -> tuple[float, float]:
         return (0, y_max)
     # Both are < 0, so we force y_max to 0
     return (y_min, 0)
-        
+
 
 
 def _plot_graphs(parameters: PlotParameters, inputs: np.ndarray, graphs: GraphList) -> None:
@@ -105,6 +142,13 @@ def _plot_graphs(parameters: PlotParameters, inputs: np.ndarray, graphs: GraphLi
         plt.plot(inputs, y, format, label=expression, markersize=3)
 
     plt.grid(True, 'both', 'both')
+
+    if parameters.is_x_log:
+        plt.xscale('log')
+    if parameters.is_y_log:
+        plt.yscale('log')
+
+    plt.xlim(_get_x_lims_graph(parameters))
     plt.ylim(_get_y_lims(parameters))
 
     plt.legend(loc=0)
@@ -125,7 +169,7 @@ def plot(parameters: PlotParameters) -> None:
 
     inputs = _generate_inputs(parameters)
     graphs = _generate_graphs(parameters, inputs)
-  
+
     _plot_graphs(parameters, inputs, graphs)
     #TODO faire qqch si aucun graphe
     plt.show()
