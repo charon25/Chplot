@@ -1,5 +1,9 @@
+import logging
+logger = logging.getLogger('chplot')
 import math
 from typing import Optional
+
+from tqdm import tqdm
 
 
 from chplot.functions import FUNCTIONS #TODO changer l'origine pour ajouter constantes/fonctions custom
@@ -84,4 +88,4 @@ def compute_rpn_unsafe(rpn_tokens: list[str], x: float, variable: str = 'x') -> 
 
 def compute_rpn_list(rpn: str, inputs: float, variable: str = 'x') -> list[float]:
     rpn_tokens = rpn.split()
-    return [compute_rpn_unsafe(rpn_tokens, x, variable) for x in inputs]
+    return [compute_rpn_unsafe(rpn_tokens, x, variable) for x in tqdm(inputs, total=len(inputs), leave=False)]

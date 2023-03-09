@@ -19,5 +19,6 @@ setuptools.setup(
 		'shunting_yard>=1.0.5',
 		'numpy>=1.23.4',
 		'matplotlib>=3.6.1',
+		'tqdm>=4.64.1',
 	],
 )

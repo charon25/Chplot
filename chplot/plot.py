@@ -1,5 +1,6 @@
 from dataclasses import dataclass, fields
 import logging
+logger = logging.getLogger('chplot')
 from typing import Optional
 
 import numpy as np
@@ -8,8 +9,6 @@ from shunting_yard import MismatchedBracketsError, shunting_yard
 
 from chplot.rpn import compute_rpn_list, get_rpn_errors
 
-
-logger = logging.getLogger('chplot')
 
 GraphList = list[tuple[str, list[float]]]
 
