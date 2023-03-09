@@ -7,12 +7,12 @@ TODO :
 Paramètres CLI :
  - une ou plusieurs expressions entre guillemets
  - -x pour changer les bornes x (suivi de deux int/float) OK
- - -y pour forcer les bornes y (suivi de deux int/float)
+ - -y pour forcer les bornes y (suivi de deux int/float) OK
  - -v pour changer la variable du graphique (def x) OK
  - -n pour changer le nombre de point (def 100000?) OK
  - -i pour forcer les entrées à être des entiers (linspace -> floor -> unique) OK
  - -ex/-ey pour changer l'échelle du graphique (suivi par lin ou log, def lin)
- - -z pour forcer 0 à être dans l'échelle verticale (override les commandes -y)
+ - -z pour forcer 0 à être dans l'échelle verticale (override les commandes -y) OK
 
  - -lx/-ly pour ajouter un titre aux axes
  - -t pour ajouter un titre au graphique

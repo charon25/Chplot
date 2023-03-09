@@ -1,5 +1,5 @@
 import logging
-logger = logging.getLogger('chplot')
+logger = logging.getLogger(__name__)
 import math
 from typing import Optional
 

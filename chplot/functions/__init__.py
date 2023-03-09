@@ -10,7 +10,7 @@ from chplot.functions.scipy_functions import SCIPY_SPECIAL_FUNCTIONS
 from chplot.functions.utils import FunctionDict
 
 
-logger = logging.getLogger('chplot')
+logger = logging.getLogger(__name__)
 
 
 FUNCTIONS: FunctionDict = {

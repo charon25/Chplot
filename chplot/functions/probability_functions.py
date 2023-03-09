@@ -4,7 +4,7 @@ import math
 from chplot.functions.utils import FunctionDict
 
 
-logger = logging.getLogger('chplot')
+logger = logging.getLogger(__name__)
 
 
 def _norm_pdf(x: float, mu: float, sigma: float) -> float:

@@ -3,7 +3,7 @@ import logging
 from chplot.functions.utils import FunctionDict, get_functions_from_module, get_renamed_functions_from_module
 
 
-logger = logging.getLogger('chplot')
+logger = logging.getLogger(__name__)
 
 
 _SCIPY_SPECIAL_MODULE_FUNCTION_NAMES: tuple[int, str] = [

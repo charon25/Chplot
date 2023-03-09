@@ -3,7 +3,7 @@ from types import ModuleType
 from typing import Callable, Union
 
 
-logger = logging.getLogger('chplot')
+logger = logging.getLogger(__name__)
 
 FunctionDict = dict[str, tuple[int, Union[Callable[..., float], float]]]
 
