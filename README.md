@@ -10,11 +10,14 @@ Paramètres CLI :
  - -y pour forcer les bornes y (suivi de deux int/float)
  - -v pour changer la variable du graphique (def x) OK
  - -n pour changer le nombre de point (def 100000?) OK
- - -i pour forcer les entrées à être des entiers (linspace -> floor -> unique)
- - -s pour enregistrer la figure au lieu de la show (avec nom fichier)
+ - -i pour forcer les entrées à être des entiers (linspace -> floor -> unique) OK
  - -ex/-ey pour changer l'échelle du graphique (suivi par lin ou log, def lin)
  - -z pour forcer 0 à être dans l'échelle verticale (override les commandes -y)
 
+ - -lx/-ly pour ajouter un titre aux axes
+ - -t pour ajouter un titre au graphique
+
+ - -s pour enregistrer la figure au lieu de la show (avec nom fichier)
  - -c pour charger des constantes (soit un nom de fichier, soit de la forme "a=123;b=3214;c=324")
  - -f pour charger un fichier contenant des points (possible de le faire plusieurs fois)
  - -d pour enregistrer les valeurs des points des fonctions dans un fichier csv

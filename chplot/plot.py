@@ -4,6 +4,7 @@ logger = logging.getLogger('chplot')
 from typing import Optional
 
 import numpy as np
+np.seterr('raise')
 import matplotlib.pyplot as plt
 from shunting_yard import MismatchedBracketsError, shunting_yard
 
@@ -19,6 +20,7 @@ class PlotParameters:
 
     x_lim: Optional[tuple[float, float]]
     n_points: Optional[int]
+    is_integer: Optional[bool]
 
 
 DEFAULT_PARAMETERS = PlotParameters(
@@ -26,6 +28,7 @@ DEFAULT_PARAMETERS = PlotParameters(
     variable='x',
     x_lim=(0.0, 1.0),
     n_points=10000,
+    is_integer=False,
 )
 
 
@@ -37,10 +40,16 @@ def _set_default_values(parameters: PlotParameters) -> None:
 
 
 def _generate_inputs(parameters: PlotParameters) -> np.ndarray:
-    return np.linspace(parameters.x_lim[0], parameters.x_lim[1], parameters.n_points, endpoint=True)
+    inputs = np.linspace(parameters.x_lim[0], parameters.x_lim[1], parameters.n_points, endpoint=True)
+
+    if not parameters.is_integer:
+        return inputs
+
+    # Some points may repeat, so we keep only the unique to avoid doing useless work
+    return np.unique(np.round(inputs))
 
 
-def _generate_graphs(parameters: PlotParameters, x: np.ndarray) -> GraphList:
+def _generate_graphs(parameters: PlotParameters, inputs: np.ndarray) -> GraphList:
     graphs: GraphList = []
 
     for expression in parameters.expressions:
@@ -54,15 +63,16 @@ def _generate_graphs(parameters: PlotParameters, x: np.ndarray) -> GraphList:
             logger.error("error for expression '%s' : %s", expression, error)
             continue
 
-        y = compute_rpn_list(rpn, x, variable=parameters.variable)
+        y = compute_rpn_list(rpn, inputs, variable=parameters.variable)
         graphs.append((expression, y))
     
     return graphs
 
 
-def _plot_graphs(parameters: PlotParameters, x: np.ndarray, graphs: GraphList) -> None:
+def _plot_graphs(parameters: PlotParameters, inputs: np.ndarray, graphs: GraphList) -> None:
+    format = 'o' if parameters.is_integer else '-'
     for expression, y in graphs:
-        plt.plot(x, y, label=expression)
+        plt.plot(inputs, y, format, label=expression, markersize=3)
 
     plt.grid(True, 'both', 'both')
     plt.legend(loc=0)
@@ -81,9 +91,9 @@ def plot(parameters: PlotParameters) -> None:
 
     _set_default_values(parameters)
 
-    x = _generate_inputs(parameters)
-    graphs = _generate_graphs(parameters, x)
+    inputs = _generate_inputs(parameters)
+    graphs = _generate_graphs(parameters, inputs)
   
-    _plot_graphs(parameters, x, graphs)
+    _plot_graphs(parameters, inputs, graphs)
     #TODO faire qqch si aucun graphe
     plt.show()
