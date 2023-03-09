@@ -10,7 +10,7 @@ NUMBER_CHARS = '0123456789.'
 
 def get_rpn_errors(rpn: str, variable: str = 'x') -> Optional[str]:
     """Check if the given RPN is a valid one.
-    Return a tuple containing a boolean indicating the validity of the RPN, and then the error message if it is not valid."""
+    Return either None if the RPN is valid, or the error message as a string if it is not."""
     stack: list[float] = []
 
     for token in rpn.split(' '):
@@ -21,7 +21,7 @@ def get_rpn_errors(rpn: str, variable: str = 'x') -> Optional[str]:
             stack.append(0)
         else:
             if not token in FUNCTIONS:
-                return f"unknown function : '{token}'"
+                return f"unknown function: '{token}'"
 
             param_count, func = FUNCTIONS[token]
 
@@ -30,7 +30,7 @@ def get_rpn_errors(rpn: str, variable: str = 'x') -> Optional[str]:
                 continue
 
             if len(stack) < param_count:
-                return f"not enough parameters for function '{token}' : {len(stack)} found, {param_count} expected."
+                return f"not enough parameters for function '{token}': {len(stack)} found, {param_count} expected."
 
             parameters = stack[-param_count:]
             stack = stack[:-param_count]
