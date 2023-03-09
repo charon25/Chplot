@@ -1,5 +1,5 @@
 import math
-from typing import Iterator, Optional
+from typing import Optional
 
 
 from chplot.functions import FUNCTIONS #TODO changer l'origine pour ajouter constantes/fonctions custom
@@ -8,12 +8,12 @@ from chplot.functions import FUNCTIONS #TODO changer l'origine pour ajouter cons
 NUMBER_CHARS = '0123456789.'
 
 
-def is_rpn_valid(rpn_tokens: list[str], variable: str = 'x') -> tuple[bool, Optional[str]]:
+def get_rpn_errors(rpn: str, variable: str = 'x') -> Optional[str]:
     """Check if the given RPN is a valid one.
     Return a tuple containing a boolean indicating the validity of the RPN, and then the error message if it is not valid."""
     stack: list[float] = []
 
-    for token in rpn_tokens:
+    for token in rpn.split(' '):
         if token[0] in NUMBER_CHARS:
             # Convert to float or int according to the presence of a dot
             stack.append(float(token) if '.' in token else int(token))
@@ -21,7 +21,7 @@ def is_rpn_valid(rpn_tokens: list[str], variable: str = 'x') -> tuple[bool, Opti
             stack.append(0)
         else:
             if not token in FUNCTIONS:
-                return (False, f"unknown function : '{token}'")
+                return f"unknown function : '{token}'"
 
             param_count, func = FUNCTIONS[token]
 
@@ -30,7 +30,7 @@ def is_rpn_valid(rpn_tokens: list[str], variable: str = 'x') -> tuple[bool, Opti
                 continue
 
             if len(stack) < param_count:
-                return (False, f"not enough parameters for function '{token}' : {len(stack)} found, {param_count} expected.")
+                return f"not enough parameters for function '{token}' : {len(stack)} found, {param_count} expected."
 
             parameters = stack[-param_count:]
             stack = stack[:-param_count]
@@ -43,9 +43,9 @@ def is_rpn_valid(rpn_tokens: list[str], variable: str = 'x') -> tuple[bool, Opti
             stack.append(result)
 
     if len(stack) > 1:
-        return (False, f"expression does not give only one result.")
+        return f"expression does not give only one result."
 
-    return (True, None)
+    return None
 
 
 def compute_rpn_unsafe(rpn_tokens: list[str], x: float, variable: str = 'x') -> float:
@@ -82,8 +82,6 @@ def compute_rpn_unsafe(rpn_tokens: list[str], x: float, variable: str = 'x') -> 
     return stack[0] if not math.isinf(stack[0]) else math.nan
 
 
-def compute_rpn_list(rpn: str, inputs: float, variable: str = 'x') -> Iterator[float]:
+def compute_rpn_list(rpn: str, inputs: float, variable: str = 'x') -> list[float]:
     rpn_tokens = rpn.split()
-
-    for x in inputs:
-        yield compute_rpn_unsafe(rpn_tokens, x, variable)
+    return [compute_rpn_unsafe(rpn_tokens, x, variable) for x in inputs]

@@ -13,7 +13,7 @@ _SCIPY_SPECIAL_MODULE_FUNCTION_NAMES: tuple[int, str] = [
     (1, 'psi'), (1, 'digamma')
 ]
 _SCIPY_SPECIAL_MODULE_FUNCTION_RENAMED: tuple[str, int, str] = {
-    ('W', 1, 'lambertW'),
+    ('W', 1, 'lambertw'),
 }
 
 try:

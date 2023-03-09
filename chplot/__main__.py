@@ -1,0 +1,21 @@
+import argparse
+
+from chplot.plot import plot
+
+
+def read_parameters() -> argparse.Namespace:
+    parser = argparse.ArgumentParser()
+    parser.add_argument('expressions', metavar='EXPRESSION', nargs='+', help='The expression(s) to plot.')
+    parser.add_argument('-v', metavar='VARIABLE', dest='variable', default='x', help="The name of the variable plotted on the x-axis (defaults to 'x').")
+    parser.add_argument('-x', nargs=2, metavar=('X_MIN', 'X_MAX'), type=float, dest='x_lim', help='The x-axis limits.')
+    parser.add_argument('-n', metavar='POINTS', type=int, dest='n_points', help='Number of points for each expression.')
+
+    return parser.parse_args()
+
+
+if __name__ == '__main__':
+    parameters = read_parameters()
+    print(parameters)
+
+    plot(parameters)
+
