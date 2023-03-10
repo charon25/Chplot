@@ -71,11 +71,6 @@ OTHER_FUNCTIONS: FunctionDict = {
     'lerp': (5, _lerp),
     'lerpt': (3, _lerpt),
 
-    'sinc': (1, _sinc),
-    'sincpi': (1, _norm_sinc),
-    'nsinc': (1, _norm_sinc),
-    'normsinc': (1, _norm_sinc),
-
     'heaviside': (1, _heaviside),
     'ramp': (1, _relu),
     'rect': (1, _rect),

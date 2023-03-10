@@ -1,6 +1,8 @@
 import logging
 import math
 
+import scipy.stats
+
 from chplot.functions.utils import FunctionDict
 
 
@@ -44,55 +46,30 @@ def _cauchy_cdf(x: float, x0: float, gamma: float) -> float:
     # 0.3183098861837907 = 1 / pi
     return 0.5 + 0.3183098861837907 * math.atan((x - x0) / gamma)
 
+def _student_pdf(x: float, nu: float) -> float:
+    return scipy.stats.t.pdf(x, nu)
 
-try:
-    import scipy.stats
-    def _student_pdf(x: float, nu: float) -> float:
-        return scipy.stats.t.pdf(x, nu)
+def _student_cdf(x: float, nu: float) -> float:
+    return scipy.stats.t.cdf(x, nu)
 
-    def _student_cdf(x: float, nu: float) -> float:
-        return scipy.stats.t.cdf(x, nu)
+def _beta_pdf(x: float, alpha: float, beta: float) -> float:
+    return scipy.stats.beta.pdf(x, alpha, beta)
 
-    def _beta_pdf(x: float, alpha: float, beta: float) -> float:
-        return scipy.stats.beta.pdf(x, alpha, beta)
+def _beta_cdf(x: float, alpha: float, beta: float) -> float:
+    return scipy.stats.beta.cdf(x, alpha, beta)
 
-    def _beta_cdf(x: float, alpha: float, beta: float) -> float:
-        return scipy.stats.beta.cdf(x, alpha, beta)
+def _chi2_pdf(x: float, k: float) -> float:
+    return scipy.stats.chi2.pdf(x, k)
 
-    def _chi2_pdf(x: float, k: float) -> float:
-        return scipy.stats.chi2.pdf(x, k)
+def _chi2_cdf(x: float, k: float) -> float:
+    return scipy.stats.chi2.cdf(x, k)
 
-    def _chi2_cdf(x: float, k: float) -> float:
-        return scipy.stats.chi2.cdf(x, k)
+# The scale is defined from https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.gamma.html#scipy.stats.gamma
+def _gamma_pdf(x: float, alpha: float, beta: float) -> float:
+    return scipy.stats.gamma.pdf(x, alpha, scale=1/beta)
 
-    # The scale is defined from https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.gamma.html#scipy.stats.gamma
-    def _gamma_pdf(x: float, alpha: float, beta: float) -> float:
-        return scipy.stats.gamma.pdf(x, alpha, scale=1/beta)
-
-    def _gamma_cdf(x: float, alpha: float, beta: float) -> float:
-        return scipy.stats.gamma.cdf(x, alpha, scale=1/beta)
-
-
-    _SCIPY_STATS_FUNCTIONS: FunctionDict = {
-        # Student's t distribution
-        'studentpdf': (2, _student_pdf),
-        'studentcdf': (2, _student_cdf),
-        # Beta distribution
-        'betapdf': (3, _beta_pdf),
-        'betacdf': (3, _beta_cdf),
-        # Chi squared distribution
-        'chi2pdf': (2, _chi2_pdf),
-        'khi2pdf': (2, _chi2_pdf),
-        'chi2cdf': (2, _chi2_cdf),
-        'khi2cdf': (2, _chi2_cdf),
-        # Gamma distribution
-        'gammapdf': (3, _gamma_pdf),
-        'gammacdf': (3, _gamma_cdf),
-    }
-
-except (ModuleNotFoundError, ImportError):
-    logger.info('Scipy.stats is not installed, will continue without its functions.')
-    _SCIPY_STATS_FUNCTIONS: FunctionDict = {}
+def _gamma_cdf(x: float, alpha: float, beta: float) -> float:
+    return scipy.stats.gamma.cdf(x, alpha, scale=1/beta)
 
 
 PROBABILITY_FUNCTIONS: FunctionDict = {
@@ -107,7 +84,20 @@ PROBABILITY_FUNCTIONS: FunctionDict = {
     # Exponential distribution
     'exponpdf': (2, _expon_pdf),
     'exponcdf': (2, _expon_cdf),
-    **_SCIPY_STATS_FUNCTIONS,
+    # Student's t distribution
+    'studentpdf': (2, _student_pdf),
+    'studentcdf': (2, _student_cdf),
+    # Beta distribution
+    'betapdf': (3, _beta_pdf),
+    'betacdf': (3, _beta_cdf),
+    # Chi squared distribution
+    'chi2pdf': (2, _chi2_pdf),
+    'khi2pdf': (2, _chi2_pdf),
+    'chi2cdf': (2, _chi2_cdf),
+    'khi2cdf': (2, _chi2_cdf),
+    # Gamma distribution
+    'gammapdf': (3, _gamma_pdf),
+    'gammacdf': (3, _gamma_cdf),
     # Cauchy distribution
     'cauchypdf': (3, _cauchy_pdf),
     'cauchycdf': (3, _cauchy_cdf),

@@ -1,5 +1,7 @@
 import logging
 
+import mpmath
+
 from chplot.functions.utils import FunctionDict, get_functions_from_module, get_renamed_functions_from_module
 
 
@@ -7,6 +9,7 @@ logger = logging.getLogger(__name__)
 
 
 _MPMATH_MODULE_FUNCTION_NAMES: tuple[int, str] = [
+    (1, 'lambertw'),
     (2, 'agm'),
 
     (1, 'sec'), (1, 'csc'), (1, 'cot'),
@@ -20,11 +23,15 @@ _MPMATH_MODULE_FUNCTION_NAMES: tuple[int, str] = [
     (2, 'binomial'),    
     (1, 'rgamma'), (1, 'loggamma'), (3, 'gammainc'),
     (1, 'rf'), (1, 'ff'),
+    (2, 'beta'), (4, 'betainc'),
     (1, 'superfac'), (1, 'hyperfac'), (1, 'barnesg'),
+    (1, 'digamma'),
     (1, 'harmonic'),
 
+    (3, 'gammainc'),
     (1, 'li'),
-    (1, 'erfi'),
+    (1, 'erfi'), (1, 'erfinv'),
+    (3, 'npdf'), (3, 'ncdf'),
     (1, 'fresnels'), (1, 'fresnelc'),
 
     (2, 'besselj'), (2, 'bessely'), (2, 'besseli'), (2, 'besselk'),
@@ -55,26 +62,31 @@ _MPMATH_MODULE_FUNCTION_NAMES: tuple[int, str] = [
     (1, 'primepi'), (1, 'riemannr'),
 ]
 _MPMATH_MODULE_FUNCTION_RENAMED: tuple[str, int, str] = {
+    ('betainc0', 4, 'betainc'),
+
+    ('W', 1, 'lambertw'),
     ('Ei', 1, 'ei'),
     ('Ci', 1, 'ci'), ('Si', 1, 'si'),
     ('Chi', 1, 'chi'), ('Shi', 1, 'shi'),
+
+    ('normsinc', 1, 'sincpi'), ('nsinc', 1, 'sincpi'),
 
     ('hurwitz', 2, 'zeta'), ('hurwitzzeta', 2, 'zeta'), ('eta', 1, 'altzeta'), ('nzetazeros', 1, 'nzeros')
 
 }
 
-try:
-    import mpmath
 
-    def _Li(x):
-        return mpmath.li(x, offset=True)
+def _Li(x: float) -> float:
+    return mpmath.li(x, offset=True)
 
-    MPMATH_FUNCTIONS: FunctionDict = get_functions_from_module(mpmath, _MPMATH_MODULE_FUNCTION_NAMES)
-    MPMATH_FUNCTIONS.update({
-        'Li': (1, _Li),
+def _psi(x: float) -> float:
+    return mpmath.psi(0, x)
 
-    })
-    MPMATH_FUNCTIONS.update(get_renamed_functions_from_module(mpmath, _MPMATH_MODULE_FUNCTION_RENAMED))
-except (ModuleNotFoundError, ImportError):
-    logger.info('mpmath is not installed, will continue without its functions.')
-    MPMATH_FUNCTIONS: FunctionDict = {}
+MPMATH_FUNCTIONS: FunctionDict = get_functions_from_module(mpmath, _MPMATH_MODULE_FUNCTION_NAMES)
+
+MPMATH_FUNCTIONS.update({
+    'Li': (1, _Li),
+    'psi': (1, _psi),
+})
+
+MPMATH_FUNCTIONS.update(get_renamed_functions_from_module(mpmath, _MPMATH_MODULE_FUNCTION_RENAMED))

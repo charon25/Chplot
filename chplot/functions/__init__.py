@@ -26,9 +26,9 @@ FUNCTIONS: FunctionDict = {
     # Constants
     **CONSTANTS_FUNCTIONS,
     #
-    **OTHER_FUNCTIONS, # unpack this first, so its functions may be overriden by the next ones
     **MATH_FUNCTIONS,
     **MPMATH_FUNCTIONS,
+    **OTHER_FUNCTIONS,
     **SCIPY_SPECIAL_FUNCTIONS,
     **PROBABILITY_FUNCTIONS,
 }
