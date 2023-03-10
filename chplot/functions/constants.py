@@ -7,15 +7,22 @@ _MATH_CONSTANTS: FunctionDict = {
     'pi': (0, math.pi),
     'tau': (0, 2 * math.pi),
     'e': (0, math.e),
-    'gamma': (0, 0.577_215_664_901_532_9),
+    'ga': (0, 0.577_215_664_901_532_9),
     'phi': (0, 1.618_033_988_749_895),
     'sqrt2': (0, math.sqrt(2)),
+    'catalan': (0, 0.915_965_594_177_219),
+    'apery': (0, 1.202_056_903_159_594),
+    'khinchin': (0, 2.685_452_001_065_306_2),
+    'glaisher': (0, 1.282_427_129_100_622_6),
+    'mertens': (0, 0.261_497_212_847_642_77),
+    'brun': (0, 1.902_160_583_104),
 }
 
 # Based on https://en.wikipedia.org/wiki/List_of_physical_constants
 # All quantities in SI units
 _PHYSICS_CONSTANTS: FunctionDict = {
     'G': (0, 6.674_30e-11),
+    'g': (0, 9.806_65),
     'c': (0, 299_792_458.0),
     'h': (0, 6.626_070_15e-34),
     'hb': (0, 1.054_571_817e-34),

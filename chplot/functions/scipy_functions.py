@@ -21,5 +21,5 @@ try:
     SCIPY_SPECIAL_FUNCTIONS: FunctionDict = get_functions_from_module(scipy.special, _SCIPY_SPECIAL_MODULE_FUNCTION_NAMES)
     SCIPY_SPECIAL_FUNCTIONS.update(get_renamed_functions_from_module(scipy.special, _SCIPY_SPECIAL_MODULE_FUNCTION_RENAMED))
 except (ModuleNotFoundError, ImportError):
-    logger.info('Scipy.special is not installed, will continue without its functions.')
+    logger.info('scipy.special is not installed, will continue without its functions.')
     SCIPY_SPECIAL_FUNCTIONS: FunctionDict = {}

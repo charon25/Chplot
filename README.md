@@ -1,5 +1,7 @@
 TODO :
 
+ - vérifier bornes y avec échelle log
+ - ajouter tests unitaires pour les bornes
  - gestion fichier (avec analyse format)
  - ajout constantes dans l'expression (venants de fichier)
  - fonction depuis fichiers

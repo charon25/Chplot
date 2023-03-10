@@ -20,5 +20,5 @@ setuptools.setup(
 		'numpy>=1.23.4',
 		'matplotlib>=3.6.1',
 		'tqdm>=4.64.1',
-	],
+	]
 )
