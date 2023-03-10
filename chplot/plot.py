@@ -20,38 +20,46 @@ class PlotParameters:
     expressions: list[str]
     variable: Optional[str]
 
-    x_lim: Optional[tuple[float, float]]
-    is_x_log: Optional[bool]
-    y_lim: Optional[tuple[float, float]]
-    must_contains_zero: Optional[bool]
-    is_y_log: Optional[bool]
     n_points: Optional[int]
     is_integer: Optional[bool]
+
+    x_lim: Optional[tuple[float, float]]
+    is_x_log: Optional[bool]
+
+    y_lim: Optional[tuple[float, float]]
+    must_contain_zero: Optional[bool]
+    is_y_log: Optional[bool]
+
 
 
 DEFAULT_PARAMETERS = PlotParameters(
     expressions=[],
     variable='x',
-    x_lim=(0.0, 1.0),
-    is_x_log=False,
-    y_lim=None,
-    must_contains_zero=False,
-    is_y_log=False,
+
     n_points=10000,
     is_integer=False,
+
+    x_lim=(0.0, 1.0),
+    is_x_log=False,
+
+    y_lim=None,
+    must_contain_zero=False,
+    is_y_log=False,
+
 )
 
 
 
 def _set_default_values(parameters: PlotParameters) -> None:
     for field in fields(PlotParameters):
-        fieldname = field.name
-        if not hasattr(parameters, fieldname) or getattr(parameters, fieldname) is None:
-            setattr(parameters, fieldname, getattr(DEFAULT_PARAMETERS, fieldname))
+        field_name = field.name
+        if not hasattr(parameters, field_name) or getattr(parameters, field_name) is None:
+            setattr(parameters, field_name, getattr(DEFAULT_PARAMETERS, field_name))
 
 
 
-def _get_x_lims(parameters: PlotParameters) -> tuple[float, float]:
+def _get_x_lim(parameters: PlotParameters) -> tuple[float, float]:
+    """Return the minimum and maximum value for the input array. If max < min, reverse them."""
     x_min, x_max = parameters.x_lim
     if x_max < x_min:
         logger.warning('the upper x bound (%s) is inferior to the lower x bound (%s), they will be swapped.', x_max, x_min)
@@ -61,7 +69,8 @@ def _get_x_lims(parameters: PlotParameters) -> tuple[float, float]:
 
 
 
-def _get_x_lims_graph(parameters: PlotParameters) -> tuple[float, float]:
+def _get_x_lim_graph(parameters: PlotParameters) -> tuple[float, float]:
+    """Return the bounds for the plot x-axis. Will reverse if in the wrong order, and remove some negative bounds for log-scaled x-axis."""
     x_min, x_max = parameters.x_lim
     if x_max < x_min:
         x_min, x_max = x_max, x_min
@@ -69,14 +78,14 @@ def _get_x_lims_graph(parameters: PlotParameters) -> tuple[float, float]:
     if not parameters.is_x_log:
         return (x_min, x_max)
 
-    # If the x-axis is on a log-scale and x_min < 0, we force it to be smallest meaningful positive number:
-    # the min of 1 and the smallest positive input
+    # If the x-axis is on a log-scale and x_min < 0, we let matplotlib decide the smallest meaningful value
     if x_min <= 0 < x_max:
         logger.warning('x-axis scale is logarithmic, but lower x bound (%s) is negative: x-axis will be truncated to positive values', x_min)
-        return (min(1, x_max / parameters.n_points), x_max)
+        return (None, x_max)
 
     if x_max <= 0:
         logger.error('x-axis scale is logarithmic, but both lower (%s) and upper (%s) x bounds are negative: cannot graph anything', x_min, x_max)
+        return ()
 
     # Both bounds are already > 0
     return (x_min, x_max)
@@ -84,7 +93,7 @@ def _get_x_lims_graph(parameters: PlotParameters) -> tuple[float, float]:
 
 
 def _generate_inputs(parameters: PlotParameters) -> np.ndarray:
-    inputs = np.linspace(*_get_x_lims(parameters), parameters.n_points, endpoint=True)
+    inputs = np.linspace(*_get_x_lim(parameters), parameters.n_points, endpoint=True)
 
     if not parameters.is_integer:
         return inputs
@@ -115,7 +124,8 @@ def _generate_graphs(parameters: PlotParameters, inputs: np.ndarray) -> GraphLis
 
 
 
-def _get_y_lims(parameters: PlotParameters) -> tuple[float, float]:
+def _get_y_lim_graph(parameters: PlotParameters) -> tuple[float, float]:
+    """Return the bounds for the plot y-axis. Will reverse if in the wrong order, and remove some negative bounds for log-scaled y-axis."""
     y_min, y_max = plt.ylim()
 
     if parameters.y_lim is not None:
@@ -124,16 +134,31 @@ def _get_y_lims(parameters: PlotParameters) -> tuple[float, float]:
             logger.warning('the upper y bound (%s) is inferior to the lower y bound (%s), they will be swapped.', y_max, y_min)
             y_min, y_max = y_max, y_min
 
-    # If we do not require the y-axis to contain 0 or if it is already contained
-    if not parameters.must_contains_zero or y_min <= 0 <= y_max:
+    if parameters.must_contain_zero and parameters.is_y_log:
+        logger.warning("the y-axis cannot be logarithmic while containing zero ; the '-z' argument will be ignored")
+
+    # There are 12 possible cases depending on the parameters
+    # The first separation is whether y_max is > 0 or <= 0
+    if y_max > 0:
+        # Here, there are 3 binary variables: y_min <= 0 or not, must contain zero or not, log scale or not
+        # In all cases, the upper bound does not vary, only the lower bound
+        if y_min > 0 and parameters.must_contain_zero and not parameters.is_y_log:
+            y_min = 0
+        elif y_min <= 0 and parameters.is_y_log:
+            logger.warning('y-axis scale is logarithmic, but lower y bound (%s) is negative: y-axis will be truncated to positive values', y_min)
+            y_min = None
+
         return (y_min, y_max)
 
-    # Both are > 0, so we force y_min to 0
-    if y_min > 0:
-        return (0, y_max)
-    # Both are < 0, so we force y_max to 0
-    return (y_min, 0)
+    # If y_max <= 0, there are 4 cases and only two binary variables: must contain zero or not, log scale or not
+    if parameters.is_y_log:
+        logger.error('y-axis scale is logarithmic, but both lower (%s) and upper (%s) y bounds are negative: cannot graph anything', y_min, y_max)
+        return ()
+    
+    if parameters.must_contain_zero:
+        return (y_min, 0)
 
+    return (y_min, y_max)
 
 
 def _plot_graphs(parameters: PlotParameters, inputs: np.ndarray, graphs: GraphList) -> None:
@@ -148,8 +173,8 @@ def _plot_graphs(parameters: PlotParameters, inputs: np.ndarray, graphs: GraphLi
     if parameters.is_y_log:
         plt.yscale('log')
 
-    plt.xlim(_get_x_lims_graph(parameters))
-    plt.ylim(_get_y_lims(parameters))
+    plt.xlim(_get_x_lim_graph(parameters))
+    plt.ylim(_get_y_lim_graph(parameters))
 
     plt.legend(loc=0)
 

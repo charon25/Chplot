@@ -8,22 +8,22 @@ class TestRpnValidity(unittest.TestCase):
 
     def test_no_problems(self):
         rpn = "1 1 +"
-        self.assertIsNone(get_rpn_errors(rpn.split(' ')))
+        self.assertIsNone(get_rpn_errors(rpn))
 
     def test_unknown_function(self):
         rpn = "1 unknown_func"
         error_message = "unknown function: 'unknown_func'"
-        self.assertEqual(get_rpn_errors(rpn.split(' ')), error_message)
+        self.assertEqual(get_rpn_errors(rpn), error_message)
 
     def test_not_enough_parameters(self):
         rpn = "1 +"
         error_message = "not enough parameters for function '+': 1 found, 2 expected."
-        self.assertEqual(get_rpn_errors(rpn.split(' ')), error_message)
+        self.assertEqual(get_rpn_errors(rpn), error_message)
 
     def test_too_many_results(self):
         rpn = "1 1"
         error_message = "expression does not give only one result."
-        self.assertTupleEqual(get_rpn_errors(rpn.split(' ')), error_message)
+        self.assertEqual(get_rpn_errors(rpn), error_message)
 
 class TestRpnUnsafe(unittest.TestCase):
 

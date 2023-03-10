@@ -1,13 +1,11 @@
 TODO :
 
- - vérifier bornes y avec échelle log
- - ajouter tests unitaires pour les bornes
  - gestion fichier (avec analyse format)
  - ajout constantes dans l'expression (venants de fichier)
  - fonction depuis fichiers
 
 Paramètres CLI :
- - une ou plusieurs expressions entre guillemets
+ - une ou plusieurs expressions entre guillemets OK
  - -x pour changer les bornes x (suivi de deux int/float) OK
  - -y pour forcer les bornes y (suivi de deux int/float) OK
  - -v pour changer la variable du graphique (def x) OK
