@@ -14,8 +14,9 @@ Paramètres CLI :
  - -xlog/-ylog pour mettre l'axe en échelle logs OK
  - -z pour forcer 0 à être dans l'échelle verticale (override les commandes -y) OK
 
- - -lx/-ly pour ajouter un titre aux axes
- - -t pour ajouter un titre au graphique
+ - -xl/-yl pour ajouter un titre aux axes OK
+ - -t pour ajouter un titre au graphique OK
+ - -rl pour retirer la légende OK
 
  - -s pour enregistrer la figure au lieu de la show (avec nom fichier)
  - -c pour charger des constantes (soit un nom de fichier, soit de la forme "a=123;b=3214;c=324")

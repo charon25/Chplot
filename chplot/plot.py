@@ -1,7 +1,6 @@
-from dataclasses import dataclass, fields
+from dataclasses import fields
 import logging
 logger = logging.getLogger(__name__)
-from typing import Optional
 
 import numpy as np
 np.seterr('raise')
@@ -9,45 +8,11 @@ import matplotlib.pyplot as plt
 from shunting_yard import MismatchedBracketsError, shunting_yard
 
 from chplot.rpn import compute_rpn_list, get_rpn_errors
+from chplot.plot_parameters import DEFAULT_PARAMETERS, PlotParameters
 
 
 
 GraphList = list[tuple[str, list[float]]]
-
-
-@dataclass
-class PlotParameters:
-    expressions: list[str]
-    variable: Optional[str]
-
-    n_points: Optional[int]
-    is_integer: Optional[bool]
-
-    x_lim: Optional[tuple[float, float]]
-    is_x_log: Optional[bool]
-
-    y_lim: Optional[tuple[float, float]]
-    must_contain_zero: Optional[bool]
-    is_y_log: Optional[bool]
-
-
-
-DEFAULT_PARAMETERS = PlotParameters(
-    expressions=[],
-    variable='x',
-
-    n_points=10000,
-    is_integer=False,
-
-    x_lim=(0.0, 1.0),
-    is_x_log=False,
-
-    y_lim=None,
-    must_contain_zero=False,
-    is_y_log=False,
-
-)
-
 
 
 def _set_default_values(parameters: PlotParameters) -> None:
@@ -176,7 +141,12 @@ def _plot_graphs(parameters: PlotParameters, inputs: np.ndarray, graphs: GraphLi
     plt.xlim(_get_x_lim_graph(parameters))
     plt.ylim(_get_y_lim_graph(parameters))
 
-    plt.legend(loc=0)
+    plt.xlabel(parameters.x_label)
+    plt.ylabel(parameters.y_label)
+    plt.title(parameters.title)
+
+    if not parameters.remove_legend:
+        plt.legend(loc=0)
 
 
 

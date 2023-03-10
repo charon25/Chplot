@@ -18,6 +18,11 @@ def read_parameters() -> argparse.Namespace:
     parser.add_argument('-z', action='store_true', dest='must_contain_zero', help='Indicate if the y-axis should contain zero. If the -y parameter is present, it will be overriden as necessary.')
     parser.add_argument('-ylog', action='store_true', dest='is_y_log', help="Indicate if the y-axis scale should be logarithmic.")
 
+    parser.add_argument('-xl', metavar='X_LABEL', dest='x_label', help='The x-axis label.')
+    parser.add_argument('-yl', metavar='Y_LABEL', dest='y_label', help='The y-axis label.')
+    parser.add_argument('-t', metavar='TITLE', dest='title', help='The plot title.')
+    parser.add_argument('-rl', action='store_true', dest='remove_legend', help='Remove the plot legend.')
+
 
     return parser.parse_args()
 
