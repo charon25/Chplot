@@ -22,6 +22,8 @@ class PlotParameters:
     title: Optional[str]
     remove_legend: Optional[str]
 
+    compute_zeros: Optional[bool]
+
 
 DEFAULT_PARAMETERS = PlotParameters(
     expressions=[],
@@ -41,4 +43,6 @@ DEFAULT_PARAMETERS = PlotParameters(
     y_label=None,
     title=None,
     remove_legend=False,
+
+    compute_zeros=False,
 )

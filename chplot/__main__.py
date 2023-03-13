@@ -23,6 +23,8 @@ def read_parameters() -> argparse.Namespace:
     parser.add_argument('-t', metavar='TITLE', dest='title', help='The plot title.')
     parser.add_argument('-rl', action='store_true', dest='remove_legend', help='Remove the plot legend.')
 
+    parser.add_argument('--zeros', action='store_true', dest='compute_zeros', help='Indicate if the zeros of the functions should be computed')
+
 
     return parser.parse_args()
 

@@ -1,5 +1,6 @@
 from dataclasses import fields
 import logging
+from typing import Union
 logger = logging.getLogger(__name__)
 
 import numpy as np
@@ -13,6 +14,7 @@ from chplot.plot_parameters import DEFAULT_PARAMETERS, PlotParameters
 
 
 GraphList = list[tuple[str, list[float]]]
+ZerosList: list[tuple[float, float]]
 # Characters that won't appear in the RPN but are recognized
 NORMAL_UNRECOGNIZED_CHARACTERS = '( ),;'
 
@@ -157,6 +159,13 @@ def _plot_graphs(parameters: PlotParameters, inputs: np.ndarray, graphs: GraphLi
         plt.legend(loc=0)
 
 
+def _compute_zeros(inputs: np.ndarray, graphs: GraphList) -> ZerosList:
+    pass
+
+
+def _compute_and_print_zeros(inputs: np.ndarray, graphs: GraphList):
+    pass
+
 
 def plot(parameters: PlotParameters) -> None:
     """_summary_
@@ -176,6 +185,9 @@ def plot(parameters: PlotParameters) -> None:
     if not graphs:
         logger.error('no expression without errors, cannot plot anything.')
         return
+
+    if parameters.compute_zeros:
+        _compute_and_print_zeros(graphs)
 
     _plot_graphs(parameters, inputs, graphs)
     #TODO faire qqch si aucun graphe

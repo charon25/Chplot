@@ -28,16 +28,6 @@ def _heaviside(x: float) -> float:
         return 0
     return 1 if x > 0 else 0.5
 
-def _sinc(x: float) -> float:
-    if x == 0:
-        return 1
-    return math.sin(x) / x
-
-def _norm_sinc(x: float) -> float:
-    if x == 0:
-        return 1
-    return math.sin(x / math.pi) / (x * math.pi)
-
 def _rect(x: float) -> float:
     if x < -0.5 or x > 0.5:
         return 0
