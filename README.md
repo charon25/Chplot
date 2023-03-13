@@ -1,7 +1,9 @@
 TODO :
 
+ - calculer les zéros des fonctions
  - gestion fichier (avec analyse format)
  - ajout constantes dans l'expression (venants de fichier)
+ - les constantes peuvent être elles mêmes des expressions
  - fonction depuis fichiers
 
 Paramètres CLI :

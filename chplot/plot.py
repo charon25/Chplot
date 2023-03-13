@@ -13,6 +13,8 @@ from chplot.plot_parameters import DEFAULT_PARAMETERS, PlotParameters
 
 
 GraphList = list[tuple[str, list[float]]]
+# Characters that won't appear in the RPN but are recognized
+NORMAL_UNRECOGNIZED_CHARACTERS = '( ),;'
 
 
 def _set_default_values(parameters: PlotParameters) -> None:
@@ -67,6 +69,9 @@ def _generate_inputs(parameters: PlotParameters) -> np.ndarray:
     return np.unique(np.round(inputs))
 
 
+def _get_unrecognized_characters(expression: str, rpn: str) -> set[str]:
+    return set(expression).difference(rpn).difference(NORMAL_UNRECOGNIZED_CHARACTERS)
+
 
 def _generate_graphs(parameters: PlotParameters, inputs: np.ndarray) -> GraphList:
     graphs: GraphList = []
@@ -81,6 +86,9 @@ def _generate_graphs(parameters: PlotParameters, inputs: np.ndarray) -> GraphLis
         if (error := get_rpn_errors(rpn, variable=parameters.variable)) is not None:
             logger.error("error for expression '%s' : %s", expression, error)
             continue
+
+        if (unknown_characters := _get_unrecognized_characters(expression, rpn)):
+            logger.warning("unknown characters in expression '%s': %s", expression, ''.join(unknown_characters))
 
         y = compute_rpn_list(rpn, inputs, variable=parameters.variable)
         graphs.append((expression, y))
@@ -164,6 +172,10 @@ def plot(parameters: PlotParameters) -> None:
 
     inputs = _generate_inputs(parameters)
     graphs = _generate_graphs(parameters, inputs)
+
+    if not graphs:
+        logger.error('no expression without errors, cannot plot anything.')
+        return
 
     _plot_graphs(parameters, inputs, graphs)
     #TODO faire qqch si aucun graphe

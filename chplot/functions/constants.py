@@ -8,6 +8,7 @@ _MATH_CONSTANTS: FunctionDict = {
     'tau': (0, 2 * math.pi),
     'e': (0, math.e),
     'ga': (0, 0.577_215_664_901_532_9),
+    'em': (0, 0.577_215_664_901_532_9),
     'phi': (0, 1.618_033_988_749_895),
     'sqrt2': (0, math.sqrt(2)),
     'catalan': (0, 0.915_965_594_177_219),
@@ -16,6 +17,8 @@ _MATH_CONSTANTS: FunctionDict = {
     'glaisher': (0, 1.282_427_129_100_622_6),
     'mertens': (0, 0.261_497_212_847_642_77),
     'brun': (0, 1.902_160_583_104),
+    'feigenbaumd': (0, 4.669_201_609_102_990_67),
+    'feigenbauma': (0, 2.502_907_875_095_892_82),
 }
 
 # Based on https://en.wikipedia.org/wiki/List_of_physical_constants

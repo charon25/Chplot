@@ -3,7 +3,7 @@ logging.disable(logging.CRITICAL)
 from typing import Any
 import unittest
 
-from chplot.plot import _get_x_lim, _get_x_lim_graph, _get_y_lim_graph, PlotParameters
+from chplot.plot import _get_unrecognized_characters, _get_x_lim, _get_x_lim_graph, _get_y_lim_graph, PlotParameters
 
 
 class MockParameters:
@@ -113,5 +113,19 @@ class TestYLimGraph(unittest.TestCase):
         self.assertTupleEqual(_get_y_lim_graph(parameters), ())
 
 
+class TestUnrecognizedCharacters(unittest.TestCase):
+
+    def test_no_unrecognized_characters(self):
+        self.assertSetEqual(_get_unrecognized_characters('1+1', '1 1 +'), set())
+
+    def test_normal_unrecognized_characters(self):
+        self.assertSetEqual(_get_unrecognized_characters('max(1, 2)', '1 2 max'), set())
+        self.assertSetEqual(_get_unrecognized_characters('max(1; 2)', '1 2 max'), set())
+
+    def test_one_unrecognized_characters(self):
+        self.assertSetEqual(_get_unrecognized_characters('x!', 'x'), {'!'})
+
+    def test_multiple_unrecognized_characters(self):
+        self.assertSetEqual(_get_unrecognized_characters('x?4$5%', 'x 4 5'), {'?', '$', '%'})
 
 
