@@ -1,6 +1,7 @@
 TODO :
 
  - calculer les zéros des fonctions
+ - ajouter RPN pour xlim et ylim
  - gestion fichier (avec analyse format)
  - ajout constantes dans l'expression (venants de fichier)
  - les constantes peuvent être elles mêmes des expressions

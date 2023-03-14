@@ -1,6 +1,5 @@
-from dataclasses import fields
 import logging
-from typing import Union
+
 logger = logging.getLogger(__name__)
 
 import numpy as np
@@ -9,21 +8,9 @@ import matplotlib.pyplot as plt
 from shunting_yard import MismatchedBracketsError, shunting_yard
 
 from chplot.rpn import compute_rpn_list, get_rpn_errors
-from chplot.plot_parameters import DEFAULT_PARAMETERS, PlotParameters
-
-
-
-GraphList = list[tuple[str, list[float]]]
-ZerosList: list[tuple[float, float]]
-# Characters that won't appear in the RPN but are recognized
-NORMAL_UNRECOGNIZED_CHARACTERS = '( ),;'
-
-
-def _set_default_values(parameters: PlotParameters) -> None:
-    for field in fields(PlotParameters):
-        field_name = field.name
-        if not hasattr(parameters, field_name) or getattr(parameters, field_name) is None:
-            setattr(parameters, field_name, getattr(DEFAULT_PARAMETERS, field_name))
+from chplot.plot.utils import GraphList, NORMAL_UNRECOGNIZED_CHARACTERS
+from chplot.plot.plot_parameters import PlotParameters, set_default_values
+from chplot.plot.zeros import compute_and_print_zeros
 
 
 
@@ -93,10 +80,9 @@ def _generate_graphs(parameters: PlotParameters, inputs: np.ndarray) -> GraphLis
             logger.warning("unknown characters in expression '%s': %s", expression, ''.join(unknown_characters))
 
         y = compute_rpn_list(rpn, inputs, variable=parameters.variable)
-        graphs.append((expression, y))
+        graphs.append((expression, rpn, y))
 
     return graphs
-
 
 
 def _get_y_lim_graph(parameters: PlotParameters) -> tuple[float, float]:
@@ -138,7 +124,7 @@ def _get_y_lim_graph(parameters: PlotParameters) -> tuple[float, float]:
 
 def _plot_graphs(parameters: PlotParameters, inputs: np.ndarray, graphs: GraphList) -> None:
     format = 'o' if parameters.is_integer else '-'
-    for expression, y in graphs:
+    for expression, _, y in graphs:
         plt.plot(inputs, y, format, label=expression, markersize=3)
 
     plt.grid(True, 'both', 'both')
@@ -159,13 +145,6 @@ def _plot_graphs(parameters: PlotParameters, inputs: np.ndarray, graphs: GraphLi
         plt.legend(loc=0)
 
 
-def _compute_zeros(inputs: np.ndarray, graphs: GraphList) -> ZerosList:
-    pass
-
-
-def _compute_and_print_zeros(inputs: np.ndarray, graphs: GraphList):
-    pass
-
 
 def plot(parameters: PlotParameters) -> None:
     """_summary_
@@ -177,7 +156,7 @@ def plot(parameters: PlotParameters) -> None:
         Refer to the PlotParameters class for more details.
     """
 
-    _set_default_values(parameters)
+    set_default_values(parameters)
 
     inputs = _generate_inputs(parameters)
     graphs = _generate_graphs(parameters, inputs)
@@ -187,7 +166,7 @@ def plot(parameters: PlotParameters) -> None:
         return
 
     if parameters.compute_zeros:
-        _compute_and_print_zeros(graphs)
+        compute_and_print_zeros(graphs)
 
     _plot_graphs(parameters, inputs, graphs)
     #TODO faire qqch si aucun graphe

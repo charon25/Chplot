@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, fields
 from typing import Optional
 
 
@@ -46,3 +46,12 @@ DEFAULT_PARAMETERS = PlotParameters(
 
     compute_zeros=False,
 )
+
+
+def set_default_values(parameters: PlotParameters) -> None:
+    for field in fields(PlotParameters):
+        field_name = field.name
+        if not hasattr(parameters, field_name) or getattr(parameters, field_name) is None:
+            setattr(parameters, field_name, getattr(DEFAULT_PARAMETERS, field_name))
+
+
