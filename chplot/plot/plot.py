@@ -175,6 +175,7 @@ def plot(parameters: PlotParameters) -> None:
             logger.error("error while computing zeros")
 
 
-    _plot_graphs(parameters, inputs, graphs)
-    #TODO faire qqch si aucun graphe
-    plt.show()
+    if not parameters.no_plot:
+        _plot_graphs(parameters, inputs, graphs)
+        #TODO faire qqch si aucun graphe
+        plt.show()

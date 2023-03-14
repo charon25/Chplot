@@ -1,6 +1,5 @@
 TODO :
 
- - calculer les zéros des fonctions
  - ajouter RPN pour xlim et ylim
  - gestion fichier (avec analyse format)
  - ajout constantes dans l'expression (venants de fichier)
@@ -20,6 +19,9 @@ Paramètres CLI :
  - -xl/-yl pour ajouter un titre aux axes OK
  - -t pour ajouter un titre au graphique OK
  - -rl pour retirer la légende OK
+ - --no-plot pour ne pas plot la fonction
+
+ - --zeros pour calculer les zéros
 
  - -s pour enregistrer la figure au lieu de la show (avec nom fichier)
  - -c pour charger des constantes (soit un nom de fichier, soit de la forme "a=123;b=3214;c=324")

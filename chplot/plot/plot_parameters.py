@@ -23,6 +23,7 @@ class PlotParameters:
     remove_legend: Optional[str]
 
     zeros_file: Optional[Union[Literal[0], str]]
+    no_plot: Optional[bool]
 
 
 DEFAULT_PARAMETERS = PlotParameters(
@@ -44,7 +45,8 @@ DEFAULT_PARAMETERS = PlotParameters(
     title=None,
     remove_legend=False,
 
-    zeros_file=False,
+    zeros_file=None,
+    no_plot=False,
 )
 
 
