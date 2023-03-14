@@ -1,5 +1,5 @@
 from dataclasses import dataclass, fields
-from typing import Optional
+from typing import Literal, Optional, Union
 
 
 @dataclass
@@ -22,7 +22,7 @@ class PlotParameters:
     title: Optional[str]
     remove_legend: Optional[str]
 
-    compute_zeros: Optional[bool]
+    zeros_file: Optional[Union[Literal[0], str]]
 
 
 DEFAULT_PARAMETERS = PlotParameters(
@@ -44,7 +44,7 @@ DEFAULT_PARAMETERS = PlotParameters(
     title=None,
     remove_legend=False,
 
-    compute_zeros=False,
+    zeros_file=False,
 )
 
 

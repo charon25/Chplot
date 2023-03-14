@@ -23,7 +23,7 @@ def read_parameters() -> argparse.Namespace:
     parser.add_argument('-t', metavar='TITLE', dest='title', help='The plot title.')
     parser.add_argument('-rl', action='store_true', dest='remove_legend', help='Remove the plot legend.')
 
-    parser.add_argument('--zeros', action='store_true', dest='compute_zeros', help='Indicate if the zeros of the functions should be computed')
+    parser.add_argument('--zeros', nargs='?', const=0, dest='zeros_file', help='Indicate if the zeros of the functions should be computed. If no arguments are provided, will write to stdout, otherwise to the specified file.')
 
 
     return parser.parse_args()

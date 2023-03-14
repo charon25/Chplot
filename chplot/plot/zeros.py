@@ -1,13 +1,14 @@
 import math
 import numpy as np
+import sys
 
 from chplot.plot.plot_parameters import PlotParameters
 from chplot.plot.utils import Graph, GraphList, ZerosList
 from chplot.rpn import compute_rpn_unsafe
 
 
-TARGET_ERROR = 1e-15
-MAX_ITERATIONS = 200
+TARGET_ERROR = 1e-308
+MAX_ITERATIONS = 1000
 
 
 def _compute_simple_zero(parameters: PlotParameters, inputs: np.ndarray, rpn_tokens: list[str], zero_index: int) -> float:
@@ -136,6 +137,30 @@ def _compute_zeros(parameters: PlotParameters, inputs: np.ndarray, graph: Graph)
     return sorted(all_zeros)
 
 
-
 def compute_and_print_zeros(parameters: PlotParameters, inputs: np.ndarray, graphs: GraphList):
-    pass
+    # print to stdout
+    if parameters.zeros_file == 0:
+        file = sys.stdout
+    else:
+        file = open(parameters.zeros_file, 'w', encoding='utf-8')
+
+    file.write(f'On the interval [{round(parameters.x_lim[0], 3)} ; {round(parameters.x_lim[1], 3)}]...\n\n')
+    for graph in graphs:
+        expression = graph[0]
+        zeros = _compute_zeros(parameters, inputs, graph)
+        if len(zeros) == 0:
+            file.write(f'  the function f(x) = {expression} never equals zero')
+            continue
+
+        file.write(f'  the function f(x) = {expression} equals zero...\n')
+        for zero_start, zero_end in zeros:
+            # Simple zero
+            if zero_end is None:
+                file.write(f'    at x = {round(zero_start, 15)}\n')
+            # Zero zone
+            else:
+                file.write(f'    on [{round(zero_start, 15)} ; {round(zero_end, 15)}]\n')
+        file.write('\n')
+
+    if file is not sys.stdout:
+        file.close()

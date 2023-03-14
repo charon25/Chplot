@@ -165,8 +165,15 @@ def plot(parameters: PlotParameters) -> None:
         logger.error('no expression without errors, cannot plot anything.')
         return
 
-    if parameters.compute_zeros:
-        compute_and_print_zeros(graphs)
+
+    if parameters.zeros_file is not None:
+        try:
+            compute_and_print_zeros(parameters, inputs, graphs)
+        except OSError:
+            logger.error("error while opening file '%s' to write zeros", parameters.zeros_file)
+        except Exception:
+            logger.error("error while computing zeros")
+
 
     _plot_graphs(parameters, inputs, graphs)
     #TODO faire qqch si aucun graphe
