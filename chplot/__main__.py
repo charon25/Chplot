@@ -1,4 +1,5 @@
 import argparse
+from chplot.convert_args import retrieve_constants
 
 from chplot.plot import plot
 
@@ -27,6 +28,7 @@ def read_parameters() -> argparse.Namespace:
     parser.add_argument('--zeros', nargs='?', const=0, dest='zeros_file', help='Indicate if the zeros of the functions should be computed. If no arguments are provided, will write to stdout, otherwise to the specified file.')
     parser.add_argument('--no-plot', action='store_true', dest='no_plot', help='If present, will not graph the functions at all.')
 
+    parser.add_argument('-c', nargs='+', dest='constants_arg', metavar=('CONSTANT', 'CONSTANT'), help='Constants to add to the computation, at least one and as much as needed. Either of the form "<name>=<expression>", or the name of a file containing this form of statement, one on each line.')
 
     return parser.parse_args()
 
@@ -34,6 +36,7 @@ def read_parameters() -> argparse.Namespace:
 if __name__ == '__main__':
     parameters = read_parameters()
     print(parameters)
+    # retrieve_constants(parameters)
 
     plot(parameters)
 
