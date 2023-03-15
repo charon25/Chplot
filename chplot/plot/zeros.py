@@ -144,6 +144,7 @@ def compute_and_print_zeros(parameters: PlotParameters, inputs: np.ndarray, grap
     else:
         file = open(parameters.zeros_file, 'w', encoding='utf-8')
 
+    file.write('\nNote that non-continuous functions may give false zeros. Furthermore, some zeros may be missing if the graph is tangent to the x-axis.\n')
     file.write(f'On the interval [{round(parameters.x_lim[0], 3)} ; {round(parameters.x_lim[1], 3)}]...\n\n')
     for graph in graphs:
         expression = graph[0]
@@ -161,6 +162,8 @@ def compute_and_print_zeros(parameters: PlotParameters, inputs: np.ndarray, grap
             else:
                 file.write(f'    on [{round(zero_start, 15)} ; {round(zero_end, 15)}]\n')
         file.write('\n')
+
+    file.write('\n')
 
     if file is not sys.stdout:
         file.close()

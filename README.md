@@ -19,9 +19,10 @@ Paramètres CLI :
  - -xl/-yl pour ajouter un titre aux axes OK
  - -t pour ajouter un titre au graphique OK
  - -rl pour retirer la légende OK
- - --no-plot pour ne pas plot la fonction
+ - --no-plot pour ne pas plot la fonction OK
+ - --dis pour enlever les interpolations linéaires OK
 
- - --zeros pour calculer les zéros
+ - --zeros pour calculer les zéros OK
 
  - -s pour enregistrer la figure au lieu de la show (avec nom fichier)
  - -c pour charger des constantes (soit un nom de fichier, soit de la forme "a=123;b=3214;c=324")

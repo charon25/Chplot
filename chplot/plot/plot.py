@@ -1,4 +1,5 @@
 import logging
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -121,11 +122,20 @@ def _get_y_lim_graph(parameters: PlotParameters) -> tuple[float, float]:
 
     return (y_min, y_max)
 
+def _get_graph_parameters(parameters: PlotParameters) -> dict[str, Any]:
+    if parameters.is_integer:# or parameters.plot_without_lines:
+        return {'linestyle': ' ', 'marker': 'o', 'markersize': 3}
+
+    if parameters.plot_without_lines:
+        return {'linestyle': ' ', 'marker': 'o', 'markersize': 1}
+    
+    return {'linestyle': '-'}
+
 
 def _plot_graphs(parameters: PlotParameters, inputs: np.ndarray, graphs: GraphList) -> None:
-    format = 'o' if parameters.is_integer else '-'
+    graph_parameters = _get_graph_parameters(parameters)
     for expression, _, y in graphs:
-        plt.plot(inputs, y, format, label=expression, markersize=3)
+        plt.plot(inputs, y, label=expression, **graph_parameters)
 
     plt.grid(True, 'both', 'both')
 
@@ -167,6 +177,9 @@ def plot(parameters: PlotParameters) -> None:
 
 
     if parameters.zeros_file is not None:
+        if parameters.is_integer:
+            logger.warning('forcing the inputs to be integers may cause to miss some zeros.')
+
         try:
             compute_and_print_zeros(parameters, inputs, graphs)
         except OSError:

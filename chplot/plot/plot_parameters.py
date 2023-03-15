@@ -20,7 +20,8 @@ class PlotParameters:
     x_label: Optional[str]
     y_label: Optional[str]
     title: Optional[str]
-    remove_legend: Optional[str]
+    remove_legend: Optional[bool]
+    plot_without_lines: Optional[bool]
 
     zeros_file: Optional[Union[Literal[0], str]]
     no_plot: Optional[bool]
@@ -30,7 +31,7 @@ DEFAULT_PARAMETERS = PlotParameters(
     expressions=[],
     variable='x',
 
-    n_points=10000,
+    n_points=10001,
     is_integer=False,
 
     x_lim=(0.0, 1.0),
@@ -44,6 +45,7 @@ DEFAULT_PARAMETERS = PlotParameters(
     y_label=None,
     title=None,
     remove_legend=False,
+    plot_without_lines=False,
 
     zeros_file=None,
     no_plot=False,
