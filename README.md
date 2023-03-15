@@ -9,7 +9,7 @@ TODO :
 
 Paramètres CLI :
  - une ou plusieurs expressions entre guillemets OK
- - -x pour changer les bornes x (suivi de deux int/float) OK
+ - -x pour changer les bornes x (suivi de deux expressions mathématiques (inclue int ou float) ; ATTENTION à ne pas commencer l'expression par un tiret (mettre 0-EXP plutôt que -EXP)) OK
  - -y pour forcer les bornes y (suivi de deux int/float) OK
  - -v pour changer la variable du graphique (def x) OK
  - -n pour changer le nombre de point (def 100000?) OK
