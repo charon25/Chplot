@@ -10,7 +10,7 @@ from shunting_yard import MismatchedBracketsError, shunting_yard
 
 from chplot.rpn import compute_rpn_list, get_rpn_errors
 from chplot.plot.utils import GraphList, NORMAL_UNRECOGNIZED_CHARACTERS
-from chplot.plot.plot_parameters import PlotParameters, set_default_values
+from chplot.plot.plot_parameters import convert_parameters_expression, PlotParameters, set_default_values
 from chplot.plot.zeros import compute_and_print_zeros
 
 
@@ -90,11 +90,15 @@ def _get_y_lim_graph(parameters: PlotParameters) -> tuple[float, float]:
     """Return the bounds for the plot y-axis. Will reverse if in the wrong order, and remove some negative bounds for log-scaled y-axis."""
     y_min, y_max = plt.ylim()
 
-    if parameters.y_lim is not None:
-        y_min, y_max = parameters.y_lim
-        if y_max < y_min:
-            logger.warning('the upper y bound (%s) is inferior to the lower y bound (%s), they will be swapped.', y_max, y_min)
-            y_min, y_max = y_max, y_min
+    # Override with non-None value given by users
+    if parameters.y_lim[0] is not None:
+        y_min = parameters.y_lim[0]
+    if parameters.y_lim[1] is not None:
+        y_max = parameters.y_lim[1]
+
+    if y_max < y_min:
+        logger.warning('the upper y bound (%s) is inferior to the lower y bound (%s), they will be swapped.', y_max, y_min)
+        y_min, y_max = y_max, y_min
 
     if parameters.must_contain_zero and parameters.is_y_log:
         logger.warning("the y-axis cannot be logarithmic while containing zero ; the '-z' argument will be ignored")
@@ -167,6 +171,7 @@ def plot(parameters: PlotParameters) -> None:
     """
 
     set_default_values(parameters)
+    convert_parameters_expression(parameters)
 
     inputs = _generate_inputs(parameters)
     graphs = _generate_graphs(parameters, inputs)

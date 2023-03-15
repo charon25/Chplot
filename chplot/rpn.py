@@ -55,7 +55,7 @@ def get_rpn_errors(rpn: str, variable: str = 'x') -> Optional[str]:
 def compute_rpn_unsafe(rpn_tokens: list[str], x: float, variable: str = 'x') -> float:
     """Compute the value of a RPN expression where every occurence of variable (default 'x') is replaced by the given value.
     Will return math.nan if either a function raises an exception (e.g. division by zero) or if the result is infinite (e.g. zeta(1)).
-    This function can crash as it will not check for problems. Use check_rpn_validity first to know if the RPN is valid."""
+    This function can crash as it will not check for problems. Use get_rpn_errors first to know if the RPN is valid."""
     stack: list[float] = []
 
     for token in rpn_tokens:

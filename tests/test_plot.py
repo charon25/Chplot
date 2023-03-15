@@ -4,11 +4,13 @@ import math
 from typing import Any
 import unittest
 
+import matplotlib.pyplot as plt
+
 from chplot.plot.utils import ZerosList
 from chplot.plot.plot import _generate_graphs, _generate_inputs
 from chplot.plot.plot import _get_unrecognized_characters
 from chplot.plot.plot import _get_x_lim, _get_x_lim_graph, _get_y_lim_graph
-from chplot.plot.plot_parameters import set_default_values
+from chplot.plot.plot_parameters import convert_parameters_expression, set_default_values
 from chplot.plot.zeros import _compute_zeros
 
 
@@ -64,6 +66,21 @@ class TestYLimGraph(unittest.TestCase):
 
     def test_wrong_order(self):
         parameters = MockParameters(y_lim=(1, 0), must_contain_zero=False, is_y_log=False)
+        self.assertTupleEqual(_get_y_lim_graph(parameters), (0, 1))
+
+    def test_only_min(self):
+        plt.ylim((1, 2))
+        parameters = MockParameters(y_lim=(0, None), must_contain_zero=False, is_y_log=False)
+        self.assertTupleEqual(_get_y_lim_graph(parameters), (0, 2))
+
+    def test_only_max(self):
+        plt.ylim((0, 2))
+        parameters = MockParameters(y_lim=(None, 3), must_contain_zero=False, is_y_log=False)
+        self.assertTupleEqual(_get_y_lim_graph(parameters), (0, 3))
+
+    def test_none(self):
+        plt.ylim((0, 1))
+        parameters = MockParameters(y_lim=(None, None), must_contain_zero=False, is_y_log=False)
         self.assertTupleEqual(_get_y_lim_graph(parameters), (0, 1))
 
     # First 8 cases, y_max > 0
@@ -239,4 +256,81 @@ class TestComputeZeros(unittest.TestCase):
         graph = _generate_graphs(parameters, inputs)[0]
 
         self.assertZerosListAlmostEqual(_compute_zeros(parameters, inputs, graph), [(0.0, 1.0)])
+
+
+class TestConvertParameters(unittest.TestCase):
+
+    # XLIM
+    def test_xlim_int(self):
+        parameters = MockParameters(x_lim=(0, 1))
+        set_default_values(parameters)
+        convert_parameters_expression(parameters)
+
+        self.assertAlmostEqual(parameters.x_lim[0], 0.0)
+        self.assertAlmostEqual(parameters.x_lim[1], 1.0)
+
+    def test_xlim_float(self):
+        parameters = MockParameters(x_lim=(0.5, 1.2))
+        set_default_values(parameters)
+        convert_parameters_expression(parameters)
+
+        self.assertAlmostEqual(parameters.x_lim[0], 0.5)
+        self.assertAlmostEqual(parameters.x_lim[1], 1.2)
+
+    def test_xlim_float_str(self):
+        parameters = MockParameters(x_lim=("0", "1"))
+        set_default_values(parameters)
+        convert_parameters_expression(parameters)
+
+        self.assertAlmostEqual(parameters.x_lim[0], 0.0)
+        self.assertAlmostEqual(parameters.x_lim[1], 1.0)
+
+    def test_xlim_expression(self):
+        parameters = MockParameters(x_lim=("sqrt(2)", "pi + 1"))
+        set_default_values(parameters)
+        convert_parameters_expression(parameters)
+
+        self.assertAlmostEqual(parameters.x_lim[0], math.sqrt(2))
+        self.assertAlmostEqual(parameters.x_lim[1], math.pi + 1)
+
+    def test_xlim_default(self):
+        parameters = MockParameters(x_lim=("_unknown_function(1)", "_unknown_function(2)"))
+        set_default_values(parameters)
+        convert_parameters_expression(parameters)
+
+        self.assertAlmostEqual(parameters.x_lim[0], 0.0)
+        self.assertAlmostEqual(parameters.x_lim[1], 1.0)
+
+    # YLIM
+    def test_ylim_int(self):
+        parameters = MockParameters(y_lim=(0, 1))
+        set_default_values(parameters)
+        convert_parameters_expression(parameters)
+
+        self.assertAlmostEqual(parameters.y_lim[0], 0.0)
+        self.assertAlmostEqual(parameters.y_lim[1], 1.0)
+
+    def test_ylim_float(self):
+        parameters = MockParameters(y_lim=(0.5, 1.2))
+        set_default_values(parameters)
+        convert_parameters_expression(parameters)
+
+        self.assertAlmostEqual(parameters.y_lim[0], 0.5)
+        self.assertAlmostEqual(parameters.y_lim[1], 1.2)
+
+    def test_ylim_float_str(self):
+        parameters = MockParameters(y_lim=("0", "1"))
+        set_default_values(parameters)
+        convert_parameters_expression(parameters)
+
+        self.assertAlmostEqual(parameters.y_lim[0], 0.0)
+        self.assertAlmostEqual(parameters.y_lim[1], 1.0)
+
+    def test_ylim_expression(self):
+        parameters = MockParameters(y_lim=("sqrt(2)", "pi + 1"))
+        set_default_values(parameters)
+        convert_parameters_expression(parameters)
+
+        self.assertAlmostEqual(parameters.y_lim[0], math.sqrt(2))
+        self.assertAlmostEqual(parameters.y_lim[1], math.pi + 1)
 
