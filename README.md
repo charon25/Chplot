@@ -1,7 +1,5 @@
 TODO :
 
- - permettre de mettre qu'une seule valeur pour xlim et ylim
- - ajouter RPN pour xlim et ylim
  - gestion fichier (avec analyse format)
  - ajout constantes dans l'expression (venants de fichier)
  - les constantes peuvent être elles mêmes des expressions

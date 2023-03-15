@@ -51,6 +51,18 @@ class TestRpnUnsafe(unittest.TestCase):
         rpn = "1.2 1 2 10 20 lerp"
         self.assertAlmostEqual(compute_rpn_unsafe(rpn.split(' '), 1), 12)
 
+    def test_infinity_is_nan(self):
+        rpn = "x zeta"
+        self.assertTrue(math.isnan(compute_rpn_unsafe(rpn.split(' '), 1)))
+
+    def test_error_is_nan(self):
+        rpn = "x sqrt"
+        self.assertTrue(math.isnan(compute_rpn_unsafe(rpn.split(' '), -1)))
+
+    def test_nan_constant(self):
+        rpn = "nan"
+        self.assertTrue(math.isnan(compute_rpn_unsafe(rpn.split(' '), 0)))
+
 
 class TestRpnList(unittest.TestCase):
 

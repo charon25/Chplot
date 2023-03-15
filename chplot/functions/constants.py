@@ -19,6 +19,7 @@ _MATH_CONSTANTS: FunctionDict = {
     'brun': (0, 1.902_160_583_104),
     'feigenbaumd': (0, 4.669_201_609_102_990_67),
     'feigenbauma': (0, 2.502_907_875_095_892_82),
+    'nan': (0, math.nan),
 }
 
 # Based on https://en.wikipedia.org/wiki/List_of_physical_constants
