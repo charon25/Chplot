@@ -2,7 +2,6 @@ import math
 import numpy as np
 import sys
 
-from chplot.functions import FUNCTIONS
 from chplot.plot.plot_parameters import PlotParameters
 from chplot.plot.utils import Graph, GraphList, ZerosList
 from chplot.rpn import compute_rpn_unsafe

@@ -9,8 +9,9 @@ import matplotlib.pyplot as plt
 from shunting_yard import MismatchedBracketsError, shunting_yard
 
 from chplot.functions import FUNCTIONS
-from chplot.plot.utils import GraphList, NORMAL_UNRECOGNIZED_CHARACTERS
+from chplot.plot.integral import compute_and_print_integrals
 from chplot.plot.plot_parameters import convert_parameters_expression, PlotParameters, set_default_values
+from chplot.plot.utils import GraphList, NORMAL_UNRECOGNIZED_CHARACTERS
 from chplot.plot.zeros import compute_and_print_zeros
 from chplot.rpn import compute_rpn_list, get_rpn_errors
 
@@ -160,6 +161,24 @@ def _plot_graphs(parameters: PlotParameters, inputs: np.ndarray, graphs: GraphLi
         plt.legend(loc=0)
 
 
+def _manage_zeros(parameters: PlotParameters, inputs: np.ndarray, graphs: GraphList):
+    if parameters.is_integer:
+        logger.warning('forcing the inputs to be integers may cause to miss some zeros.')
+
+    try:
+        compute_and_print_zeros(parameters, inputs, graphs)
+    except OSError:
+        logger.error("error while opening file '%s' to write zeros", parameters.zeros_file)
+    except Exception:
+        logger.error("error while computing zeros")
+
+
+def _manage_integrals(parameters: PlotParameters, inputs: np.ndarray, graphs: GraphList):
+    try:
+        compute_and_print_integrals(parameters, inputs, graphs)
+    except OSError:
+        logger.error("error while opening file '%s' to write integral", parameters.zeros_file)
+
 
 def plot(parameters: PlotParameters) -> None:
     """_summary_
@@ -183,15 +202,10 @@ def plot(parameters: PlotParameters) -> None:
 
 
     if parameters.zeros_file is not None:
-        if parameters.is_integer:
-            logger.warning('forcing the inputs to be integers may cause to miss some zeros.')
+        _manage_zeros(parameters, inputs, graphs)
 
-        try:
-            compute_and_print_zeros(parameters, inputs, graphs)
-        except OSError:
-            logger.error("error while opening file '%s' to write zeros", parameters.zeros_file)
-        except Exception:
-            logger.error("error while computing zeros")
+    if parameters.integral_file is not None:
+        _manage_integrals(parameters, inputs, graphs)
 
 
     if not parameters.no_plot:

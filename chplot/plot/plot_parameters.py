@@ -36,6 +36,7 @@ class PlotParameters:
 
     zeros_file: Optional[Union[Literal[0], str]]
     no_plot: Optional[bool]
+    integral_file: Optional[Union[Literal[0], str]]
 
     constants: Optional[Union[list[str], FunctionDict]]
 
@@ -62,6 +63,7 @@ DEFAULT_PARAMETERS = PlotParameters(
 
     zeros_file=None,
     no_plot=False,
+    integral_file=None,
 
     constants=lambda:[], # prevents reference copying
 )
