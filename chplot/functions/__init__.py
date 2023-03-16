@@ -13,7 +13,7 @@ from chplot.functions.utils import FunctionDict
 
 logger = logging.getLogger(__name__)
 
-
+# This global variable can and will be modified to add to functions
 FUNCTIONS: FunctionDict = {
     # Base operations
     '+': (2, add),

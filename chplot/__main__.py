@@ -36,7 +36,7 @@ def read_parameters() -> argparse.Namespace:
 if __name__ == '__main__':
     parameters = read_parameters()
     print(parameters)
-    # retrieve_constants(parameters)
+    retrieve_constants(parameters)
 
     plot(parameters)
 

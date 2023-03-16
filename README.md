@@ -1,9 +1,9 @@
 TODO :
 
  - gestion fichier (avec analyse format)
- - ajout constantes dans l'expression (venants de fichier)
- - les constantes peuvent être elles mêmes des expressions
+ - intégrale des fonctions (méthode des trapèzes / calcul de l'erreur avec la dérivée seconde)
  - fonction depuis fichiers
+ - revoir le nom et l'emplacement des loggers
 
 Paramètres CLI :
  - une ou plusieurs expressions entre guillemets OK
@@ -24,7 +24,7 @@ Paramètres CLI :
  - --zeros pour calculer les zéros OK
 
  - -s pour enregistrer la figure au lieu de la show (avec nom fichier)
- - -c pour charger des constantes (soit un nom de fichier, soit de la forme "a=123;b=3214;c=324")
+ - -c pour charger des constantes (au moins 1 paramètres, soit de la forme "\<nom\>=\<expression\>" soit un fichier contenant ce format, un par ligne) OK
  - -f pour charger un fichier contenant des points (possible de le faire plusieurs fois)
  - -d pour enregistrer les valeurs des points des fonctions dans un fichier csv
  - -r pour lire les équations depuis un ou plusieurs fichiers (une par ligne)

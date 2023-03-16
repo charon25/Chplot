@@ -8,10 +8,11 @@ np.seterr('raise')
 import matplotlib.pyplot as plt
 from shunting_yard import MismatchedBracketsError, shunting_yard
 
-from chplot.rpn import compute_rpn_list, get_rpn_errors
+from chplot.functions import FUNCTIONS
 from chplot.plot.utils import GraphList, NORMAL_UNRECOGNIZED_CHARACTERS
 from chplot.plot.plot_parameters import convert_parameters_expression, PlotParameters, set_default_values
 from chplot.plot.zeros import compute_and_print_zeros
+from chplot.rpn import compute_rpn_list, get_rpn_errors
 
 
 

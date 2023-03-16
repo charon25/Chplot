@@ -19,7 +19,7 @@ def retrieve_constants(parameters: argparse.Namespace) -> None:
                 final_constants.extend([line.strip() for line in fi if line != '\n'])
 
         # If the file is not found, it means it should be an expression
-        except FileNotFoundError:
+        except (FileNotFoundError, OSError):
             final_constants.append(constant)
 
         # For every other exception, log and ignore

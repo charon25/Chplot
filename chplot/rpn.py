@@ -1,12 +1,13 @@
 import logging
+
 logger = logging.getLogger(__name__)
 import math
 from typing import Optional
 
 from tqdm import tqdm
 
-
-from chplot.functions import FUNCTIONS #TODO changer l'origine pour ajouter constantes/fonctions custom
+from chplot.functions import FUNCTIONS
+from chplot.functions.utils import FunctionDict
 
 
 NUMBER_CHARS = '0123456789.'
