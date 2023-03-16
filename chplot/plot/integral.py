@@ -34,7 +34,7 @@ def compute_and_print_integrals(parameters: PlotParameters, inputs: np.ndarray, 
     if parameters.integral_file == 0:
         file = sys.stdout
     else:
-        file = open(parameters.zeros_file, 'w', encoding='utf-8')
+        file = open(parameters.integral_file, 'w', encoding='utf-8')
 
     file.write('\nNote that the more points, the smallest the error and that floating point numbers may introduce errors.\n')
     file.write(f'The integral on the interval [{round(parameters.x_lim[0], 3)} ; {round(parameters.x_lim[1], 3)}] of the function{"s" if len(graphs) > 1 else ""}...\n\n')
