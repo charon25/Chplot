@@ -1,7 +1,7 @@
 TODO :
 
+ - possibilité de plot les dérivées des fonctions
  - gestion fichier (avec analyse format)
- - intégrale des fonctions (méthode des trapèzes / calcul de l'erreur avec la dérivée seconde)
  - fonction depuis fichiers
  - revoir le nom et l'emplacement des loggers
 
@@ -22,6 +22,8 @@ Paramètres CLI :
  - --dis pour enlever les interpolations linéaires OK
 
  - --zeros pour calculer les zéros OK
+ - --integral pour calculer l'intégrale sur l'interval considéré
+ - --deriv pour afficher des dérivées (suivies par une liste d'ordre de dérivation)
 
  - -s pour enregistrer la figure au lieu de la show (avec nom fichier)
  - -c pour charger des constantes (au moins 1 paramètres, soit de la forme "\<nom\>=\<expression\>" soit un fichier contenant ce format, un par ligne) OK

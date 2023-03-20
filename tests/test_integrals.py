@@ -10,7 +10,7 @@ from mock_parameters import MockParameters
 
 
 class TestComputeIntegrals(unittest.TestCase):
-    
+
     def assertTupleAlmostEqual(self, tuple1: tuple, tuple2: tuple):
         self.assertEqual(len(tuple1), len(tuple2))
         for elem1, elem2 in zip(tuple1, tuple2):

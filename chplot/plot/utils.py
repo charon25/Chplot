@@ -1,5 +1,9 @@
+from typing import Union
 
-Graph = tuple[str, str, list[float]]
+import numpy as np
+
+
+Graph = tuple[str, str, Union[list[float], np.ndarray]]
 GraphList = list[Graph]
 ZerosList = list[tuple[float, float]]
 # Characters that won't appear in the RPN but are recognized

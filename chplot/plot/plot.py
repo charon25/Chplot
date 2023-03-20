@@ -122,7 +122,7 @@ def _get_y_lim_graph(parameters: PlotParameters) -> tuple[float, float]:
     if parameters.is_y_log:
         logger.error('y-axis scale is logarithmic, but both lower (%s) and upper (%s) y bounds are negative: cannot graph anything', y_min, y_max)
         return ()
-    
+
     if parameters.must_contain_zero:
         return (y_min, 0)
 
@@ -134,7 +134,7 @@ def _get_graph_parameters(parameters: PlotParameters) -> dict[str, Any]:
 
     if parameters.plot_without_lines:
         return {'linestyle': ' ', 'marker': 'o', 'markersize': 1}
-    
+
     return {'linestyle': '-'}
 
 

@@ -20,7 +20,7 @@ _MPMATH_MODULE_FUNCTION_NAMES: tuple[int, str] = [
     (1, 'asech'), (1, 'acsch'), (1, 'acoth'),
 
     (1, 'factorial'), (1, 'fac'), (1, 'fac2'),
-    (2, 'binomial'),    
+    (2, 'binomial'),
     (1, 'rgamma'), (1, 'loggamma'), (3, 'gammainc'),
     (1, 'rf'), (1, 'ff'),
     (2, 'beta'), (4, 'betainc'),
@@ -56,7 +56,7 @@ _MPMATH_MODULE_FUNCTION_NAMES: tuple[int, str] = [
     (1, 'zeta'), (1, 'altzeta'), (1, 'stieltjes'), (1, 'siegelz'), (1, 'siegeltheta'),
     (1, 'backlunds'), (3, 'lerchphi'),
     (2, 'polylog'), (2, 'clsin'), (2, 'clcos'), (2, 'polyexp'),
-    (1, 'primezeta'), (1, 'secondzeta'), 
+    (1, 'primezeta'), (1, 'secondzeta'),
 
     (1, 'fib'), (1, 'fibonacci'),
     (1, 'primepi'), (1, 'riemannr'),

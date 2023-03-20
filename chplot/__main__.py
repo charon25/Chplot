@@ -4,6 +4,18 @@ from chplot.convert_args import retrieve_constants
 from chplot.plot import plot
 
 
+def positive_integer(value):
+    try:
+        value = int(value)
+    except ValueError:
+        raise argparse.ArgumentTypeError(f"invalid int value: '{value}'")
+
+    if value <= 0:
+        raise argparse.ArgumentTypeError(f"invalid strictly positive integer: '{value}'")
+
+    return value
+
+
 def read_parameters() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="TODO")
     parser.add_argument('expressions', metavar='EXPRESSION', nargs='+', help='The expression(s) to plot.')
@@ -27,6 +39,7 @@ def read_parameters() -> argparse.Namespace:
 
     parser.add_argument('--zeros', nargs='?', const=0, dest='zeros_file', help='Indicate if the zeros of the functions should be computed. If no arguments are provided, will write to stdout, otherwise to the specified file.')
     parser.add_argument('--integral', nargs='?', const=0, dest='integral_file', help='Indicate if the integral of the functions should be computed. If no arguments are provided, will write to stdout, otherwise to the specified file.')
+    parser.add_argument('--deriv', nargs='+', dest='derivation_orders', type=positive_integer, help='Will add the derivative to the graph (and integral/zeros computation).')
     parser.add_argument('--no-plot', action='store_true', dest='no_plot', help='If present, will not graph the functions at all.')
 
     parser.add_argument('-c', nargs='+', dest='constants_arg', metavar=('CONSTANT', 'CONSTANT'), help='Constants to add to the computation, at least one and as much as needed. Either of the form "<name>=<expression>", or the name of a file containing this form of statement, one on each line.')

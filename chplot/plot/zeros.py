@@ -16,7 +16,7 @@ def _compute_simple_zero(parameters: PlotParameters, inputs: np.ndarray, rpn_tok
     Can only be accurate if the function is continuous."""
     xa, xb = map(float, inputs[zero_index:zero_index + 2]) # convert to real float for the rpn compute algorithm
     fa = compute_rpn_unsafe(rpn_tokens, xa, variable=parameters.variable)
-    
+
     it = 0
     while it < MAX_ITERATIONS and xb - xa > TARGET_ERROR:
         xm = (xa + xb) / 2
