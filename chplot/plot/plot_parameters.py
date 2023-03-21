@@ -35,8 +35,9 @@ class PlotParameters:
     plot_without_lines: Optional[bool]
 
     zeros_file: Optional[Union[Literal[0], str]]
-    no_plot: Optional[bool]
     integral_file: Optional[Union[Literal[0], str]]
+    derivation_orders: Optional[list[int]]
+    no_plot: Optional[bool]
 
     constants: Optional[Union[list[str], FunctionDict]]
 
@@ -62,8 +63,9 @@ DEFAULT_PARAMETERS = PlotParameters(
     plot_without_lines=False,
 
     zeros_file=None,
-    no_plot=False,
     integral_file=None,
+    derivation_orders=None,
+    no_plot=False,
 
     constants=lambda:[], # prevents reference copying
 )

@@ -63,3 +63,9 @@ class TestGetDerivatives(unittest.TestCase):
 
         self.assertListAlmostEqual(_get_sixth_derivative(y, x[1] - x[0]), np.ones(N - 2 * _get_size_reduction(6)) * 7.20, delta=0.1)
         self.assertListAlmostEqual(_get_nth_derivative(y, x[1] - x[0], n=6), np.ones(N - 2 * _get_size_reduction(6)) * 7.20, delta=0.1)
+
+    def test_seventh_derivative_constant(self):
+        x = np.linspace(0, 1, 50, endpoint=False)
+        y = 0.001 * x**7 - 1
+
+        self.assertListAlmostEqual(_get_nth_derivative(y, x[1] - x[0], n=7), np.ones(50 - 2 * _get_size_reduction(7)) * 5.04, delta=0.1)

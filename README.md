@@ -1,6 +1,7 @@
 TODO :
 
  - possibilité de plot les dérivées des fonctions
+ - voir pour que des trucs genre 3x ou 4sin(x) fonctionnent
  - gestion fichier (avec analyse format)
  - fonction depuis fichiers
  - revoir le nom et l'emplacement des loggers

@@ -2,7 +2,8 @@
 
 import numpy as np
 
-from chplot.plot.utils import Graph, GraphList
+from chplot.plot.plot_parameters import PlotParameters
+from chplot.plot.utils import Graph
 
 
 
@@ -18,7 +19,7 @@ def _get_size_reduction(n: int) -> int:
     return reduction + 4
 
 
-# All the functions below are taken from https://en.wikipedia.org/wiki/Finite_difference_coefficient
+# All the coefficients below are taken from https://en.wikipedia.org/wiki/Finite_difference_coefficient
 
 def _get_first_derivative(f: np.ndarray, h: float) -> np.ndarray:
     return (1/280 * f[0:-8] - 4/105 * f[1:-7] + 1/5 * f[2:-6] - 4/5 * f[3:-5] + 4/5 * f[5:-3] - 1/5 * f[6:-2] + 4/105 * f[7:-1] - 1/280 * f[8:]) / h
@@ -36,7 +37,7 @@ def _get_fifth_derivative(f: np.ndarray, h: float) -> np.ndarray:
     return (-13/288 * f[0:-10] + 19/36 * f[1:-9] - 87/32 * f[2:-8] + 13/2 * f[3:-7] - 323/48 * f[4:-6] + 323/48 * f[6:-4] - 13/2 * f[7:-3] + 87/32 * f[8:-2] - 19/36 * f[9:-1] + 13/288 * f[10:]) / (h ** 5)
 
 def _get_sixth_derivative(f: np.ndarray, h: float) -> np.ndarray:
-    return (13/240 * f[0:-10] - 19/24 * f[1:-9] + 87/16 * f[2:-8] - 39/2 * f[3:-7] + 323/8 * f[4:-6] - 1023/20 * f[5:-5] + 323/8 * f[6:-4] - 39/2 * f[7:-3] + 87/16 * f[8:-2] -19/24 * f[9:-1] + 13/240 * f[10:]) / (h ** 6)
+    return (13/240 * f[0:-10] - 19/24 * f[1:-9] + 87/16 * f[2:-8] - 39/2 * f[3:-7] + 323/8 * f[4:-6] - 1023/20 * f[5:-5] + 323/8 * f[6:-4] - 39/2 * f[7:-3] + 87/16 * f[8:-2] - 19/24 * f[9:-1] + 13/240 * f[10:]) / (h ** 6)
 
 
 def _get_nth_derivative(f: np.ndarray, h: float, n: int) -> np.ndarray:
@@ -58,3 +59,19 @@ def _get_nth_derivative(f: np.ndarray, h: float, n: int) -> np.ndarray:
         f = _get_fifth_derivative(f, h)
 
     return f
+
+
+def compute_derivatives(parameters: PlotParameters, graphs: list[Graph]) -> list[Graph]:
+    derivatives: list[Graph] = []
+    for graph in graphs:
+        h = graph.inputs[1] - graph.inputs[0]
+        for order in parameters.derivation_orders:
+            shrinkage = _get_size_reduction(order)
+            derivative_graph = Graph(
+                inputs=graph.inputs[shrinkage:-shrinkage],
+                expression=f'd{order}/dx{order} * {graph.expression}',
+                rpn=None,
+                values=_get_nth_derivative(graph.values, h, order)
+            )
+            derivatives.append(derivative_graph)
+    pass

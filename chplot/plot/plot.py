@@ -9,9 +9,10 @@ import matplotlib.pyplot as plt
 from shunting_yard import MismatchedBracketsError, shunting_yard
 
 from chplot.functions import FUNCTIONS
+from chplot.plot.derivative import compute_derivatives
 from chplot.plot.integral import compute_and_print_integrals
 from chplot.plot.plot_parameters import convert_parameters_expression, PlotParameters, set_default_values
-from chplot.plot.utils import GraphList, NORMAL_UNRECOGNIZED_CHARACTERS
+from chplot.plot.utils import Graph, NORMAL_UNRECOGNIZED_CHARACTERS
 from chplot.plot.zeros import compute_and_print_zeros
 from chplot.rpn import compute_rpn_list, get_rpn_errors
 
@@ -65,8 +66,8 @@ def _get_unrecognized_characters(expression: str, rpn: str) -> set[str]:
     return set(expression).difference(rpn).difference(NORMAL_UNRECOGNIZED_CHARACTERS)
 
 
-def _generate_graphs(parameters: PlotParameters, inputs: np.ndarray) -> GraphList:
-    graphs: GraphList = []
+def _generate_graphs(parameters: PlotParameters, inputs: np.ndarray) -> list[Graph]:
+    graphs: list[Graph] = []
 
     for expression in parameters.expressions:
         try:
@@ -82,8 +83,8 @@ def _generate_graphs(parameters: PlotParameters, inputs: np.ndarray) -> GraphLis
         if (unknown_characters := _get_unrecognized_characters(expression, rpn)):
             logger.warning("unknown characters in expression '%s': %s", expression, ''.join(unknown_characters))
 
-        y = compute_rpn_list(rpn, inputs, variable=parameters.variable)
-        graphs.append((expression, rpn, y))
+        values = compute_rpn_list(rpn, inputs, variable=parameters.variable)
+        graphs.append(Graph(inputs, expression, rpn, values))
 
     return graphs
 
@@ -138,10 +139,10 @@ def _get_graph_parameters(parameters: PlotParameters) -> dict[str, Any]:
     return {'linestyle': '-'}
 
 
-def _plot_graphs(parameters: PlotParameters, inputs: np.ndarray, graphs: GraphList) -> None:
+def _plot_graphs(parameters: PlotParameters, graphs: list[Graph]) -> None:
     graph_parameters = _get_graph_parameters(parameters)
-    for expression, _, y in graphs:
-        plt.plot(inputs, y, label=expression, **graph_parameters)
+    for graph in graphs:
+        plt.plot(graph.inputs, graph.values, label=graph.expression, **graph_parameters)
 
     plt.grid(True, 'both', 'both')
 
@@ -161,21 +162,36 @@ def _plot_graphs(parameters: PlotParameters, inputs: np.ndarray, graphs: GraphLi
         plt.legend(loc=0)
 
 
-def _manage_zeros(parameters: PlotParameters, inputs: np.ndarray, graphs: GraphList):
+def _manage_derivatives(parameters: PlotParameters, graphs: list[Graph]):
+    parameters.derivation_orders.sort()
+    if any(order > 3 for order in parameters.derivation_orders):
+        logger.info('derivation of higher orders may not be very accurate')
+
+    try:
+        derivatives = compute_derivatives(parameters, graphs)
+    # except ...:
+    #     pass
+    except Exception:
+        pass
+
+    graphs.extend(derivatives)
+
+
+def _manage_zeros(parameters: PlotParameters, graphs: list[Graph]):
     if parameters.is_integer:
         logger.warning('forcing the inputs to be integers may cause to miss some zeros.')
 
     try:
-        compute_and_print_zeros(parameters, inputs, graphs)
+        compute_and_print_zeros(parameters, graphs)
     except OSError:
         logger.error("error while opening file '%s' to write zeros", parameters.zeros_file)
     except Exception:
         logger.error("error while computing zeros")
 
 
-def _manage_integrals(parameters: PlotParameters, inputs: np.ndarray, graphs: GraphList):
+def _manage_integrals(parameters: PlotParameters, graphs: list[Graph]):
     try:
-        compute_and_print_integrals(parameters, inputs, graphs)
+        compute_and_print_integrals(parameters, graphs)
     except OSError:
         logger.error("error while opening file '%s' to write integral", parameters.zeros_file)
 
@@ -200,14 +216,17 @@ def plot(parameters: PlotParameters) -> None:
         logger.error('no expression without errors, cannot plot anything.')
         return
 
+    if parameters.derivation_orders is not None:
+        _manage_derivatives(parameters, graphs)
+
 
     if parameters.zeros_file is not None:
-        _manage_zeros(parameters, inputs, graphs)
+        _manage_zeros(parameters, graphs)
 
     if parameters.integral_file is not None:
-        _manage_integrals(parameters, inputs, graphs)
+        _manage_integrals(parameters, graphs)
 
 
     if not parameters.no_plot:
-        _plot_graphs(parameters, inputs, graphs)
+        _plot_graphs(parameters, graphs)
         plt.show()

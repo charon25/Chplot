@@ -3,7 +3,7 @@ import numpy as np
 import sys
 
 from chplot.plot.plot_parameters import PlotParameters
-from chplot.plot.utils import Graph, GraphList, ZerosList
+from chplot.plot.utils import Graph, ZerosList
 from chplot.rpn import compute_rpn_unsafe
 
 
@@ -34,7 +34,7 @@ def _compute_simple_zero(parameters: PlotParameters, inputs: np.ndarray, rpn_tok
     return xa
 
 
-def _compute_zero_zone(parameters: PlotParameters, inputs: np.ndarray, rpn_tokens: list[str], zone_start: int, zone_end: int, outputs: list[float]) -> tuple[float, float]:
+def _compute_zero_zone(parameters: PlotParameters, inputs: np.ndarray, rpn_tokens: list[str], zone_start: int, zone_end: int) -> tuple[float, float]:
     """Given an interval where the function is always zero, get the closest float value to the real start and end of this interval.
     Can only be accurate if the function is continuous."""
     # if the zone is at the start of the input, do not compute its start further as we do not go outside the x range
@@ -78,14 +78,13 @@ def _compute_zero_zone(parameters: PlotParameters, inputs: np.ndarray, rpn_token
     return (start_xa, end_xa)
 
 
-def _compute_zeros(parameters: PlotParameters, inputs: np.ndarray, graph: Graph) -> ZerosList:
-    _, rpn, outputs = graph
-
+def _compute_zeros(parameters: PlotParameters, graph: Graph) -> ZerosList:
+    inputs = graph.inputs
     simple_zeros: list[float] = []  # Values of x where graph[x] = 0
     simple_zeros_indexes: list[int] = []    # Indexes where to compute simple zeros
     zero_zones_indexes: list[int] = []      # Indexes of zero "zones", always by two (start and end)
 
-    for index, (y1, y2) in enumerate(zip(outputs, outputs[1:])):
+    for index, (y1, y2) in enumerate(zip(graph.values, graph.values[1:])):
         # No point to do anything is one is nan
         if math.isnan(y1) or math.isnan(y2):
             continue
@@ -123,21 +122,21 @@ def _compute_zeros(parameters: PlotParameters, inputs: np.ndarray, graph: Graph)
     if len(zero_zones_indexes) % 2 == 1:
         zero_zones_indexes.append(len(inputs) - 1)
 
-    rpn_tokens = rpn.split(' ')
+    rpn_tokens = graph.rpn.split(' ')
     simple_zeros.extend(_compute_simple_zero(parameters, inputs, rpn_tokens, zero_index) for zero_index in simple_zeros_indexes)
 
     all_zeros: ZerosList = [(zero_x, None) for zero_x in simple_zeros]
     all_zeros.extend(
         _compute_zero_zone(
             parameters, inputs, rpn_tokens,
-            zero_zones_indexes[index], zero_zones_indexes[index + 1], outputs
+            zero_zones_indexes[index], zero_zones_indexes[index + 1]
         ) for index in range(0, len(zero_zones_indexes), 2)
     )
 
     return sorted(all_zeros)
 
 
-def compute_and_print_zeros(parameters: PlotParameters, inputs: np.ndarray, graphs: GraphList):
+def compute_and_print_zeros(parameters: PlotParameters, graphs: list[Graph]):
     # print to stdout
     if parameters.zeros_file == 0:
         file = sys.stdout
@@ -147,13 +146,12 @@ def compute_and_print_zeros(parameters: PlotParameters, inputs: np.ndarray, grap
     file.write('\nNote that non-continuous functions may give false zeros. Furthermore, some zeros may be missing if the graph is tangent to the x-axis.\n')
     file.write(f'On the interval [{round(parameters.x_lim[0], 3)} ; {round(parameters.x_lim[1], 3)}]...\n\n')
     for graph in graphs:
-        expression = graph[0]
-        zeros = _compute_zeros(parameters, inputs, graph)
+        zeros = _compute_zeros(parameters, graph)
         if len(zeros) == 0:
-            file.write(f'  the function f(x) = {expression} never equals zero')
+            file.write(f'  the function f(x) = {graph.expression} never equals zero')
             continue
 
-        file.write(f'  the function f(x) = {expression} equals zero...\n')
+        file.write(f'  the function f(x) = {graph.expression} equals zero...\n')
         for zero_start, zero_end in zeros:
             # Simple zero
             if zero_end is None:

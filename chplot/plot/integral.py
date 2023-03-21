@@ -4,7 +4,7 @@ import numpy as np
 import sys
 
 from chplot.plot.plot_parameters import PlotParameters
-from chplot.plot.utils import Graph, GraphList
+from chplot.plot.utils import Graph
 
 
 logger = logging.getLogger(__name__)
@@ -12,24 +12,23 @@ logger = logging.getLogger(__name__)
 
 # See https://en.wikipedia.org/wiki/Trapezoidal_rule for the computation of the integral
 # and http://isdl.cau.ac.kr/education.data/numerical.analysis/Lecture17.pdf for the computation of the second derivative needed for the error
-def _compute_integral(parameters: PlotParameters, inputs: np.ndarray, graph: Graph) -> tuple[float, float]:
-    _, _, outputs = graph
-    delta = inputs[1] - inputs[0]
+def _compute_integral(parameters: PlotParameters, graph: Graph) -> tuple[float, float]:
+    delta = graph.inputs[1] - graph.inputs[0]
     # use numpy as it's faster even with the conversion
-    np_outputs = np.nan_to_num(outputs, copy=True, nan=0)
+    np_values = np.nan_to_num(graph.values, copy=True, nan=0)
 
-    integral = sum(np_outputs[1:-1]) + (np_outputs[0] + np_outputs[-1]) / 2
+    integral = sum(np_values[1:-1]) + (np_values[0] + np_values[-1]) / 2
     integral *= delta
 
-    unscaled_second_derivative = -np_outputs[3:] + 4 * np_outputs[2:-1] - 5 * np_outputs[1:-2] + 2 * np_outputs[:-3]
+    unscaled_second_derivative = -np_values[3:] + 4 * np_values[2:-1] - 5 * np_values[1:-2] + 2 * np_values[:-3]
     second_derivative_abs_maximum = np.max(np.abs(unscaled_second_derivative)) / (delta * delta)
 
-    abs_error = second_derivative_abs_maximum * ((inputs[-1] - inputs[1]) ** 3) / (12 * (parameters.n_points ** 2))
+    abs_error = second_derivative_abs_maximum * ((graph.inputs[-1] - graph.inputs[1]) ** 3) / (12 * (parameters.n_points ** 2))
 
     return (float(integral), float(abs_error))
 
 
-def compute_and_print_integrals(parameters: PlotParameters, inputs: np.ndarray, graphs: GraphList):
+def compute_and_print_integrals(parameters: PlotParameters, graphs: list[Graph]):
     # print to stdout
     if parameters.integral_file == 0:
         file = sys.stdout
@@ -41,7 +40,7 @@ def compute_and_print_integrals(parameters: PlotParameters, inputs: np.ndarray, 
     for graph in graphs:
         expression = graph[0]
         try:
-            integral, abs_error = _compute_integral(parameters, inputs, graph)
+            integral, abs_error = _compute_integral(parameters, graph)
             max_decimal_places = abs(math.floor(1 + math.log10(abs_error)))
         except Exception:
             logger.error("error while computing integral for expression '%s'", expression)

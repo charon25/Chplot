@@ -22,7 +22,7 @@ class TestComputeIntegrals(unittest.TestCase):
         inputs = _generate_inputs(parameters)
         graph = _generate_graphs(parameters, inputs)[0]
 
-        self.assertTupleAlmostEqual(_compute_integral(parameters, inputs, graph), (0.5, 0.0))
+        self.assertTupleAlmostEqual(_compute_integral(parameters, graph), (0.5, 0.0))
 
     def test_exact_integral_2(self):
         parameters = MockParameters(expressions=['7*x-2'], x_lim=(-4, 3))
@@ -30,14 +30,14 @@ class TestComputeIntegrals(unittest.TestCase):
         inputs = _generate_inputs(parameters)
         graph = _generate_graphs(parameters, inputs)[0]
 
-        self.assertTupleAlmostEqual(_compute_integral(parameters, inputs, graph), (-38.5, 0.0))
+        self.assertTupleAlmostEqual(_compute_integral(parameters, graph), (-38.5, 0.0))
 
     def test_integral_polynome(self):
         parameters = MockParameters(expressions=['3*x^3-2*x^2+x-10'], x_lim=(-2, 6))
         set_default_values(parameters)
         inputs = _generate_inputs(parameters)
         graph = _generate_graphs(parameters, inputs)[0]
-        integral, abs_error = _compute_integral(parameters, inputs, graph)
+        integral, abs_error = _compute_integral(parameters, graph)
 
         self.assertTrue(integral - abs_error <= 2240 / 3 <= integral + abs_error)
 
@@ -46,7 +46,7 @@ class TestComputeIntegrals(unittest.TestCase):
         set_default_values(parameters)
         inputs = _generate_inputs(parameters)
         graph = _generate_graphs(parameters, inputs)[0]
-        integral, abs_error = _compute_integral(parameters, inputs, graph)
+        integral, abs_error = _compute_integral(parameters, graph)
 
         self.assertTrue(integral - abs_error <= math.pi / 2 <= integral + abs_error)
 
@@ -56,7 +56,7 @@ class TestComputeIntegrals(unittest.TestCase):
         convert_parameters_expression(parameters)
         inputs = _generate_inputs(parameters)
         graph = _generate_graphs(parameters, inputs)[0]
-        integral, abs_error = _compute_integral(parameters, inputs, graph)
+        integral, abs_error = _compute_integral(parameters, graph)
 
         self.assertTrue(integral - abs_error <= 1.0 <= integral + abs_error)
 
@@ -65,7 +65,7 @@ class TestComputeIntegrals(unittest.TestCase):
         set_default_values(parameters)
         inputs = _generate_inputs(parameters)
         graph = _generate_graphs(parameters, inputs)[0]
-        integral, abs_error = _compute_integral(parameters, inputs, graph)
+        integral, abs_error = _compute_integral(parameters, graph)
 
         self.assertTrue(integral - abs_error <= 2.0 <= integral + abs_error)
 
@@ -74,7 +74,7 @@ class TestComputeIntegrals(unittest.TestCase):
         set_default_values(parameters)
         inputs = _generate_inputs(parameters)
         graph = _generate_graphs(parameters, inputs)[0]
-        integral, abs_error = _compute_integral(parameters, inputs, graph)
+        integral, abs_error = _compute_integral(parameters, graph)
         print(integral, abs_error)
 
         self.assertTrue(integral - abs_error <= 8 * math.sqrt(2) / 3 <= integral + abs_error)
