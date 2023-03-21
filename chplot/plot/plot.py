@@ -165,14 +165,14 @@ def _plot_graphs(parameters: PlotParameters, graphs: list[Graph]) -> None:
 def _manage_derivatives(parameters: PlotParameters, graphs: list[Graph]):
     parameters.derivation_orders.sort()
     if any(order > 3 for order in parameters.derivation_orders):
-        logger.info('derivation of higher orders may not be very accurate')
+        logger.info('derivation of higher orders may not be very accurate. The number of points used to compute the derivative will be reduced if necessary. Reduce it further to get more accurate.')
 
-    try:
-        derivatives = compute_derivatives(parameters, graphs)
+    # try:
+    derivatives = compute_derivatives(parameters, graphs)
     # except ...:
     #     pass
-    except Exception:
-        pass
+    # except Exception:
+    #     pass
 
     graphs.extend(derivatives)
 

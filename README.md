@@ -1,6 +1,6 @@
 TODO :
 
- - possibilité de plot les dérivées des fonctions
+ - dérivées + zéros
  - voir pour que des trucs genre 3x ou 4sin(x) fonctionnent
  - gestion fichier (avec analyse format)
  - fonction depuis fichiers

@@ -9,9 +9,32 @@ from chplot.plot.plot import _generate_graphs, _generate_inputs
 from chplot.plot.plot_parameters import convert_parameters_expression, set_default_values
 from chplot.plot.derivative import _get_first_derivative, _get_second_derivative, _get_third_derivative
 from chplot.plot.derivative import _get_fourth_derivative, _get_fifth_derivative, _get_sixth_derivative
-from chplot.plot.derivative import _get_nth_derivative, _get_size_reduction
-from mock_parameters import MockParameters
+from chplot.plot.derivative import _get_nth_derivative
+from chplot.plot.derivative import _get_max_number_of_points, _resize_array, _get_size_reduction
 
+
+class TestUtilityFunctions(unittest.TestCase):
+
+    def test_get_max_number_of_points(self):
+        points_numbers = [_get_max_number_of_points(n) for n in range(1, 10)]
+        self.assertListEqual(points_numbers, [1_000_000, 500_000, 10_000, 1000, 100, 100, 50, 50, 50])
+
+    def test_get_size_reduction(self):
+        reductions = [_get_size_reduction(n) for n in range(1, 13)]
+        self.assertListEqual(reductions, [4, 4, 4, 4, 5, 5, 9, 9, 9, 9, 10, 10])
+
+    def test_resize_array_no_resizing(self):
+        x = list(range(100))
+        self.assertListEqual(_resize_array(x, 1000), x)
+        self.assertListEqual(_resize_array(x, 100), x)
+
+    def test_resize_array_half(self):
+        x = list(range(100))
+        self.assertListEqual(_resize_array(x, 50), list(range(0, 100, 2)))
+
+    def test_resize_array_irregular(self):
+        x = list(range(100))
+        self.assertListEqual(_resize_array(x, 13), [0, 7, 14, 21, 28, 35, 42, 49, 56, 63, 70, 77, 84, 91, 98])
 
 N = 100
 

@@ -1,10 +1,33 @@
-
-
 import numpy as np
 
 from chplot.plot.plot_parameters import PlotParameters
 from chplot.plot.utils import Graph
 
+
+MAX_NUMBER_OF_POINTS_BY_ORDER: dict[int, int] = {
+    1: 1_000_000,
+    2: 500_000,
+    3: 10_000,
+    4: 1000,
+    5: 100,
+    6: 100,
+    7: 50,
+}
+
+def _get_max_number_of_points(n: int) -> int:
+    """Return the max number of points to use to compute the n-th derivative."""
+    if n <= 7:
+        return MAX_NUMBER_OF_POINTS_BY_ORDER[n]
+    return MAX_NUMBER_OF_POINTS_BY_ORDER[7]
+
+def _resize_array(input: np.ndarray, n_points: int) -> np.ndarray:
+    """Resize the given array to an array containing maximum n_points. This is approximative, and the result can contain more than asked."""
+    input_len = len(input)
+    if n_points >= input_len:
+        return input
+
+    spacing = input_len // n_points
+    return input[::spacing]
 
 
 def _get_size_reduction(n: int) -> int:
@@ -64,14 +87,21 @@ def _get_nth_derivative(f: np.ndarray, h: float, n: int) -> np.ndarray:
 def compute_derivatives(parameters: PlotParameters, graphs: list[Graph]) -> list[Graph]:
     derivatives: list[Graph] = []
     for graph in graphs:
-        h = graph.inputs[1] - graph.inputs[0]
+        values = np.nan_to_num(graph.values, copy=True, nan=0)
         for order in parameters.derivation_orders:
             shrinkage = _get_size_reduction(order)
+            max_points = _get_max_number_of_points(order)
+            inputs = _resize_array(graph.inputs, max_points)
+            values = _resize_array(values, max_points)
+            h = inputs[1] - inputs[0]
+
+            derivative_expression = f'd{order}/dx{order} * ({graph.expression})' if order != 1 else f'd/dx * ({graph.expression})'
             derivative_graph = Graph(
-                inputs=graph.inputs[shrinkage:-shrinkage],
-                expression=f'd{order}/dx{order} * {graph.expression}',
+                inputs=inputs[shrinkage:-shrinkage],
+                expression=derivative_expression,
                 rpn=None,
-                values=_get_nth_derivative(graph.values, h, order)
+                values=_get_nth_derivative(values, h, order)
             )
             derivatives.append(derivative_graph)
-    pass
+
+    return derivatives

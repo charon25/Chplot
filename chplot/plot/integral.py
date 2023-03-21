@@ -3,6 +3,7 @@ import math
 import numpy as np
 import sys
 
+from chplot.plot.derivative import _get_second_derivative
 from chplot.plot.plot_parameters import PlotParameters
 from chplot.plot.utils import Graph
 
@@ -10,20 +11,26 @@ from chplot.plot.utils import Graph
 logger = logging.getLogger(__name__)
 
 
+def _smart_round(x: float) -> float:
+    if x == 0:
+        return 0.0
+
+    digits = abs(math.floor(math.log10(abs(x))) + 1)
+    return round(x, digits + 5)
+
 # See https://en.wikipedia.org/wiki/Trapezoidal_rule for the computation of the integral
 # and http://isdl.cau.ac.kr/education.data/numerical.analysis/Lecture17.pdf for the computation of the second derivative needed for the error
 def _compute_integral(parameters: PlotParameters, graph: Graph) -> tuple[float, float]:
     delta = graph.inputs[1] - graph.inputs[0]
     # use numpy as it's faster even with the conversion
-    np_values = np.nan_to_num(graph.values, copy=True, nan=0)
+    values = np.nan_to_num(graph.values, copy=True, nan=0)
 
-    integral = sum(np_values[1:-1]) + (np_values[0] + np_values[-1]) / 2
+    integral = sum(values[1:-1]) + (values[0] + values[-1]) / 2
     integral *= delta
 
-    unscaled_second_derivative = -np_values[3:] + 4 * np_values[2:-1] - 5 * np_values[1:-2] + 2 * np_values[:-3]
-    second_derivative_abs_maximum = np.max(np.abs(unscaled_second_derivative)) / (delta * delta)
+    second_derivative_abs_maximum = np.max(np.abs(_get_second_derivative(values, delta)))
 
-    abs_error = second_derivative_abs_maximum * ((graph.inputs[-1] - graph.inputs[1]) ** 3) / (12 * (parameters.n_points ** 2))
+    abs_error = second_derivative_abs_maximum * ((graph.inputs[-1] - graph.inputs[0]) ** 3) / (12 * (parameters.n_points ** 2))
 
     return (float(integral), float(abs_error))
 
@@ -36,17 +43,18 @@ def compute_and_print_integrals(parameters: PlotParameters, graphs: list[Graph])
         file = open(parameters.integral_file, 'w', encoding='utf-8')
 
     file.write('\nNote that the more points, the smallest the error and that floating point numbers may introduce errors.\n')
-    file.write(f'The integral on the interval [{round(parameters.x_lim[0], 3)} ; {round(parameters.x_lim[1], 3)}] of the function{"s" if len(graphs) > 1 else ""}...\n\n')
+    if any(graph.rpn is None for graph in graphs):
+        file.write('The x-axis limits on derivatives are slightly tighter because of the algorithm used. This may be counteracted by addind more points.\n')
+    file.write(f'\nThe integral of the function{"s" if len(graphs) > 1 else ""}...\n\n')
     for graph in graphs:
-        expression = graph[0]
         try:
             integral, abs_error = _compute_integral(parameters, graph)
             max_decimal_places = abs(math.floor(1 + math.log10(abs_error)))
         except Exception:
-            logger.error("error while computing integral for expression '%s'", expression)
+            logger.error("error while computing integral for expression '%s'", graph.expression)
             continue
 
-        file.write(f' f(x) = {expression} is {round(integral, max_decimal_places)} ± {abs_error:.2e}...\n')
+        file.write(f' f(x) = {graph.expression} on [{_smart_round(graph.inputs[0])} ; {_smart_round(graph.inputs[-1])}] is {round(integral, max_decimal_places)} ± {abs_error:.2e}...\n')
         file.write('\n')
 
     file.write('\n')
