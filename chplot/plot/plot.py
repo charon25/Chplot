@@ -12,7 +12,7 @@ from chplot.functions import FUNCTIONS
 from chplot.plot.derivative import compute_derivatives
 from chplot.plot.integral import compute_and_print_integrals
 from chplot.plot.plot_parameters import convert_parameters_expression, PlotParameters, set_default_values
-from chplot.plot.utils import Graph, NORMAL_UNRECOGNIZED_CHARACTERS
+from chplot.plot.utils import Graph, NORMAL_UNRECOGNIZED_CHARACTERS, GraphType
 from chplot.plot.zeros import compute_and_print_zeros
 from chplot.rpn import compute_rpn_list, get_rpn_errors
 
@@ -84,7 +84,7 @@ def _generate_graphs(parameters: PlotParameters, inputs: np.ndarray) -> list[Gra
             logger.warning("unknown characters in expression '%s': %s", expression, ''.join(unknown_characters))
 
         values = compute_rpn_list(rpn, inputs, variable=parameters.variable)
-        graphs.append(Graph(inputs, expression, rpn, values))
+        graphs.append(Graph(inputs, GraphType.BASE, expression, rpn, values))
 
     return graphs
 

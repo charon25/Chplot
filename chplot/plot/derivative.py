@@ -1,7 +1,7 @@
 import numpy as np
 
 from chplot.plot.plot_parameters import PlotParameters
-from chplot.plot.utils import Graph
+from chplot.plot.utils import Graph, GraphType
 
 
 MAX_NUMBER_OF_POINTS_BY_ORDER: dict[int, int] = {
@@ -98,6 +98,7 @@ def compute_derivatives(parameters: PlotParameters, graphs: list[Graph]) -> list
             derivative_expression = f'd{order}/dx{order} * ({graph.expression})' if order != 1 else f'd/dx * ({graph.expression})'
             derivative_graph = Graph(
                 inputs=inputs[shrinkage:-shrinkage],
+                type=GraphType.DERIVATIVE,
                 expression=derivative_expression,
                 rpn=None,
                 values=_get_nth_derivative(values, h, order)

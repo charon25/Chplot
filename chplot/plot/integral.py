@@ -5,7 +5,7 @@ import sys
 
 from chplot.plot.derivative import _get_second_derivative
 from chplot.plot.plot_parameters import PlotParameters
-from chplot.plot.utils import Graph
+from chplot.plot.utils import Graph, GraphType
 
 
 logger = logging.getLogger(__name__)
@@ -19,7 +19,6 @@ def _smart_round(x: float) -> float:
     return round(x, digits + 5)
 
 # See https://en.wikipedia.org/wiki/Trapezoidal_rule for the computation of the integral
-# and http://isdl.cau.ac.kr/education.data/numerical.analysis/Lecture17.pdf for the computation of the second derivative needed for the error
 def _compute_integral(parameters: PlotParameters, graph: Graph) -> tuple[float, float]:
     delta = graph.inputs[1] - graph.inputs[0]
     # use numpy as it's faster even with the conversion
@@ -43,8 +42,10 @@ def compute_and_print_integrals(parameters: PlotParameters, graphs: list[Graph])
         file = open(parameters.integral_file, 'w', encoding='utf-8')
 
     file.write('\nNote that the more points, the smallest the error and that floating point numbers may introduce errors.\n')
-    if any(graph.rpn is None for graph in graphs):
-        file.write('The x-axis limits on derivatives are slightly tighter because of the algorithm used. This may be counteracted by addind more points.\n')
+
+    if any(graph.type == GraphType.DERIVATIVE for graph in graphs):
+        file.write('The x-axis limits on derivatives are slightly tighter because of the algorithm used. This may be counteracted by adding more points.\n')
+
     file.write(f'\nThe integral of the function{"s" if len(graphs) > 1 else ""}...\n\n')
     for graph in graphs:
         try:
