@@ -3,10 +3,12 @@ logging.disable(logging.CRITICAL)
 import math
 import unittest
 
-from chplot.plot.utils import ZerosList
+import numpy as np
+
 from chplot.plot.plot import _generate_graphs, _generate_inputs
 from chplot.plot.plot_parameters import set_default_values
-from chplot.plot.zeros import _compute_zeros
+from chplot.plot.utils import GraphType, ZerosList
+from chplot.plot.zeros import _compute_zeros, _compute_simple_zero_with_interpolation
 from mock_parameters import MockParameters
 
 
@@ -115,3 +117,31 @@ class TestComputeZeros(unittest.TestCase):
 
         self.assertZerosListAlmostEqual(_compute_zeros(parameters, graph), [(0.0, 1.0)])
 
+
+class TestComputeZeroInterpolation(unittest.TestCase):
+
+    # A list of zeros contains float 2-tuples either of the form (lower, upper) if the function is zero on an interval
+    # or (x_zero, None) if the function is zero only at one point
+    def assertZerosListAlmostEqual(self, computed_zeros: ZerosList, real_zeros: ZerosList):
+        for (computed_lower, computed_upper), (real_lower, real_upper) in zip(computed_zeros, real_zeros):
+            self.assertAlmostEqual(computed_lower, real_lower)
+            self.assertAlmostEqual(computed_upper, real_upper)
+
+    def test_interpolation_neg_to_pos(self):
+        graph = MockParameters(type=GraphType.DERIVATIVE, inputs=[0, 1, 2, 3], values=[1, -2, 2, 3])
+        self.assertAlmostEqual(_compute_simple_zero_with_interpolation(graph, 1), 1.5)
+
+    def test_interpolation_pos_to_neg(self):
+        x = np.linspace(0, 1, 101, endpoint=True)
+        graph = MockParameters(type=GraphType.DERIVATIVE, inputs=x, values=x*x-0.5)
+        self.assertAlmostEqual(_compute_simple_zero_with_interpolation(graph, 70), 0.7 + 0.01 / 1.41)
+
+    def test_compute_simple_zeros_interpolation(self):
+        x = np.linspace(-1, 1, 201, endpoint=True)
+        graph = MockParameters(type=GraphType.DERIVATIVE, inputs=x, values=x*x-0.5)
+        self.assertZerosListAlmostEqual(_compute_zeros(None, graph), [(-0.7 - 0.01 / 1.41, None), (0.7 + 0.01 / 1.41, None)])
+
+    def test_compute_zero_zone_interpolation(self):
+        x = np.linspace(-1, 1, 201, endpoint=True)
+        graph = MockParameters(type=GraphType.DERIVATIVE, inputs=x, values=1*(x<-0.5)+1*(x>0.5))
+        self.assertZerosListAlmostEqual(_compute_zeros(None, graph), [(-0.5, 0.5)])

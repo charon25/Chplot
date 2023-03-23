@@ -1,6 +1,5 @@
 TODO :
 
- - dérivées + zéros
  - voir pour que des trucs genre 3x ou 4sin(x) fonctionnent
  - gestion fichier (avec analyse format)
  - fonction depuis fichiers
@@ -23,8 +22,8 @@ Paramètres CLI :
  - --dis pour enlever les interpolations linéaires OK
 
  - --zeros pour calculer les zéros OK
- - --integral pour calculer l'intégrale sur l'interval considéré
- - --deriv pour afficher des dérivées (suivies par une liste d'ordre de dérivation)
+ - --integral pour calculer l'intégrale sur l'interval considéré OK
+ - --deriv pour afficher des dérivées (suivies par une liste d'ordre de dérivation) OK
 
  - -s pour enregistrer la figure au lieu de la show (avec nom fichier)
  - -c pour charger des constantes (au moins 1 paramètres, soit de la forme "\<nom\>=\<expression\>" soit un fichier contenant ce format, un par ligne) OK

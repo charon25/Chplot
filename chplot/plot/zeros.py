@@ -3,7 +3,7 @@ import numpy as np
 import sys
 
 from chplot.plot.plot_parameters import PlotParameters
-from chplot.plot.utils import Graph, ZerosList
+from chplot.plot.utils import Graph, GraphType, ZerosList
 from chplot.rpn import compute_rpn_unsafe
 
 
@@ -32,6 +32,12 @@ def _compute_simple_zero(parameters: PlotParameters, inputs: np.ndarray, rpn_tok
         it += 1
 
     return xa
+
+
+def _compute_simple_zero_with_interpolation(graph: Graph, zero_index: int) -> float:
+    (x1, x2), (y1, y2) = graph.inputs[zero_index:zero_index + 2], graph.values[zero_index:zero_index + 2]
+    a = (y2 - y1) / (x2 - x1)
+    return x2 - y2 / a
 
 
 def _compute_zero_zone(parameters: PlotParameters, inputs: np.ndarray, rpn_tokens: list[str], zone_start: int, zone_end: int) -> tuple[float, float]:
@@ -118,20 +124,30 @@ def _compute_zeros(parameters: PlotParameters, graph: Graph) -> ZerosList:
                 if index == 0:
                     zero_zones_indexes.append(0)
 
-    # the last zero zone goes until the end, so it needs to be closed
+    # if the last zero zone goes until the end, close it
     if len(zero_zones_indexes) % 2 == 1:
         zero_zones_indexes.append(len(inputs) - 1)
 
-    rpn_tokens = graph.rpn.split(' ')
-    simple_zeros.extend(_compute_simple_zero(parameters, inputs, rpn_tokens, zero_index) for zero_index in simple_zeros_indexes)
+    if graph.type == GraphType.BASE:
+        rpn_tokens = graph.rpn.split(' ')
+        simple_zeros.extend(_compute_simple_zero(parameters, inputs, rpn_tokens, zero_index) for zero_index in simple_zeros_indexes)
 
-    all_zeros: ZerosList = [(zero_x, None) for zero_x in simple_zeros]
-    all_zeros.extend(
-        _compute_zero_zone(
-            parameters, inputs, rpn_tokens,
-            zero_zones_indexes[index], zero_zones_indexes[index + 1]
-        ) for index in range(0, len(zero_zones_indexes), 2)
-    )
+        all_zeros: ZerosList = [(zero_x, None) for zero_x in simple_zeros]
+        all_zeros.extend(
+            _compute_zero_zone(
+                parameters, inputs, rpn_tokens,
+                zero_zones_indexes[index], zero_zones_indexes[index + 1]
+            ) for index in range(0, len(zero_zones_indexes), 2)
+        )
+
+    else:
+        simple_zeros.extend(_compute_simple_zero_with_interpolation(graph, zero_index) for zero_index in simple_zeros_indexes)
+
+        all_zeros: ZerosList = [(zero_x, None) for zero_x in simple_zeros]
+        all_zeros.extend(
+            (inputs[zero_zones_indexes[index]], inputs[zero_zones_indexes[index + 1]])
+            for index in range(0, len(zero_zones_indexes), 2)
+        )
 
     return sorted(all_zeros)
 
@@ -144,21 +160,25 @@ def compute_and_print_zeros(parameters: PlotParameters, graphs: list[Graph]):
         file = open(parameters.zeros_file, 'w', encoding='utf-8')
 
     file.write('\nNote that non-continuous functions may give false zeros. Furthermore, some zeros may be missing if the graph is tangent to the x-axis.\n')
-    file.write(f'On the interval [{round(parameters.x_lim[0], 3)} ; {round(parameters.x_lim[1], 3)}]...\n\n')
+
+    if any(graph.type in (GraphType.DERIVATIVE, GraphType.FILE) for graph in graphs):
+        file.write('Furthermore, on derivatives and file data, zeros are approximated using linear interpolation, and may be far from their real values.\n')
+
+    file.write(f'\nOn the interval [{round(parameters.x_lim[0], 3)} ; {round(parameters.x_lim[1], 3)}]...\n\n')
     for graph in graphs:
         zeros = _compute_zeros(parameters, graph)
         if len(zeros) == 0:
-            file.write(f'  the function f(x) = {graph.expression} never equals zero')
+            file.write(f'  the function f(x) = {graph.expression} never equals zero\n')
             continue
 
         file.write(f'  the function f(x) = {graph.expression} equals zero...\n')
         for zero_start, zero_end in zeros:
             # Simple zero
             if zero_end is None:
-                file.write(f'    at x = {round(zero_start, 15)}\n')
+                file.write(f'    at x = {round(zero_start, 10)}\n')
             # Zero zone
             else:
-                file.write(f'    on [{round(zero_start, 15)} ; {round(zero_end, 15)}]\n')
+                file.write(f'    on [{round(zero_start, 10)} ; {round(zero_end, 10)}]\n')
         file.write('\n')
 
     file.write('\n')
