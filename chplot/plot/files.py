@@ -1,5 +1,4 @@
 from enum import Enum
-from fileinput import filename
 import logging
 import math
 import ntpath
@@ -107,14 +106,16 @@ def _read_one_file(filepath: str) -> list[Graph]:
         if _is_line_numeric(line):
             if decimal_separator in (DecimalSeparator.COMMA, DecimalSeparator.UNKNOWN):
                 line = line.replace(',', '.')
-                x, *values = map(_to_float_or_nan, line.split(column_separator))
 
-                # If there are suddenly a new columns, increase the inputs and values count
-                if len(values) > len(inputs_list):
-                    inputs_list.extend(([] for _ in  range(len(values) - len(inputs_list))))
-                    values_list.extend(([] for _ in  range(len(values) - len(inputs_list))))
+            x, *values = map(_to_float_or_nan, line.split(column_separator))
 
-                for index, value in enumerate(values):
+            # If there are suddenly a new columns, increase the inputs and values count
+            if len(values) > len(inputs_list):
+                inputs_list.extend(([] for _ in  range(len(values) - len(inputs_list))))
+                values_list.extend(([] for _ in  range(len(values) - len(values_list))))
+
+            for index, value in enumerate(values):
+                if not math.isnan(value):
                     inputs_list[index].append(x)
                     values_list[index].append(value)
 
@@ -125,10 +126,12 @@ def _read_one_file(filepath: str) -> list[Graph]:
     # Remove the first column, as we do not care about the x label
     column_names = column_names[1:]
     if len(column_names) < len(values_list):
-        column_names.extend((
-            f'{ntpath.basename(filename)} - Column {index + len(column_names) + 1}'
+        # Extend will change column_names length between each iteration, so we need to store the offset before
+        offset = len(column_names) + 1
+        column_names.extend([
+            f'{ntpath.basename(filepath)} - Column {index + offset}'
             for index in range(len(values_list) - len(column_names))
-        ))
+        ])
 
 
     return [
@@ -143,6 +146,7 @@ def _read_files(parameters: PlotParameters) -> list[Graph]:
     for filepath in parameters.data_files:
         try:
             graphs.extend(_read_one_file(filepath))
+            print(filepath)
         except FileNotFoundError:
             logger.error("file '%s' does not exist or is unreachable.", filepath)
         except OSError:
