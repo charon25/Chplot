@@ -90,6 +90,8 @@ def _to_float_or_nan(x: str) -> float:
     except ValueError:
         return math.nan
 
+def _get_filename(filepath: str) -> str:
+    return ntpath.basename(filepath)
 
 def _read_one_file(filepath: str) -> list[Graph]:
     # read all at once because we may need to backtrack to get the title line
@@ -121,7 +123,7 @@ def _read_one_file(filepath: str) -> list[Graph]:
 
         else:
             if line != '' and not column_names:
-                column_names = _get_column_names(line, column_separator)
+                column_names = [f'{_get_filename(filepath)} - {column_name}' for column_name in _get_column_names(line, column_separator)]
 
     # Remove the first column, as we do not care about the x label
     column_names = column_names[1:]
@@ -129,7 +131,7 @@ def _read_one_file(filepath: str) -> list[Graph]:
         # Extend will change column_names length between each iteration, so we need to store the offset before
         offset = len(column_names) + 1
         column_names.extend([
-            f'{ntpath.basename(filepath)} - Column {index + offset}'
+            f'{_get_filename(filepath)} - Column {index + offset}'
             for index in range(len(values_list) - len(column_names))
         ])
 
@@ -146,7 +148,6 @@ def _read_files(parameters: PlotParameters) -> list[Graph]:
     for filepath in parameters.data_files:
         try:
             graphs.extend(_read_one_file(filepath))
-            print(filepath)
         except FileNotFoundError:
             logger.error("file '%s' does not exist or is unreachable.", filepath)
         except OSError:
