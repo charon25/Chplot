@@ -1,10 +1,13 @@
 import logging
+
+import numpy as np
 logging.disable(logging.CRITICAL)
 import unittest
 
 import matplotlib.pyplot as plt
 
 from chplot.plot.plot import _get_x_lim, _get_x_lim_graph, _get_y_lim_graph
+from chplot.plot.utils import Graph
 from mock_parameters import MockParameters
 
 
@@ -44,6 +47,11 @@ class TestXLimGraph(unittest.TestCase):
     def test_correct_order_log_negative(self):
         parameters = MockParameters(x_lim=(-1, -2), is_x_log=True)
         self.assertTupleEqual(_get_x_lim_graph(parameters), ())
+
+    def test_x_lim_moved_by_graphs(self):
+        parameters = MockParameters(x_lim=(0, 1), is_x_log=False)
+        graphs = [Graph(np.array([-1, 2]), None, None, None, None)]
+        self.assertTupleEqual(_get_x_lim_graph(parameters, graphs), (-1, 2))
 
 
 class TestYLimGraph(unittest.TestCase):
