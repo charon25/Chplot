@@ -1,7 +1,6 @@
 TODO :
 
  - voir pour que des trucs genre 3x ou 4sin(x) fonctionnent
- - enregistrer les points
  - équations depuis fichiers
  - fonction depuis fichiers
  - revoir le nom et l'emplacement des loggers

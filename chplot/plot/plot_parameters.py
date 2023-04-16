@@ -42,6 +42,7 @@ class PlotParameters:
     constants: Optional[Union[list[str], FunctionDict]]
     data_files: Optional[list[str]]
     save_figure_path: Optional[str]
+    save_data_path: Optional[str]
 
 
 DEFAULT_PARAMETERS = PlotParameters(
@@ -72,6 +73,7 @@ DEFAULT_PARAMETERS = PlotParameters(
     constants=lambda:[], # prevents reference copying
     data_files=None,
     save_figure_path=None,
+    save_data_path=None,
 )
 
 

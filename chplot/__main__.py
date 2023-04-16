@@ -18,7 +18,7 @@ def positive_integer(value):
 
 def read_parameters() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="TODO")
-    parser.add_argument('expressions', metavar='EXPRESSION', nargs='+', help='The expression(s) to plot.')
+    parser.add_argument('expressions', metavar='EXPRESSION', nargs='*', help='The expression(s) to plot.')
     parser.add_argument('-v', metavar='VARIABLE', dest='variable', help="The name of the variable plotted on the x-axis (default: 'x').")
 
     parser.add_argument('-n', metavar='POINTS', type=int, dest='n_points', help='Number of points for each expression (default: 10000).')
@@ -44,7 +44,8 @@ def read_parameters() -> argparse.Namespace:
 
     parser.add_argument('-c', nargs='+', dest='constants_arg', metavar=('CONSTANT', 'CONSTANT'), help='Constants to add to the computation, at least one and as much as needed. Either of the form "<name>=<expression>", or the name of a file containing this form of statement, one on each line.')
     parser.add_argument('-f', nargs='+', dest='data_files', metavar=('CSV_FILE', 'CSV_FILE'), help='Filenames of CSV files to add points.')
-    parser.add_argument('-s', dest='save_figure_path', metavar='FIGURE_PATH', help='Save figure to file.')
+    parser.add_argument('-s', dest='save_figure_path', metavar='FIGURE_FILE', help='Save figure to file.')
+    parser.add_argument('-d', dest='save_data_path', metavar='DATA_FILE', help='Save all points to a csv file.')
 
     return parser.parse_args()
 

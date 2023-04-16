@@ -1,5 +1,6 @@
+import csv
 import logging
-from typing import Any
+from typing import Any, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -30,11 +31,23 @@ def _get_x_lim(parameters: PlotParameters) -> tuple[float, float]:
 
 
 
-def _get_x_lim_graph(parameters: PlotParameters) -> tuple[float, float]:
+def _get_x_lim_graph(parameters: PlotParameters, graphs: Optional[list[Graph]] = None) -> tuple[float, float]:
     """Return the bounds for the plot x-axis. Will reverse if in the wrong order, and remove some negative bounds for log-scaled x-axis."""
     x_min, x_max = parameters.x_lim
     if x_max < x_min:
         x_min, x_max = x_max, x_min
+
+    prev_x_min = x_min
+    prev_x_max = x_max
+    if graphs is not None:
+        for graph in graphs:
+            x_min = min(x_min, graph.inputs.min())
+            x_max = max(x_max, graph.inputs.max())
+
+    if prev_x_min > x_min:
+        logger.info('lower x bound of graph was decreased to %s to accomodate all data.', round(x_min, 3))
+    if prev_x_max < x_max:
+        logger.info('upper x bound of graph was increased to %s to accomodate all data.', round(x_max, 3))
 
     if not parameters.is_x_log:
         return (x_min, x_max)
@@ -130,6 +143,7 @@ def _get_y_lim_graph(parameters: PlotParameters) -> tuple[float, float]:
 
     return (y_min, y_max)
 
+
 def _get_graph_parameters(parameters: PlotParameters) -> dict[str, Any]:
     if parameters.is_integer:# or parameters.plot_without_lines:
         return {'linestyle': ' ', 'marker': 'o', 'markersize': 3}
@@ -152,7 +166,7 @@ def _plot_graphs(parameters: PlotParameters, graphs: list[Graph]) -> None:
     if parameters.is_y_log:
         plt.yscale('log')
 
-    plt.xlim(_get_x_lim_graph(parameters))
+    plt.xlim(_get_x_lim_graph(parameters, graphs))
     plt.ylim(_get_y_lim_graph(parameters))
 
     plt.xlabel(parameters.x_label)
@@ -180,22 +194,64 @@ def _manage_zeros(parameters: PlotParameters, graphs: list[Graph]):
     try:
         compute_and_print_zeros(parameters, graphs)
     except OSError:
-        logger.error("error while opening file '%s' to write zeros", parameters.zeros_file)
+        logger.error("error while saving zeros to file '%s'.", parameters.zeros_file)
     except Exception:
-        logger.error("error while computing zeros")
+        logger.error("error while computing zeros.")
 
 
 def _manage_integrals(parameters: PlotParameters, graphs: list[Graph]):
     try:
         compute_and_print_integrals(parameters, graphs)
     except OSError:
-        logger.error("error while opening file '%s' to write integral", parameters.zeros_file)
+        logger.error("error while saving integrals to file '%s'.", parameters.zeros_file)
+    except Exception:
+        logger.error("error while computing integrals")
+
+
+def _save_data(parameters: PlotParameters, graphs: list[Graph]):
+    column_names: list[str] = []
+    data: list[list[float]] = []
+    # All base graphs have the same x
+    base_graphs = [graph for graph in graphs if graph.type == GraphType.BASE]
+    if base_graphs:
+        column_names.append(parameters.x_label or 'x')
+        data.append(base_graphs[0].inputs.tolist())
+        for graph in base_graphs:
+            column_names.append(graph.expression)
+            data.append(graph.values)
+
+    # Add both x and y for every other graph
+    for graph in graphs:
+        if graph.type == GraphType.BASE:
+            continue
+
+        column_names.append(f'x {{{graph.expression}}}')
+        column_names.append(graph.expression)
+
+        data.append(graph.inputs.tolist())
+        # Force convert back to python list because values can be np array of python list
+        data.append(list(graph.values))
+    
+    # Equalize the length of each column
+    max_column_height = max(map(len, data))
+    for index in range(len(data)):
+        data[index].extend(['' for _ in range(max_column_height - len(data[index]))])
+
+
+    try:
+        with open(parameters.save_data_path, 'w', encoding='utf-8') as fo:
+            csvwriter = csv.writer(fo, lineterminator='\n')
+            csvwriter.writerow(column_names)
+            for index in range(max_column_height):
+                csvwriter.writerow(column[index] for column in data)
+    except OSError:
+        logger.error("error while saving data to file '%s'.", parameters.save_data_path)
 
 
 def _save_figure(parameters: PlotParameters):
     try:
         plt.savefig(parameters.save_figure_path, bbox_inches='tight')
-    except (FileNotFoundError, OSError):
+    except OSError:
         logger.error("error while saving figure to file '%s'.", parameters.save_figure_path)
 
 
@@ -231,6 +287,9 @@ def plot(parameters: PlotParameters) -> None:
 
     if parameters.integral_file is not None:
         _manage_integrals(parameters, graphs)
+
+    if parameters.save_data_path is not None:
+        _save_data(parameters, graphs)
 
     _plot_graphs(parameters, graphs)
 
