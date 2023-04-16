@@ -1,8 +1,7 @@
 TODO :
 
  - voir pour que des trucs genre 3x ou 4sin(x) fonctionnent
- - gestion fichier (avec analyse format)
- - enregistrer le graphique et les points
+ - enregistrer les points
  - équations depuis fichiers
  - fonction depuis fichiers
  - revoir le nom et l'emplacement des loggers
@@ -27,7 +26,7 @@ Paramètres CLI :
  - --integral pour calculer l'intégrale sur l'interval considéré OK
  - --deriv pour afficher des dérivées (suivies par une liste d'ordre de dérivation) OK
 
- - -s pour enregistrer la figure au lieu de la show (avec nom fichier)
+ - -s pour enregistrer la figure (avec nom fichier)
  - -c pour charger des constantes (au moins 1 paramètres, soit de la forme "\<nom\>=\<expression\>" soit un fichier contenant ce format, un par ligne) OK
  - -f pour charger un fichier contenant des points (possible d'en mettre plusieurs)
  - -d pour enregistrer les valeurs des points des fonctions dans un fichier csv

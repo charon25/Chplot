@@ -192,6 +192,13 @@ def _manage_integrals(parameters: PlotParameters, graphs: list[Graph]):
         logger.error("error while opening file '%s' to write integral", parameters.zeros_file)
 
 
+def _save_figure(parameters: PlotParameters):
+    try:
+        plt.savefig(parameters.save_figure_path, bbox_inches='tight')
+    except (FileNotFoundError, OSError):
+        logger.error("error while saving figure to file '%s'.", parameters.save_figure_path)
+
+
 def plot(parameters: PlotParameters) -> None:
     """_summary_
 
@@ -225,7 +232,10 @@ def plot(parameters: PlotParameters) -> None:
     if parameters.integral_file is not None:
         _manage_integrals(parameters, graphs)
 
+    _plot_graphs(parameters, graphs)
+
+    if parameters.save_figure_path is not None:
+        _save_figure(parameters)
 
     if not parameters.no_plot:
-        _plot_graphs(parameters, graphs)
         plt.show()
