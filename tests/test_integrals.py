@@ -75,6 +75,5 @@ class TestComputeIntegrals(unittest.TestCase):
         inputs = _generate_inputs(parameters)
         graph = _generate_graphs(parameters, inputs)[0]
         integral, abs_error = _compute_integral(parameters, graph)
-        print(integral, abs_error)
 
         self.assertTrue(integral - abs_error <= 8 * math.sqrt(2) / 3 <= integral + abs_error)

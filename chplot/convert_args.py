@@ -24,6 +24,6 @@ def retrieve_constants(parameters: argparse.Namespace) -> None:
 
         # For every other exception, log and ignore
         except Exception:
-            logger.warning("error while opening file '%s', it will be ignored.", constants)
+            logger.warning("error while opening file '%s', the file will be ignored.", constants)
 
     parameters.constants = final_constants

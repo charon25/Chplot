@@ -1,7 +1,12 @@
+import logging
+
 import numpy as np
 
 from chplot.plot.plot_parameters import PlotParameters
 from chplot.plot.utils import Graph, GraphType
+
+
+logger = logging.getLogger(__name__)
 
 
 MAX_NUMBER_OF_POINTS_BY_ORDER: dict[int, int] = {
@@ -89,20 +94,23 @@ def compute_derivatives(parameters: PlotParameters, graphs: list[Graph]) -> list
     for graph in graphs:
         values = np.nan_to_num(graph.values, copy=True, nan=0)
         for order in parameters.derivation_orders:
-            shrinkage = _get_size_reduction(order)
-            max_points = _get_max_number_of_points(order)
-            inputs = _resize_array(graph.inputs, max_points)
-            values = _resize_array(values, max_points)
-            h = inputs[1] - inputs[0]
+            try:
+                shrinkage = _get_size_reduction(order)
+                max_points = _get_max_number_of_points(order)
+                inputs = _resize_array(graph.inputs, max_points)
+                values = _resize_array(values, max_points)
+                h = inputs[1] - inputs[0]
 
-            derivative_expression = f'd{order}/dx{order} * ({graph.expression})' if order != 1 else f'd/dx * ({graph.expression})'
-            derivative_graph = Graph(
-                inputs=inputs[shrinkage:-shrinkage],
-                type=GraphType.DERIVATIVE,
-                expression=derivative_expression,
-                rpn=None,
-                values=_get_nth_derivative(values, h, order)
-            )
-            derivatives.append(derivative_graph)
+                derivative_expression = f'd{order}/dx{order} * ({graph.expression})' if order != 1 else f'd/dx * ({graph.expression})'
+                derivative_graph = Graph(
+                    inputs=inputs[shrinkage:-shrinkage],
+                    type=GraphType.DERIVATIVE,
+                    expression=derivative_expression,
+                    rpn=None,
+                    values=_get_nth_derivative(values, h, order)
+                )
+                derivatives.append(derivative_graph)
+            except Exception:
+                logger.error("error while computing derivate of order %s of '%s'.", order, graph.expression)
 
     return derivatives

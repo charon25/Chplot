@@ -10,6 +10,7 @@ from shunting_yard import MismatchedBracketsError, shunting_yard
 
 from chplot.functions import FUNCTIONS
 from chplot.plot.derivative import compute_derivatives
+from chplot.plot.files import _read_files
 from chplot.plot.integral import compute_and_print_integrals
 from chplot.plot.plot_parameters import convert_parameters_expression, PlotParameters, set_default_values
 from chplot.plot.utils import Graph, NORMAL_UNRECOGNIZED_CHARACTERS, GraphType
@@ -167,12 +168,7 @@ def _manage_derivatives(parameters: PlotParameters, graphs: list[Graph]):
     if any(order > 3 for order in parameters.derivation_orders):
         logger.info('derivation of higher orders may not be very accurate. The number of points used to compute the derivative will be reduced if necessary. Reduce it further to get more accurate.')
 
-    # try:
     derivatives = compute_derivatives(parameters, graphs)
-    # except ...:
-    #     pass
-    # except Exception:
-    #     pass
 
     graphs.extend(derivatives)
 
@@ -211,6 +207,9 @@ def plot(parameters: PlotParameters) -> None:
 
     inputs = _generate_inputs(parameters)
     graphs = _generate_graphs(parameters, inputs)
+
+    if parameters.data_files is not None:
+        graphs.extend(_read_files(parameters))
 
     if not graphs:
         logger.error('no expression without errors, cannot plot anything.')

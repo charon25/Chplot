@@ -40,6 +40,7 @@ class PlotParameters:
     no_plot: Optional[bool]
 
     constants: Optional[Union[list[str], FunctionDict]]
+    data_files: Optional[list[str]]
 
 
 DEFAULT_PARAMETERS = PlotParameters(
@@ -68,6 +69,7 @@ DEFAULT_PARAMETERS = PlotParameters(
     no_plot=False,
 
     constants=lambda:[], # prevents reference copying
+    data_files=None
 )
 
 
