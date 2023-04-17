@@ -143,7 +143,7 @@ def _read_one_file(filepath: str) -> list[Graph]:
 
 
 
-def _read_files(parameters: PlotParameters) -> list[Graph]:
+def read_files(parameters: PlotParameters) -> list[Graph]:
     graphs: list[Graph] = []
     for filepath in parameters.data_files:
         try:

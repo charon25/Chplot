@@ -39,13 +39,13 @@ def _triangle(x: float) -> float:
     return 1 - abs(x)
 
 def _if(x: float, _true: float, _false: float) -> float:
-    return _true if x > 0 else _false
+    return _true if x >= 0 else _false
 
 def _ifn(x: float, _true: float, _false: float) -> float:
-    return _true if x < 0 else _false
+    return _true if x <= 0 else _false
 
 def _ifz(x: float, _true: float, _false: float) -> float:
-    return _true if math.isclose(x, 0) else _false
+    return _true if math.isclose(x, 0.0) else _false
 
 
 OTHER_FUNCTIONS: FunctionDict = {

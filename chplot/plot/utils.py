@@ -10,6 +10,7 @@ class GraphType(Enum):
     BASE = 0
     DERIVATIVE = 1
     FILE = 2
+    REGRESSION = 3
 
 
 @dataclass

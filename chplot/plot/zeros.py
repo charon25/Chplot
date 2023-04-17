@@ -128,7 +128,7 @@ def _compute_zeros(parameters: PlotParameters, graph: Graph) -> ZerosList:
     if len(zero_zones_indexes) % 2 == 1:
         zero_zones_indexes.append(len(inputs) - 1)
 
-    if graph.type == GraphType.BASE:
+    if graph.type == GraphType.BASE or graph.type == GraphType.REGRESSION:
         rpn_tokens = graph.rpn.split(' ')
         simple_zeros.extend(_compute_simple_zero(parameters, inputs, rpn_tokens, zero_index) for zero_index in simple_zeros_indexes)
 
@@ -164,21 +164,20 @@ def compute_and_print_zeros(parameters: PlotParameters, graphs: list[Graph]):
     if any(graph.type in (GraphType.DERIVATIVE, GraphType.FILE) for graph in graphs):
         file.write('Furthermore, on derivatives and file data, zeros are approximated using linear interpolation, and may be far from their real values.\n')
 
-    file.write(f'\nOn the interval [{round(parameters.x_lim[0], 3)} ; {round(parameters.x_lim[1], 3)}]...\n\n')
     for graph in graphs:
         zeros = _compute_zeros(parameters, graph)
         if len(zeros) == 0:
-            file.write(f'  the function f(x) = {graph.expression} never equals zero\n')
+            file.write(f'On the interval [{round(graph.inputs.min(), 3)} ; {round(graph.inputs.max(), 3)}], the function f(x) = {graph.expression} never equals zero\n')
             continue
 
-        file.write(f'  the function f(x) = {graph.expression} equals zero...\n')
+        file.write(f'On the interval [{round(graph.inputs.min(), 3)} ; {round(graph.inputs.max(), 3)}], the function f(x) = {graph.expression} equals zero...\n')
         for zero_start, zero_end in zeros:
             # Simple zero
             if zero_end is None:
-                file.write(f'    at x = {round(zero_start, 10)}\n')
+                file.write(f'  at x = {round(zero_start, 10)}\n')
             # Zero zone
             else:
-                file.write(f'    on [{round(zero_start, 10)} ; {round(zero_end, 10)}]\n')
+                file.write(f'  on [{round(zero_start, 10)} ; {round(zero_end, 10)}]\n')
         file.write('\n')
 
     file.write('\n')

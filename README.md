@@ -1,6 +1,8 @@
 TODO :
 
  - revoir le nom et l'emplacement des loggers
+ - revoir l'affichage des zéros, intégraless et regressions
+ https://stackoverflow.com/questions/19189362/getting-the-r-squared-value-using-curve-fit
 
 Paramètres CLI :
  - une ou plusieurs expressions entre guillemets OK
@@ -21,10 +23,11 @@ Paramètres CLI :
  - --zeros pour calculer les zéros OK
  - --integral pour calculer l'intégrale sur l'interval considéré OK
  - --deriv pour afficher des dérivées (suivies par une liste d'ordre de dérivation) OK
+ - --reg pour calculer une régression arbitraire sur les données des fichiers (suivi par une expression quelconque)
 
  - -s pour enregistrer la figure (avec nom fichier)
  - -c pour charger des constantes (au moins 1 paramètres, soit de la forme "\<nom\>=\<expression\>" soit un fichier contenant ce format, un par ligne) OK
- - -f pour charger un fichier contenant des points (possible d'en mettre plusieurs)
- - -d pour enregistrer les valeurs des points des fonctions dans un fichier csv
- - -e pour lire les équations depuis un ou plusieurs fichiers (une par ligne)
- - -p pour charger des fonctions customs (dans un fichier python avec un décorateur spécifique)
+ - -f pour charger un fichier contenant des points (possible d'en mettre plusieurs) OK
+ - -d pour enregistrer les valeurs des points des fonctions dans un fichier csv OK
+ - -e pour lire les équations depuis un ou plusieurs fichiers (une par ligne) OK
+ - -p pour charger des fonctions customs (dans un fichier python avec un décorateur spécifique) OK

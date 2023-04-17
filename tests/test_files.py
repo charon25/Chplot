@@ -7,7 +7,7 @@ import unittest
 
 from tests.mock_parameters import MockParameters
 from chplot.plot.files import DecimalSeparator, IllegalQuotesError, REGEX_ILLEGAL_QUOTES
-from chplot.plot.files import _get_column_names, _get_line_format, _read_files
+from chplot.plot.files import _get_column_names, _get_line_format, read_files
 from chplot.plot.utils import Graph, GraphType
 
 
@@ -111,11 +111,11 @@ class TestReadFile(unittest.TestCase):
 
     def test_empty_file(self):
         parameters = MockParameters(data_files=[fp("empty")])
-        self.assertListEqual(_read_files(parameters), [])
+        self.assertListEqual(read_files(parameters), [])
 
     def test_comma_integers(self):
         parameters = MockParameters(data_files=[fp("comma_integers")])
-        graphs = _read_files(parameters)
+        graphs = read_files(parameters)
         self.assertGraphEqual(graphs[0], [0, 1, 2], 'comma_integers.csv - colB', [3, 4, 5])
         self.assertGraphEqual(graphs[1], [0, 1, 2], 'comma_integers.csv - colC', [6, 7, 8])
 
@@ -123,13 +123,13 @@ class TestReadFile(unittest.TestCase):
         files = ('comma_dot', 'semicolon_dot', 'space_dot', 'tab_dot', 'semicolon_comma')
         for file in files:
             parameters = MockParameters(data_files=[fp(file)])
-            graphs = _read_files(parameters)
+            graphs = read_files(parameters)
             self.assertGraphEqual(graphs[0], [0.5, 1.5, 2.5], f'{file}.csv - colB', [3.5, 4.5, 5.5])
             self.assertGraphEqual(graphs[1], [0.5, 1.5, 2.5], f'{file}.csv - colC', [6.5, 7.5, 8.5])
 
     def test_irregular_column_sizes(self):
         parameters = MockParameters(data_files=[fp("irregular_columns_size")])
-        graphs = _read_files(parameters)
+        graphs = read_files(parameters)
         self.assertGraphEqual(graphs[0], [0, 1, 2, 12], 'irregular_columns_size.csv - colB', [3, 4, 5, 13])
         self.assertGraphEqual(graphs[1], [0, 1, 2], 'irregular_columns_size.csv - colC', [6, 7, 8])
         self.assertGraphEqual(graphs[2], [1, 2], 'irregular_columns_size.csv - colD', [9, 10])
@@ -137,20 +137,20 @@ class TestReadFile(unittest.TestCase):
 
     def test_complicated_column_names(self):
         parameters = MockParameters(data_files=[fp("complicated_column_names")])
-        graphs = _read_files(parameters)
+        graphs = read_files(parameters)
         self.assertGraphEqual(graphs[0], [0, 1, 2], 'complicated_column_names.csv - colC x', [3, 4, 5])
         self.assertGraphEqual(graphs[1], [0, 1, 2], 'complicated_column_names.csv - colD;"E', [6, 7, 8])
         self.assertGraphEqual(graphs[2], [0, 1, 2], 'complicated_column_names.csv - colF",colG', [9, 10, 11])
 
     def test_not_enough_column_names(self):
         parameters = MockParameters(data_files=[fp("not_enough_column_names")])
-        graphs = _read_files(parameters)
+        graphs = read_files(parameters)
         self.assertGraphEqual(graphs[0], [0, 1, 2], 'not_enough_column_names.csv - Column 1', [3, 4, 5])
         self.assertGraphEqual(graphs[1], [0, 1, 2], 'not_enough_column_names.csv - Column 2', [6, 7, 8])
 
     def test_no_column_names(self):
         parameters = MockParameters(data_files=[fp("no_column_names")])
-        graphs = _read_files(parameters)
+        graphs = read_files(parameters)
         self.assertGraphEqual(graphs[0], [0, 1, 2], 'no_column_names.csv - Column 1', [3, 4, 5])
         self.assertGraphEqual(graphs[1], [0, 1, 2], 'no_column_names.csv - Column 2', [6, 7, 8])
 

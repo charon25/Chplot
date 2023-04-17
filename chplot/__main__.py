@@ -35,12 +35,13 @@ def read_parameters() -> argparse.Namespace:
     parser.add_argument('-yl', metavar='Y_LABEL', dest='y_label', help='The y-axis label.')
     parser.add_argument('-t', metavar='TITLE', dest='title', help='The plot title.')
     parser.add_argument('-rl', action='store_true', dest='remove_legend', help='Remove the plot legend.')
+    parser.add_argument('--no-plot', action='store_true', dest='no_plot', help='If present, will not graph the functions at all.')
     parser.add_argument('--dis', action='store_true', dest='plot_without_lines', help='Remove line segment between points. Does nothing if the -i flag is present.')
 
     parser.add_argument('--zeros', nargs='?', const=0, dest='zeros_file', help='Indicate if the zeros of the functions should be computed. If no arguments are provided, will write to stdout, otherwise to the specified file.')
     parser.add_argument('--integral', nargs='?', const=0, dest='integral_file', help='Indicate if the integral of the functions should be computed. If no arguments are provided, will write to stdout, otherwise to the specified file.')
     parser.add_argument('--deriv', nargs='+', dest='derivation_orders', type=positive_integer, help='Will add the derivative to the graph (and integral/zeros computation).')
-    parser.add_argument('--no-plot', action='store_true', dest='no_plot', help='If present, will not graph the functions at all.')
+    parser.add_argument('--reg', dest='regression_expression', metavar='REGRESSION_EXPRESSION', help='Compute the best coefficients to get the best fit of file data series with the given expression. The coefficients must be of the form _rx where x is any string.')
 
     parser.add_argument('-c', nargs='+', dest='constants_arg', metavar=('CONSTANT', 'CONSTANT'), help='Constants to add to the computation, at least one and as much as needed. Either of the form "<name>=<expression>", or the name of a file containing this form of statement, one on each line.')
     parser.add_argument('-f', nargs='+', dest='data_files', metavar=('CSV_FILE', 'CSV_FILE'), help='Filenames of CSV files to add points.')

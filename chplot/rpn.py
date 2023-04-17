@@ -83,7 +83,7 @@ def compute_rpn_unsafe(rpn_tokens: list[str], x: float, variable: str = 'x') -> 
             except Exception:
                 return math.nan
 
-    # Convert inf to nan so that max and min does not return inf or -inf
+    # Convert inf to nan so that max and min do not return inf or -inf
     return stack[0] if not math.isinf(stack[0]) else math.nan
 
 

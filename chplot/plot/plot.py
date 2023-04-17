@@ -14,6 +14,7 @@ from chplot.plot.derivative import compute_derivatives
 from chplot.plot.files import read_files
 from chplot.plot.integral import compute_and_print_integrals
 from chplot.plot.plot_parameters import convert_parameters_expression, PlotParameters, retrieve_python_functions, set_default_values
+from chplot.plot.regression import compute_regressions
 from chplot.plot.utils import Graph, NORMAL_UNRECOGNIZED_CHARACTERS, GraphType
 from chplot.plot.zeros import compute_and_print_zeros
 from chplot.rpn import compute_rpn_list, get_rpn_errors
@@ -50,7 +51,7 @@ def _get_x_lim_graph(parameters: PlotParameters, graphs: list[Graph]) -> tuple[f
     # Else, notify them if the min of the graphs is lower
     else:
         if x_min_graph < x_min:
-            logger.info('lower x bound of graph was decreased to %s to accomodate all data.', round(x_min, 3))
+            logger.info('lower x bound of graph was decreased to %s to accomodate all data.', round(x_min_graph, 3))
             x_min = x_min_graph
 
     # Same but reversed for the max
@@ -58,7 +59,7 @@ def _get_x_lim_graph(parameters: PlotParameters, graphs: list[Graph]) -> tuple[f
         x_max = x_max_graph
     else:
         if x_max_graph > x_max:
-            logger.info('upper x bound of graph was increased to %s to accomodate all data.', round(x_max, 3))
+            logger.info('upper x bound of graph was increased to %s to accomodate all data.', round(x_max_graph, 3))
             x_max = x_max_graph
 
     if x_min > x_max:
@@ -162,8 +163,11 @@ def _get_y_lim_graph(parameters: PlotParameters) -> tuple[float, float]:
     return (y_min, y_max)
 
 
-def _get_graph_parameters(parameters: PlotParameters) -> dict[str, Any]:
-    if parameters.is_integer:# or parameters.plot_without_lines:
+def _get_graph_parameters(parameters: PlotParameters, graph: Graph) -> dict[str, Any]:
+    if graph.type == GraphType.REGRESSION:
+        return {'linestyle': '--', 'markersize': 0}
+
+    if parameters.is_integer:
         return {'linestyle': ' ', 'marker': 'o', 'markersize': 3}
 
     if parameters.plot_without_lines:
@@ -173,8 +177,8 @@ def _get_graph_parameters(parameters: PlotParameters) -> dict[str, Any]:
 
 
 def _plot_graphs(parameters: PlotParameters, graphs: list[Graph]) -> None:
-    graph_parameters = _get_graph_parameters(parameters)
     for graph in graphs:
+        graph_parameters = _get_graph_parameters(parameters, graph)
         plt.plot(graph.inputs, graph.values, label=graph.expression, **graph_parameters)
 
     plt.grid(True, 'both', 'both')
@@ -292,6 +296,9 @@ def plot(parameters: PlotParameters) -> None:
 
     if parameters.data_files is not None:
         graphs.extend(read_files(parameters))
+
+    if parameters.regression_expression is not None:
+        graphs.extend(compute_regressions(parameters, graphs))
 
     if not graphs:
         logger.error('no expression without errors, cannot plot anything.')
