@@ -1,11 +1,14 @@
 import logging
+import os
+import pathlib
+import shutil
 logging.disable(logging.CRITICAL)
 import math
 import unittest
 
 from chplot.functions import FUNCTIONS
 from chplot.functions.utils import FunctionDict
-from chplot.plot.plot_parameters import convert_parameters_expression, set_default_values
+from chplot.plot.plot_parameters import convert_parameters_expression, retrieve_python_functions, set_default_values
 from mock_parameters import MockParameters
 
 
@@ -109,22 +112,6 @@ class TestConvertParametersConstants(unittest.TestCase):
         for key in keys:
             self.assertFalse(key in larger_dict)
 
-
-    # def test_no_constant_default_value(self):
-    #     parameters = MockParameters()
-    #     set_default_values(parameters)
-
-    #     convert_parameters_expression(parameters)
-
-    #     self.assertDictEqual(parameters.constants, {})
-
-    # def test_no_constant_normally(self):
-    #     parameters = MockParameters(constants=[])
-    #     set_default_values(parameters)
-
-    #     convert_parameters_expression(parameters)
-
-    #     self.assertDictEqual(parameters.constants, {})
 
     def test_two_simple_constants(self):
         parameters = MockParameters(constants=['a=1', 'b=2'])

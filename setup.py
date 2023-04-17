@@ -20,7 +20,7 @@ setuptools.setup(
 		'mpmath>=1.2.1',
 		'numpy>=1.23.4',
 		'scipy>=1.9.3',
-		'shunting_yard>=1.0.7',
+		'shunting_yard>=1.0.8',
 		'tqdm>=4.64.1',
 	]
 )

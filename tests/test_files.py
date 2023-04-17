@@ -11,8 +11,9 @@ from chplot.plot.files import _get_column_names, _get_line_format, _read_files
 from chplot.plot.utils import Graph, GraphType
 
 
-def fp(filename):
+def fp(filename: str) -> str:
     return f'tests\\test_files\\data_files\\{filename}.csv'
+
 
 class TestGetLineFormat(unittest.TestCase):
 

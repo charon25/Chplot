@@ -46,6 +46,7 @@ def read_parameters() -> argparse.Namespace:
     parser.add_argument('-f', nargs='+', dest='data_files', metavar=('CSV_FILE', 'CSV_FILE'), help='Filenames of CSV files to add points.')
     parser.add_argument('-s', dest='save_figure_path', metavar='FIGURE_FILE', help='Save figure to file.')
     parser.add_argument('-d', dest='save_data_path', metavar='DATA_FILE', help='Save all points to a csv file.')
+    parser.add_argument('-p', nargs='+', dest='python_files', metavar=('PYTHON_FILE', 'PYTHON_FILE'), help='Python file contaning @plottable decorated functions that can be used in the ploting step.')
 
     return parser.parse_args()
 

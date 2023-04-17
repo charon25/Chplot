@@ -6,10 +6,10 @@ from chplot.convert_args import retrieve_constants, retrieve_expressions
 from mock_parameters import MockParameters
 
 
-def fpc(filename):
+def fpc(filename: str) -> str:
     return f'tests\\test_files\\constants\\{filename}.txt'
 
-def fpe(filename):
+def fpe(filename: str) -> str:
     return f'tests\\test_files\\expressions\\{filename}.txt'
 
 

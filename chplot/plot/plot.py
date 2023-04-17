@@ -13,7 +13,7 @@ from chplot.functions import FUNCTIONS
 from chplot.plot.derivative import compute_derivatives
 from chplot.plot.files import _read_files
 from chplot.plot.integral import compute_and_print_integrals
-from chplot.plot.plot_parameters import convert_parameters_expression, PlotParameters, set_default_values
+from chplot.plot.plot_parameters import convert_parameters_expression, PlotParameters, retrieve_python_functions, set_default_values
 from chplot.plot.utils import Graph, NORMAL_UNRECOGNIZED_CHARACTERS, GraphType
 from chplot.plot.zeros import compute_and_print_zeros
 from chplot.rpn import compute_rpn_list, get_rpn_errors
@@ -87,11 +87,11 @@ def _generate_graphs(parameters: PlotParameters, inputs: np.ndarray) -> list[Gra
         try:
             rpn = shunting_yard(expression, case_sensitive=True, variable=parameters.variable)
         except MismatchedBracketsError:
-            logger.error("mismatched brackets in the expression '%s'", expression)
+            logger.warning("mismatched brackets in the expression '%s'", expression)
             continue
 
         if (error := get_rpn_errors(rpn, variable=parameters.variable)) is not None:
-            logger.error("error for expression '%s' : %s", expression, error)
+            logger.warning("error for expression '%s' : %s", expression, error)
             continue
 
         if (unknown_characters := _get_unrecognized_characters(expression, rpn)):
@@ -194,18 +194,18 @@ def _manage_zeros(parameters: PlotParameters, graphs: list[Graph]):
     try:
         compute_and_print_zeros(parameters, graphs)
     except OSError:
-        logger.error("error while saving zeros to file '%s'.", parameters.zeros_file)
+        logger.warning("error while saving zeros to file '%s'.", parameters.zeros_file)
     except Exception:
-        logger.error("error while computing zeros.")
+        logger.warning("error while computing zeros.")
 
 
 def _manage_integrals(parameters: PlotParameters, graphs: list[Graph]):
     try:
         compute_and_print_integrals(parameters, graphs)
     except OSError:
-        logger.error("error while saving integrals to file '%s'.", parameters.zeros_file)
+        logger.warning("error while saving integrals to file '%s'.", parameters.zeros_file)
     except Exception:
-        logger.error("error while computing integrals")
+        logger.warning("error while computing integrals")
 
 
 def _save_data(parameters: PlotParameters, graphs: list[Graph]):
@@ -245,14 +245,14 @@ def _save_data(parameters: PlotParameters, graphs: list[Graph]):
             for index in range(max_column_height):
                 csvwriter.writerow(column[index] for column in data)
     except OSError:
-        logger.error("error while saving data to file '%s'.", parameters.save_data_path)
+        logger.warning("error while saving data to file '%s'.", parameters.save_data_path)
 
 
 def _save_figure(parameters: PlotParameters):
     try:
         plt.savefig(parameters.save_figure_path, bbox_inches='tight')
     except OSError:
-        logger.error("error while saving figure to file '%s'.", parameters.save_figure_path)
+        logger.warning("error while saving figure to file '%s'.", parameters.save_figure_path)
 
 
 def plot(parameters: PlotParameters) -> None:
@@ -267,6 +267,7 @@ def plot(parameters: PlotParameters) -> None:
 
     set_default_values(parameters)
     convert_parameters_expression(parameters)
+    retrieve_python_functions(parameters)
 
     inputs = _generate_inputs(parameters)
     graphs = _generate_graphs(parameters, inputs)

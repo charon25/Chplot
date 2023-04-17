@@ -52,7 +52,7 @@ def compute_and_print_integrals(parameters: PlotParameters, graphs: list[Graph])
             integral, abs_error = _compute_integral(parameters, graph)
             max_decimal_places = abs(math.floor(1 + math.log10(abs_error)))
         except Exception:
-            logger.error("error while computing integral for expression '%s'", graph.expression)
+            logger.warning("error while computing integral for expression '%s'", graph.expression)
             continue
 
         file.write(f' f(x) = {graph.expression} on [{_smart_round(graph.inputs[0])} ; {_smart_round(graph.inputs[-1])}] is {round(integral, max_decimal_places)} ± {abs_error:.2e}...\n')
