@@ -1,5 +1,6 @@
 import csv
 import logging
+import math
 from typing import Any, Optional
 
 logger = logging.getLogger(__name__)
@@ -9,9 +10,8 @@ np.seterr('raise')
 import matplotlib.pyplot as plt
 from shunting_yard import MismatchedBracketsError, shunting_yard
 
-from chplot.functions import FUNCTIONS
 from chplot.plot.derivative import compute_derivatives
-from chplot.plot.files import _read_files
+from chplot.plot.files import read_files
 from chplot.plot.integral import compute_and_print_integrals
 from chplot.plot.plot_parameters import convert_parameters_expression, PlotParameters, retrieve_python_functions, set_default_values
 from chplot.plot.utils import Graph, NORMAL_UNRECOGNIZED_CHARACTERS, GraphType
@@ -23,6 +23,12 @@ from chplot.rpn import compute_rpn_list, get_rpn_errors
 def _get_x_lim(parameters: PlotParameters) -> tuple[float, float]:
     """Return the minimum and maximum value for the input array. If max < min, reverse them."""
     x_min, x_max = parameters.x_lim
+
+    if x_min is None:
+        x_min = 0
+    if x_max is None:
+        x_max = 1
+
     if x_max < x_min:
         logger.warning('the upper x bound (%s) is inferior to the lower x bound (%s), they will be swapped.', x_max, x_min)
         return (x_max, x_min)
@@ -31,23 +37,32 @@ def _get_x_lim(parameters: PlotParameters) -> tuple[float, float]:
 
 
 
-def _get_x_lim_graph(parameters: PlotParameters, graphs: Optional[list[Graph]] = None) -> tuple[float, float]:
+def _get_x_lim_graph(parameters: PlotParameters, graphs: list[Graph]) -> tuple[float, float]:
     """Return the bounds for the plot x-axis. Will reverse if in the wrong order, and remove some negative bounds for log-scaled x-axis."""
+    x_min_graph = min((graph.inputs.min() for graph in graphs), default=math.inf)
+    x_max_graph = max((graph.inputs.max() for graph in graphs), default=-math.inf)
+
     x_min, x_max = parameters.x_lim
-    if x_max < x_min:
+
+    # If user did not specify a min, use the min of the graphs
+    if x_min is None:
+        x_min = x_min_graph
+    # Else, notify them if the min of the graphs is lower
+    else:
+        if x_min_graph < x_min:
+            logger.info('lower x bound of graph was decreased to %s to accomodate all data.', round(x_min, 3))
+            x_min = x_min_graph
+
+    # Same but reversed for the max
+    if x_max is None:
+        x_max = x_max_graph
+    else:
+        if x_max_graph > x_max:
+            logger.info('upper x bound of graph was increased to %s to accomodate all data.', round(x_max, 3))
+            x_max = x_max_graph
+
+    if x_min > x_max:
         x_min, x_max = x_max, x_min
-
-    prev_x_min = x_min
-    prev_x_max = x_max
-    if graphs is not None:
-        for graph in graphs:
-            x_min = min(x_min, graph.inputs.min())
-            x_max = max(x_max, graph.inputs.max())
-
-    if prev_x_min > x_min:
-        logger.info('lower x bound of graph was decreased to %s to accomodate all data.', round(x_min, 3))
-    if prev_x_max < x_max:
-        logger.info('upper x bound of graph was increased to %s to accomodate all data.', round(x_max, 3))
 
     if not parameters.is_x_log:
         return (x_min, x_max)
@@ -88,6 +103,9 @@ def _generate_graphs(parameters: PlotParameters, inputs: np.ndarray) -> list[Gra
             rpn = shunting_yard(expression, case_sensitive=True, variable=parameters.variable)
         except MismatchedBracketsError:
             logger.warning("mismatched brackets in the expression '%s'", expression)
+            continue
+        except Exception:
+            logger.warning("unknown error in the expression '%s'", expression)
             continue
 
         if (error := get_rpn_errors(rpn, variable=parameters.variable)) is not None:
@@ -273,7 +291,7 @@ def plot(parameters: PlotParameters) -> None:
     graphs = _generate_graphs(parameters, inputs)
 
     if parameters.data_files is not None:
-        graphs.extend(_read_files(parameters))
+        graphs.extend(read_files(parameters))
 
     if not graphs:
         logger.error('no expression without errors, cannot plot anything.')
@@ -281,7 +299,6 @@ def plot(parameters: PlotParameters) -> None:
 
     if parameters.derivation_orders is not None:
         _manage_derivatives(parameters, graphs)
-
 
     if parameters.zeros_file is not None:
         _manage_zeros(parameters, graphs)

@@ -26,27 +26,27 @@ class TestXLimGraph(unittest.TestCase):
 
     def test_correct_order_no_log(self):
         parameters = MockParameters(x_lim=(0, 1), is_x_log=False)
-        self.assertTupleEqual(_get_x_lim_graph(parameters), (0, 1))
+        self.assertTupleEqual(_get_x_lim_graph(parameters, []), (0, 1))
 
     def test_wrong_order_no_log(self):
         parameters = MockParameters(x_lim=(1, -1), is_x_log=False)
-        self.assertTupleEqual(_get_x_lim_graph(parameters), (-1, 1))
+        self.assertTupleEqual(_get_x_lim_graph(parameters, []), (-1, 1))
 
     def test_correct_order_log_positive(self):
         parameters = MockParameters(x_lim=(1, 100), is_x_log=True)
-        self.assertTupleEqual(_get_x_lim_graph(parameters), (1, 100))
+        self.assertTupleEqual(_get_x_lim_graph(parameters, []), (1, 100))
 
     def test_wrong_order_log_positive(self):
         parameters = MockParameters(x_lim=(100, 10), is_x_log=True)
-        self.assertTupleEqual(_get_x_lim_graph(parameters), (10, 100))
+        self.assertTupleEqual(_get_x_lim_graph(parameters, []), (10, 100))
 
     def test_correct_order_log_half_positive(self):
         parameters = MockParameters(x_lim=(-1, 100), is_x_log=True)
-        self.assertTupleEqual(_get_x_lim_graph(parameters), (None, 100))
+        self.assertTupleEqual(_get_x_lim_graph(parameters, []), (None, 100))
 
     def test_correct_order_log_negative(self):
         parameters = MockParameters(x_lim=(-1, -2), is_x_log=True)
-        self.assertTupleEqual(_get_x_lim_graph(parameters), ())
+        self.assertTupleEqual(_get_x_lim_graph(parameters, []), ())
 
     def test_x_lim_moved_by_graphs(self):
         parameters = MockParameters(x_lim=(0, 1), is_x_log=False)

@@ -38,12 +38,13 @@ class PlotParameters:
     y_label: Optional[str]
     title: Optional[str]
     remove_legend: Optional[bool]
+    no_plot: Optional[bool]
     plot_without_lines: Optional[bool]
 
     zeros_file: Optional[Union[Literal[0], str]]
     integral_file: Optional[Union[Literal[0], str]]
     derivation_orders: Optional[list[int]]
-    no_plot: Optional[bool]
+    regression_expression: Optional[str]
 
     constants: Optional[Union[list[str], FunctionDict]]
     data_files: Optional[list[str]]
@@ -59,7 +60,7 @@ DEFAULT_PARAMETERS = PlotParameters(
     n_points=10001,
     is_integer=False,
 
-    x_lim=("0.0", "1.0"),
+    x_lim=(None, None), #("0.0", "1.0"),
     is_x_log=False,
 
     y_lim=(None, None),
@@ -70,12 +71,13 @@ DEFAULT_PARAMETERS = PlotParameters(
     y_label=None,
     title=None,
     remove_legend=False,
+    no_plot=False,
     plot_without_lines=False,
 
     zeros_file=None,
     integral_file=None,
     derivation_orders=None,
-    no_plot=False,
+    regression_expression=None,
 
     constants=lambda:[], # prevents reference copying
     data_files=None,
@@ -97,11 +99,14 @@ def set_default_values(parameters: PlotParameters) -> None:
                 setattr(parameters, field_name, default_attr)
 
 
-def _convert_single_expression(expression: str, default_value_error: Any, default_value_nan: Any = None) -> float:
+def _convert_single_expression(expression: Optional[str], default_value_error: Any, default_value_nan: Any = None) -> float:
+    if expression is None:
+        return default_value_error
+
     if default_value_nan is None:
         default_value_nan = default_value_error
 
-    rpn = shunting_yard(expression, case_sensitive=True, variable=None)
+    rpn = shunting_yard(str(expression), case_sensitive=True, variable=None)
 
     if get_rpn_errors(rpn, variable=None) is not None:
         return default_value_error
@@ -114,19 +119,19 @@ def convert_parameters_expression(parameters: PlotParameters) -> None:
     """Convert in-place every mathematical expression in fields (except the 'expressions' field) to its float value. In-place."""
     parameters.x_lim = (
         _convert_single_expression(
-            str(parameters.x_lim[0]), default_value_error=float(DEFAULT_PARAMETERS.x_lim[0])
+            parameters.x_lim[0], default_value_error=DEFAULT_PARAMETERS.x_lim[0]
         ),
         _convert_single_expression(
-            str(parameters.x_lim[1]), default_value_error=float(DEFAULT_PARAMETERS.x_lim[1])
+            parameters.x_lim[1], default_value_error=DEFAULT_PARAMETERS.x_lim[1]
         ),
     )
 
     parameters.y_lim = (
         _convert_single_expression(
-            str(parameters.y_lim[0]), default_value_error=DEFAULT_PARAMETERS.y_lim[0]
+            parameters.y_lim[0], default_value_error=DEFAULT_PARAMETERS.y_lim[0]
         ),
         _convert_single_expression(
-            str(parameters.y_lim[1]), default_value_error=DEFAULT_PARAMETERS.y_lim[1]
+            parameters.y_lim[1], default_value_error=DEFAULT_PARAMETERS.y_lim[1]
         ),
     )
 
