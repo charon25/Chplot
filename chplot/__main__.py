@@ -1,5 +1,5 @@
 import argparse
-from chplot.convert_args import retrieve_constants
+from chplot.convert_args import retrieve_constants, retrieve_expressions
 
 from chplot.plot import plot
 
@@ -18,7 +18,7 @@ def positive_integer(value):
 
 def read_parameters() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="TODO")
-    parser.add_argument('expressions', metavar='EXPRESSION', nargs='*', help='The expression(s) to plot.')
+    parser.add_argument('expressions', metavar='EXPRESSION', nargs='*', help='The expression(s) to plot. Can also be files containing expressions.')
     parser.add_argument('-v', metavar='VARIABLE', dest='variable', help="The name of the variable plotted on the x-axis (default: 'x').")
 
     parser.add_argument('-n', metavar='POINTS', type=int, dest='n_points', help='Number of points for each expression (default: 10000).')
@@ -54,6 +54,7 @@ if __name__ == '__main__':
     parameters = read_parameters()
     print(parameters)
     retrieve_constants(parameters)
+    retrieve_expressions(parameters)
 
     plot(parameters)
 

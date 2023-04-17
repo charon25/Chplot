@@ -1,7 +1,6 @@
 TODO :
 
  - voir pour que des trucs genre 3x ou 4sin(x) fonctionnent
- - équations depuis fichiers
  - fonction depuis fichiers
  - revoir le nom et l'emplacement des loggers
 
@@ -29,5 +28,5 @@ Paramètres CLI :
  - -c pour charger des constantes (au moins 1 paramètres, soit de la forme "\<nom\>=\<expression\>" soit un fichier contenant ce format, un par ligne) OK
  - -f pour charger un fichier contenant des points (possible d'en mettre plusieurs)
  - -d pour enregistrer les valeurs des points des fonctions dans un fichier csv
- - -r pour lire les équations depuis un ou plusieurs fichiers (une par ligne)
+ - -e pour lire les équations depuis un ou plusieurs fichiers (une par ligne)
  - -p pour charger des fonctions customs (dans un fichier python avec un décorateur spécifique)
