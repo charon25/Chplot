@@ -1,11 +1,6 @@
-import logging
-
 import mpmath
 
 from chplot.functions.utils import FunctionDict, get_functions_from_module, get_renamed_functions_from_module
-
-
-logger = logging.getLogger(__name__)
 
 
 _MPMATH_MODULE_FUNCTION_NAMES: tuple[int, str] = [

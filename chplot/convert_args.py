@@ -4,7 +4,7 @@ from typing import IO, Optional
 
 from chplot.plot.plot_parameters import PlotParameters
 
-logger = logging.getLogger(__name__)
+from chplot.plot.utils import LOGGER
 
 
 CONSTANT_DEFAULT_REGRESSION_KEYWORDS: dict[str, str] = {
@@ -44,7 +44,7 @@ def retrieve_constants(parameters: PlotParameters) -> None:
 
         # For every other exception, log and ignore
         except Exception:
-            logger.warning("error while opening file '%s', the file will be ignored.", constants)
+            LOGGER.warning("error while opening file '%s', the file will be ignored.", constants)
 
     parameters.constants = final_constants
 
@@ -64,7 +64,7 @@ def retrieve_expressions(parameters: PlotParameters) -> None:
 
         # For every other exception, log and ignore
         except Exception:
-            logger.warning("error while opening file '%s', the file will be ignored.", expression)
+            LOGGER.warning("error while opening file '%s', the file will be ignored.", expression)
 
     parameters.expressions = final_expressions
 

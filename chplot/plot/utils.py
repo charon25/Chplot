@@ -1,9 +1,12 @@
 from dataclasses import dataclass
 from enum import Enum
 import functools
+import logging
 from typing import Callable, Optional, Union
 
 import numpy as np
+
+LOGGER = logging.getLogger('CHPLOT')
 
 
 class GraphType(Enum):

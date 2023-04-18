@@ -1,5 +1,3 @@
-import logging
-import math
 from operator import add, mul, neg, pos, sub, truediv
 
 from chplot.functions.constants import CONSTANTS_FUNCTIONS
@@ -11,7 +9,6 @@ from chplot.functions.scipy_functions import SCIPY_SPECIAL_FUNCTIONS
 from chplot.functions.utils import FunctionDict
 
 
-logger = logging.getLogger(__name__)
 
 # This global variable can and will be modified to add to functions
 FUNCTIONS: FunctionDict = {

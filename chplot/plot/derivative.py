@@ -1,12 +1,8 @@
-import logging
-
 import numpy as np
 
 from chplot.plot.plot_parameters import PlotParameters
 from chplot.plot.utils import Graph, GraphType
-
-
-logger = logging.getLogger(__name__)
+from chplot.plot.utils import LOGGER
 
 
 MAX_NUMBER_OF_POINTS_BY_ORDER: dict[int, int] = {
@@ -111,6 +107,6 @@ def compute_derivatives(parameters: PlotParameters, graphs: list[Graph]) -> list
                 )
                 derivatives.append(derivative_graph)
             except Exception:
-                logger.warning("error while computing derivate of order %s of '%s'.", order, graph.expression)
+                LOGGER.warning("error while computing derivate of order %s of '%s'.", order, graph.expression)
 
     return derivatives

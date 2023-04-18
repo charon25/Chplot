@@ -1,12 +1,8 @@
-import logging
 import math
 
 import scipy.stats
 
 from chplot.functions.utils import FunctionDict
-
-
-logger = logging.getLogger(__name__)
 
 
 def _norm_pdf(x: float, mu: float, sigma: float) -> float:

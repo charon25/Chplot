@@ -1,5 +1,4 @@
 from enum import Enum
-import logging
 import math
 import ntpath
 import re
@@ -8,9 +7,8 @@ import numpy as np
 
 from chplot.plot.plot_parameters import PlotParameters
 from chplot.plot.utils import Graph, GraphType
+from chplot.plot.utils import LOGGER
 
-
-logger = logging.getLogger(__name__)
 
 NUMERIC_CHARS = '0123456789+-.,'
 REGEX_COMMA_DECIMAL_SEP = r'^-?\d*(,?)\d*(?:e[+-]?\d+)?([;\t ])'
@@ -149,10 +147,10 @@ def read_files(parameters: PlotParameters) -> list[Graph]:
         try:
             graphs.extend(_read_one_file(filepath))
         except FileNotFoundError:
-            logger.warning("file '%s' does not exist or is unreachable.", filepath)
+            LOGGER.warning("file '%s' does not exist or is unreachable.", filepath)
         except OSError:
-            logger.warning("error while opening file '%s'.", filepath)
+            LOGGER.warning("error while opening file '%s'.", filepath)
         except Exception:
-            logger.warning("unknown error while reading file '%s'.", filepath)
+            LOGGER.warning("unknown error while reading file '%s'.", filepath)
 
     return graphs

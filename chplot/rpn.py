@@ -1,5 +1,3 @@
-import logging
-logger = logging.getLogger(__name__)
 import math
 from typing import Optional, Union
 
@@ -7,7 +5,6 @@ import numpy as np
 from tqdm import tqdm
 
 from chplot.functions import FUNCTIONS
-from chplot.functions.utils import FunctionDict
 
 
 NUMBER_CHARS = '0123456789.'
