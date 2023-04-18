@@ -57,8 +57,8 @@ class TestConvertParametersLimits(unittest.TestCase):
 
         convert_parameters_expression(parameters)
 
-        self.assertAlmostEqual(parameters.x_lim[0], 0.0)
-        self.assertAlmostEqual(parameters.x_lim[1], 1.0)
+        self.assertIsNone(parameters.x_lim[0])
+        self.assertIsNone(parameters.x_lim[1])
 
     # YLIM
     def test_ylim_int(self):
@@ -96,6 +96,15 @@ class TestConvertParametersLimits(unittest.TestCase):
 
         self.assertAlmostEqual(parameters.y_lim[0], math.sqrt(2))
         self.assertAlmostEqual(parameters.y_lim[1], math.pi + 1)
+
+    def test_ylim_default(self):
+        parameters = MockParameters(y_lim=("_unknown_function(1)", "_unknown_function(2)"))
+        set_default_values(parameters)
+
+        convert_parameters_expression(parameters)
+
+        self.assertIsNone(parameters.y_lim[0])
+        self.assertIsNone(parameters.y_lim[1])
 
 
 class TestConvertParametersConstants(unittest.TestCase):

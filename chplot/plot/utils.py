@@ -28,14 +28,14 @@ NORMAL_UNRECOGNIZED_CHARACTERS = '( ),;'
 
 
 def plottable(arg_count: int = 1) -> Callable:
-    """ Decorator allowing the function to be used with the command line interface of the chplot module. 
+    """ Decorator allowing the function to be used with the command line interface of the chplot module.
     The function should accept a predetermined number of float and return one float (which can be nan or inf).
 
     Args:
         arg_count (int, optional): Number of (float) arguments expected by the function. Can be zero for constants. Defaults to 1.
     """
-    
-    
+
+
     def decorator_plottable(func: Callable) -> Callable:
         @functools.wraps(func)
         def wrapper(*args, **kwargs):

@@ -42,7 +42,7 @@ def _get_line_format(lines: list[str]) -> tuple[str, DecimalSeparator]:
         line = line.strip()
         if not _is_line_numeric(line):
             continue
-        
+
         if (result := re.findall(REGEX_COMMA_DECIMAL_SEP, line)):
             decimal_separator, column_separator = result[0]
             return (column_separator, DecimalSeparator.COMMA if decimal_separator == ',' else DecimalSeparator.UNKNOWN)

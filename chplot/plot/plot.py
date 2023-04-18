@@ -253,7 +253,7 @@ def _save_data(parameters: PlotParameters, graphs: list[Graph]):
         data.append(graph.inputs.tolist())
         # Force convert back to python list because values can be np array of python list
         data.append(list(graph.values))
-    
+
     # Equalize the length of each column
     max_column_height = max(map(len, data))
     for index in range(len(data)):

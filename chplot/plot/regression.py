@@ -31,49 +31,55 @@ def _check_regression_expression(parameters: PlotParameters) -> Optional[str]:
         logger.warning("unknown error in the regression expression '%s'.", parameters.regression_expression)
         return None
 
+    # Check that there are regression parameters in the expression
+    if not re.findall(REGRESSION_PARAMETERS_REGEX, rpn):
+        logger.warning("error: no regression parameters (string starting with '_r' in the regression expression)")
+        return None
+
     # Replace every regression parameters with 0 to check if the rest of the RPN is valid
     rpn_check = re.sub(REGRESSION_PARAMETERS_REGEX, r'\g<1>0\g<3>', rpn)
     if (error := get_rpn_errors(rpn_check, variable=parameters.variable)) is not None:
         logger.warning("error in the regression expression '%s' : %s", parameters.regression_expression, error)
         return None
-    
+
     return rpn
 
 
 def _get_fit_rpn(rpn: str, parameters_names: list[str], parameters_values: list[float]) -> str:
     for param_name, param_value in zip(parameters_names, parameters_values):
-        rpn = re.sub(rf'(^| ){param_name}( |$)', str(param_value), rpn)
-    
+        rpn = re.sub(rf'(^| ){param_name}( |$)', rf'\g<1>{param_value}\g<2>', rpn)
+
     return rpn
 
 
 def _get_fit_expression(expression: str, parameters_names: list[str], parameters_values: list[float]) -> str:
     for param_name, param_value in zip(parameters_names, parameters_values):
         expression = re.sub(rf'\b{param_name}\b', f'({param_value})', expression)
-    
+
     return expression
 
 
 def compute_regressions(parameters: PlotParameters, graphs: list[Graph]) -> list[Graph]:
+    if len(graphs) == 0:
+        return []
+
     if (rpn := _check_regression_expression(parameters)) is None:
         return []
 
     file = sys.stdout
-    
+
     # Get unique parameters without changing the order
     parameters_names = [param_name for _, param_name, _ in re.findall(REGRESSION_PARAMETERS_REGEX, rpn)]
     parameters_names = list(dict.fromkeys(parameters_names))
-    if len(parameters_names) == 0:
-        logger.warning("error: no regression parameters (string starting with '_r' in the regression expression)")
-        return []
-    
+
+
     def _regression_function(xdata: np.ndarray, *regression_parameters: list[float]):
         for (param_name, param_value) in zip(parameters_names, regression_parameters):
             FUNCTIONS[param_name] = (0, param_value)
-        
+
         return compute_rpn_list(rpn, xdata, parameters.variable) #compute_rpn_unsafe(rpn_tokens, x, parameters.variable)
 
-    regression_data: list[Graph] = []
+    regression_graphs: list[Graph] = []
 
     for graph in graphs:
         # if graph.type != GraphType.FILE:
@@ -88,7 +94,7 @@ def compute_regressions(parameters: PlotParameters, graphs: list[Graph]) -> list
 
         custom_inputs = np.linspace(graph.inputs.min(), graph.inputs.max(), parameters.n_points, endpoint=True)
 
-        regression_data.append(Graph(
+        regression_graphs.append(Graph(
             inputs=custom_inputs,
             type=GraphType.REGRESSION,
             expression=f'Regression [{graph.expression}]',
@@ -101,7 +107,4 @@ def compute_regressions(parameters: PlotParameters, graphs: list[Graph]) -> list
             file.write(f'  {param_name[2:]} = {param_value}\n')
         file.write(f'Copyable expression: f(x) = {_get_fit_expression(parameters.regression_expression, parameters_names, parameters_values)}\n\n')
 
-
-
-
-    return regression_data
+    return regression_graphs

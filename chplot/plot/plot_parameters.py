@@ -179,7 +179,7 @@ def _get_decorated_functions(python: ModuleType) -> list[tuple[int, str, Callabl
         if (match := re.findall(DECORATOR_GETTER_REGEX, source_code)):
             arg_count = int(match[0]) if match[0] else 1
             funcs.append((arg_count, re.findall(FUNCTION_NAME_REGEX, source_code)[0], func))
-    
+
     return funcs
 
 
@@ -188,7 +188,7 @@ def retrieve_python_functions(parameters: PlotParameters):
 
     if parameters.python_files is None:
         return
-    
+
     for python_file in parameters.python_files:
         try:
             # The file must be in the current directory
