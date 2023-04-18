@@ -46,7 +46,7 @@ class TestXLimGraph(unittest.TestCase):
 
     def test_correct_order_log_negative(self):
         parameters = MockParameters(x_lim=(-1, -2), is_x_log=True)
-        self.assertTupleEqual(_get_x_lim_graph(parameters, []), ())
+        self.assertTupleEqual(_get_x_lim_graph(parameters, []), (None, None))
 
     def test_x_lim_moved_by_graphs(self):
         parameters = MockParameters(x_lim=(0, 1), is_x_log=False)

@@ -74,7 +74,7 @@ def _get_x_lim_graph(parameters: PlotParameters, graphs: list[Graph]) -> tuple[f
 
     if x_max <= 0:
         LOGGER.critical('x-axis scale is logarithmic, but both lower (%s) and upper (%s) x bounds are negative, cannot graph anything', x_min, x_max)
-        return None
+        return (None, None)
 
     # Both bounds are already > 0
     return (x_min, x_max)

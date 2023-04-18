@@ -1,6 +1,5 @@
 TODO :
 
- - revoir l'affichage des zéros, intégraless et regressions
  - règles reg, zeros, int, deriv ?
  - PEP8
 
