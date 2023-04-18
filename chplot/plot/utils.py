@@ -49,3 +49,13 @@ def plottable(arg_count: int = 1) -> Callable:
 
 DECORATOR_GETTER_REGEX = r'@plottable(?:\((?:arg_count=)?(\d+)\))?'
 FUNCTION_NAME_REGEX = r'def (.*?)\('
+
+
+def _round(x: float, digits: int) -> float:
+    """Almost equivalent to the built-in round function, but will replace -0.0 by 0.0."""
+
+    rounded = round(x, digits)
+
+    if rounded == 0.0:
+        return 0.0
+    return rounded

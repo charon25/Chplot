@@ -63,22 +63,26 @@ class TestFitRPN(unittest.TestCase):
 
     def test_fit_rpn_base(self):
         rpn = 'x _ra * _rb +'
-        self.assertEqual(_get_fit_rpn(rpn, ['_ra', '_rb'], ['1.5', '-0.3']), 'x 1.5 * -0.3 +')
+        self.assertEqual(_get_fit_rpn(rpn, ['_ra', '_rb'], [1.5, -0.3]), 'x 1.5 * 0.3 -u +')
 
     def test_fit_rpn_parameter_repeater(self):
         rpn = 'x _ra * _ra +'
-        self.assertEqual(_get_fit_rpn(rpn, ['_ra'], ['1.5']), 'x 1.5 * 1.5 +')
+        self.assertEqual(_get_fit_rpn(rpn, ['_ra'], [1.5]), 'x 1.5 * 1.5 +')
+
+    def test_fit_rpn_negative_zero(self):
+        rpn = 'x _ra *'
+        self.assertEqual(_get_fit_rpn(rpn, ['_ra'], [-0.0]), 'x 0.0 *')
 
     def test_fit_rpn_parameter_name_included_in_other(self):
         rpn = 'x _ra * _ra2 +'
-        self.assertEqual(_get_fit_rpn(rpn, ['_ra', '_ra2'], ['1.5', '-0.3']), 'x 1.5 * -0.3 +')
+        self.assertEqual(_get_fit_rpn(rpn, ['_ra', '_ra2'], [1.5, -0.3]), 'x 1.5 * 0.3 -u +')
 
     def test_fit_rpn_parameter_at_beginning_and_end(self):
         rpn = '_ra 1 +'
-        self.assertEqual(_get_fit_rpn(rpn, ['_ra'], ['1.5']), '1.5 1 +')
+        self.assertEqual(_get_fit_rpn(rpn, ['_ra'], [1.5]), '1.5 1 +')
 
         rpn = '_ra'
-        self.assertEqual(_get_fit_rpn(rpn, ['_ra'], ['1.5']), '1.5')
+        self.assertEqual(_get_fit_rpn(rpn, ['_ra'], [1.5]), '1.5')
 
 
 class TestFitExpression(unittest.TestCase):

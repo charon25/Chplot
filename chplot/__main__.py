@@ -54,7 +54,6 @@ def read_parameters() -> argparse.Namespace:
 
 if __name__ == '__main__':
     parameters = read_parameters()
-    print(parameters)
     retrieve_constants(parameters)
     retrieve_expressions(parameters)
     parameters.regression_expression = get_default_regression_expression(parameters.regression_expression)

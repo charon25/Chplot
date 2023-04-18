@@ -12,6 +12,7 @@ from chplot.plot.files import read_files
 from chplot.plot.integral import compute_and_print_integrals
 from chplot.plot.plot_parameters import convert_parameters_expression, PlotParameters, retrieve_python_functions, set_default_values
 from chplot.plot.regression import compute_regressions
+from chplot.plot.utils import _round as round
 from chplot.plot.utils import Graph, NORMAL_UNRECOGNIZED_CHARACTERS, GraphType
 from chplot.plot.utils import LOGGER
 from chplot.plot.zeros import compute_and_print_zeros
@@ -211,12 +212,12 @@ def _manage_zeros(parameters: PlotParameters, graphs: list[Graph]):
     if parameters.is_integer:
         LOGGER.info('forcing the inputs to be integers may cause to miss some zeros.')
 
-    try:
-        compute_and_print_zeros(parameters, graphs)
-    except OSError:
-        LOGGER.error("error while saving zeros to file '%s'.", parameters.zeros_file)
-    except Exception:
-        LOGGER.error("error while computing zeros.")
+    # try:
+    compute_and_print_zeros(parameters, graphs)
+    # except OSError:
+    #     LOGGER.error("error while saving zeros to file '%s'.", parameters.zeros_file)
+    # except Exception:
+    #     LOGGER.error("error while computing zeros.")
 
 
 def _manage_integrals(parameters: PlotParameters, graphs: list[Graph]):

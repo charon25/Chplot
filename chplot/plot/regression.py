@@ -9,6 +9,7 @@ from tqdm import tqdm
 
 from chplot.functions import FUNCTIONS
 from chplot.plot.plot_parameters import PlotParameters
+from chplot.plot.utils import _round as round
 from chplot.plot.utils import Graph, GraphType
 from chplot.plot.utils import LOGGER
 from chplot.rpn import compute_rpn_list, get_rpn_errors
@@ -69,16 +70,23 @@ def _get_fit_rpn(rpn: str, parameters_names: list[str], parameters_values: list[
     """Return the given RPN with the regression parameters replaced by their values, so that the regression can be normally computed later."""
 
     for param_name, param_value in zip(parameters_names, parameters_values):
-        rpn = re.sub(rf'(^| ){param_name}( |$)', rf'\g<1>{param_value}\g<2>', rpn)
+        # abs function necessary to take care of -0.0
+        if param_value >= 0:
+            param_value_str = rf'\g<1>{abs(param_value)}\g<2>'
+        # if the value is negative, we need to add a unary subtraction in the rpn
+        else:
+            param_value_str = rf'\g<1>{abs(param_value)} -u\g<2>'
+        rpn = re.sub(rf'(^| ){param_name}( |$)', param_value_str, rpn)
 
     return rpn
 
 
-def _get_fit_expression(expression: str, parameters_names: list[str], parameters_values: list[float]) -> str:
+def _get_fit_expression(expression: str, parameters_names: list[str], parameters_values: list[float], brackets: bool = True) -> str:
     """Return the given expression with the regression parameters replaced by their values. Brackets are added to force correct parsing by others softwares."""
 
     for param_name, param_value in zip(parameters_names, parameters_values):
-        expression = re.sub(rf'\b{param_name}\b', f'({param_value})', expression)
+        param_value_str = f'({param_value})' if brackets else str(param_value)
+        expression = re.sub(rf'\b{param_name}\b', param_value_str, expression)
 
     return expression
 
@@ -116,6 +124,7 @@ def compute_regressions(parameters: PlotParameters, graphs: list[Graph]) -> list
     file = sys.stdout
 
     parameters_names = _get_unique_regression_parameters(rpn)
+    parameters_names_without_prefix = [param_name[2:] for param_name in parameters_names]
 
 
     def _regression_function(xdata: np.ndarray, *regression_parameters: list[float]):
@@ -127,6 +136,10 @@ def compute_regressions(parameters: PlotParameters, graphs: list[Graph]) -> list
         return compute_rpn_list(rpn, xdata, parameters.variable, progress_bar=False)
 
     regression_graphs: list[Graph] = []
+
+    file.write('\n===== REGRESSION COEFFICIENTS OF THE FUNCTIONS =====\n\n')
+
+    file.write(f'Regression function: reg(x) = {_get_fit_expression(parameters.regression_expression, parameters_names, parameters_names_without_prefix, brackets=False)}\n\n')
 
     for graph in graphs:
         # Remove all nan values for the curve_fit computation
@@ -168,12 +181,14 @@ def compute_regressions(parameters: PlotParameters, graphs: list[Graph]) -> list
         ))
 
 
-        file.write(f'The coefficients of the regression of the {"data series" if graph.type == GraphType.FILE else "function f(x) = "} {graph.expression} are:\n')
+        file.write(f'- Function f(x) = {graph.expression}\n')
+        file.write('  Coefficients:\n')
         for param_name, param_value in zip(parameters_names, parameters_values):
-            file.write(f'  {param_name[2:]} = {param_value}\n')
-        file.write(f'On the interval [{graph.inputs.min():.3f} ; {graph.inputs.max():.3f}] :\n')
-        file.write(f'  R2 = {r2}\n')
-        file.write(f'  |err| <= {max_error}\n')
-        file.write(f'Copyable expression: f(x) = {_get_fit_expression(parameters.regression_expression, parameters_names, parameters_values)}\n\n')
+            file.write(f'    {param_name[2:]} = {round(param_value, 5)} (exact {param_value})\n')
+
+        file.write(f'\n  Accuracy on [{graph.inputs.min():.3f} ; {graph.inputs.max():.3f}]:\n')
+        file.write(f'    R2 = {r2}\n')
+        file.write(f'    |err| <= {max_error}\n')
+        file.write(f'\n  Copyable expression:\n    f(x) = {_get_fit_expression(parameters.regression_expression, parameters_names, parameters_values)}\n\n\n')
 
     return regression_graphs

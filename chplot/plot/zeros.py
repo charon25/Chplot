@@ -3,6 +3,7 @@ import numpy as np
 import sys
 
 from chplot.plot.plot_parameters import PlotParameters
+from chplot.plot.utils import _round as round
 from chplot.plot.utils import Graph, GraphType, ZerosList
 from chplot.rpn import compute_rpn_unsafe
 
@@ -158,8 +159,9 @@ def compute_and_print_zeros(parameters: PlotParameters, graphs: list[Graph]):
         file = sys.stdout
     else:
         file = open(parameters.zeros_file, 'w', encoding='utf-8')
-
-    file.write('\nNote that non-continuous functions may give false zeros. Furthermore, some zeros may be missing if the graph is tangent to the x-axis.\n')
+    
+    file.write('\n===== ZEROS OF THE FUNCTIONS =====\n')
+    file.write('Note that non-continuous functions may give false zeros. Furthermore, some zeros may be missing if the graph is tangent to the x-axis.\n\n')
 
     if any(graph.type in (GraphType.DERIVATIVE, GraphType.FILE) for graph in graphs):
         file.write('Furthermore, on derivatives and file data, zeros are approximated using linear interpolation, and may be far from their real values.\n')
@@ -167,17 +169,17 @@ def compute_and_print_zeros(parameters: PlotParameters, graphs: list[Graph]):
     for graph in graphs:
         zeros = _compute_zeros(parameters, graph)
         if len(zeros) == 0:
-            file.write(f'On the interval [{round(graph.inputs.min(), 3)} ; {round(graph.inputs.max(), 3)}], the function f(x) = {graph.expression} never equals zero\n')
+            file.write(f'- On the interval [{round(graph.inputs.min(), 3)} ; {round(graph.inputs.max(), 3)}], the function f(x) = {graph.expression} never equals zero.\n\n')
             continue
 
-        file.write(f'On the interval [{round(graph.inputs.min(), 3)} ; {round(graph.inputs.max(), 3)}], the function f(x) = {graph.expression} equals zero...\n')
+        file.write(f'- On the interval [{round(graph.inputs.min(), 3)} ; {round(graph.inputs.max(), 3)}], the function f(x) = {graph.expression} equals zero...\n')
         for zero_start, zero_end in zeros:
             # Simple zero
             if zero_end is None:
-                file.write(f'  at x = {round(zero_start, 10)}\n')
+                file.write(f'    at x = {round(zero_start, 10)}\n')
             # Zero zone
             else:
-                file.write(f'  on [{round(zero_start, 10)} ; {round(zero_end, 10)}]\n')
+                file.write(f'    on [{round(zero_start, 10)} ; {round(zero_end, 10)}]\n')
         file.write('\n')
 
     file.write('\n')
