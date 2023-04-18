@@ -47,6 +47,12 @@ def _ifn(x: float, _true: float, _false: float) -> float:
 def _ifz(x: float, _true: float, _false: float) -> float:
     return _true if math.isclose(x, 0.0) else _false
 
+def _in(x: float, lower: float, upper: float, _true: float, _false: float) -> float:
+    return _true if lower <= x < upper else _false
+
+def _out(x: float, lower: float, upper: float, _true: float, _false: float) -> float:
+    return _false if lower <= x < upper else _true
+
 
 OTHER_FUNCTIONS: FunctionDict = {
     'relu': (1, _relu),
@@ -79,4 +85,6 @@ OTHER_FUNCTIONS: FunctionDict = {
     'if': (3, _if),
     'ifn': (3, _ifn),
     'ifz': (3, _ifz),
+    'in': (5, _in),
+    'out': (5, _out),
 }
