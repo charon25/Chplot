@@ -1,7 +1,7 @@
 import logging
 import re
 import sys
-from typing import Optional
+from typing import Optional, Union
 import numpy as np
 
 from scipy.optimize import curve_fit
@@ -46,6 +46,8 @@ def _check_regression_expression(parameters: PlotParameters) -> Optional[str]:
 
 
 def _get_fit_rpn(rpn: str, parameters_names: list[str], parameters_values: list[float]) -> str:
+    """Return the given RPN with the regression parameters replaced by their values, so that the regression can be normally computed later."""
+
     for param_name, param_value in zip(parameters_names, parameters_values):
         rpn = re.sub(rf'(^| ){param_name}( |$)', rf'\g<1>{param_value}\g<2>', rpn)
 
@@ -53,10 +55,32 @@ def _get_fit_rpn(rpn: str, parameters_names: list[str], parameters_values: list[
 
 
 def _get_fit_expression(expression: str, parameters_names: list[str], parameters_values: list[float]) -> str:
+    """Return the given expression with the regression parameters replaced by their values. Brackets are added to force correct parsing by others softwares."""
+
     for param_name, param_value in zip(parameters_names, parameters_values):
         expression = re.sub(rf'\b{param_name}\b', f'({param_value})', expression)
 
     return expression
+
+
+def _remove_nan(x: Union[list[float], np.ndarray], y: Union[list[float], np.ndarray]) -> tuple[np.ndarray, np.ndarray]:
+    """Remove the values of both array where at least one of them is nan."""
+
+    x = np.array(x)
+    y = np.array(y)
+    not_nan_indices = ~(np.isnan(x) | np.isnan(y))
+    return (x[not_nan_indices], y[not_nan_indices])
+
+
+# Ref : https://stackoverflow.com/questions/19189362/getting-the-r-squared-value-using-curve-fit
+def _compute_r_squared(ydata: np.ndarray, yfit: np.ndarray):
+    residuals = ydata - yfit
+    sum_sq_res = np.sum(residuals ** 2)
+    sum_sq_tot = np.sum((ydata - np.mean(ydata)) ** 2)
+
+    print(sum_sq_res, sum_sq_tot)
+
+    return 1 - sum_sq_res / sum_sq_tot
 
 
 def compute_regressions(parameters: PlotParameters, graphs: list[Graph]) -> list[Graph]:
@@ -82,17 +106,19 @@ def compute_regressions(parameters: PlotParameters, graphs: list[Graph]) -> list
     regression_graphs: list[Graph] = []
 
     for graph in graphs:
-        # if graph.type != GraphType.FILE:
-        #     continue
+        # Remove all nan values for the curve_fit computation
+        inputs_without_nan, values_without_nan = _remove_nan(graph.inputs, graph.values)
 
         parameters_values, _ = curve_fit(
             f=_regression_function,
-            xdata=graph.inputs,
-            ydata=graph.values,
+            xdata=inputs_without_nan,
+            ydata=values_without_nan,
             p0=[1.0]*len(parameters_names)
         )
 
         custom_inputs = np.linspace(graph.inputs.min(), graph.inputs.max(), parameters.n_points, endpoint=True)
+
+        r2 = _compute_r_squared(*_remove_nan(values_without_nan, _regression_function(inputs_without_nan, *parameters_values)))
 
         regression_graphs.append(Graph(
             inputs=custom_inputs,
@@ -102,9 +128,11 @@ def compute_regressions(parameters: PlotParameters, graphs: list[Graph]) -> list
             values=_regression_function(custom_inputs, *parameters_values)
         ))
 
-        file.write(f'The coefficients of the regression of the data series {graph.expression} are:\n')
+        file.write(f'The coefficients of the regression of the {"data series" if graph.type == GraphType.FILE else "function f(x) = "} {graph.expression} are:\n')
         for param_name, param_value in zip(parameters_names, parameters_values):
             file.write(f'  {param_name[2:]} = {param_value}\n')
+        file.write(f'On the interval [{graph.inputs.min():.3f} ; {graph.inputs.max():.3f}] R2 = {r2}\n')
         file.write(f'Copyable expression: f(x) = {_get_fit_expression(parameters.regression_expression, parameters_names, parameters_values)}\n\n')
 
     return regression_graphs
+

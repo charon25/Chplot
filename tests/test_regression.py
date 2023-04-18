@@ -126,7 +126,7 @@ class TestComputeRegression(unittest.TestCase):
         regression_graphs = compute_regressions(parameters, [graph])
 
         self.assertEqual(len(regression_graphs), 1)
-        self.assertRegressionGraphEqual(regression_graphs[0], inputs, f'Regression [{graph.expression}]', values)    
+        self.assertRegressionGraphEqual(regression_graphs[0], inputs, f'Regression [{graph.expression}]', values)
 
     def test_two_regressions_different_xlim_n_points_values(self):
         parameters = MockParameters(n_points=10, regression_expression='_ra * x', variable='x')

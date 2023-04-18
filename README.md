@@ -2,7 +2,6 @@ TODO :
 
  - revoir le nom et l'emplacement des loggers
  - revoir l'affichage des zéros, intégraless et regressions
- https://stackoverflow.com/questions/19189362/getting-the-r-squared-value-using-curve-fit
  - règles reg, zeros, int, deriv ?
  - PEP8
 
