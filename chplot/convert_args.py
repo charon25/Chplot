@@ -1,9 +1,7 @@
-import logging
 import re
 from typing import IO, Optional
 
 from chplot.plot.plot_parameters import PlotParameters
-
 from chplot.plot.utils import LOGGER
 
 
@@ -44,7 +42,7 @@ def retrieve_constants(parameters: PlotParameters) -> None:
 
         # For every other exception, log and ignore
         except Exception:
-            LOGGER.warning("error while opening file '%s', the file will be ignored.", constants)
+            LOGGER.error("error while opening file '%s', the file will be ignored", constants)
 
     parameters.constants = final_constants
 
@@ -64,7 +62,7 @@ def retrieve_expressions(parameters: PlotParameters) -> None:
 
         # For every other exception, log and ignore
         except Exception:
-            LOGGER.warning("error while opening file '%s', the file will be ignored.", expression)
+            LOGGER.error("error while opening file '%s', the file will be ignored", expression)
 
     parameters.expressions = final_expressions
 

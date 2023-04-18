@@ -29,7 +29,7 @@ def _get_x_lim(parameters: PlotParameters) -> tuple[float, float]:
         x_max = 1
 
     if x_max < x_min:
-        LOGGER.warning('the upper x bound (%s) is inferior to the lower x bound (%s), they will be swapped.', x_max, x_min)
+        LOGGER.warning('the upper x bound (%s) is inferior to the lower x bound (%s), they will be swapped', x_max, x_min)
         return (x_max, x_min)
 
     return (x_min, x_max)
@@ -49,7 +49,7 @@ def _get_x_lim_graph(parameters: PlotParameters, graphs: list[Graph]) -> tuple[f
     # Else, notify them if the min of the graphs is lower
     else:
         if x_min_graph < x_min:
-            LOGGER.info('lower x bound of graph was decreased to %s to accomodate all data.', round(x_min_graph, 3))
+            LOGGER.info('lower x bound of graph was decreased to %s to accomodate all data', round(x_min_graph, 3))
             x_min = x_min_graph
 
     # Same but reversed for the max
@@ -57,7 +57,7 @@ def _get_x_lim_graph(parameters: PlotParameters, graphs: list[Graph]) -> tuple[f
         x_max = x_max_graph
     else:
         if x_max_graph > x_max:
-            LOGGER.info('upper x bound of graph was increased to %s to accomodate all data.', round(x_max_graph, 3))
+            LOGGER.info('upper x bound of graph was increased to %s to accomodate all data', round(x_max_graph, 3))
             x_max = x_max_graph
 
     if x_min > x_max:
@@ -68,12 +68,12 @@ def _get_x_lim_graph(parameters: PlotParameters, graphs: list[Graph]) -> tuple[f
 
     # If the x-axis is on a log-scale and x_min < 0, we let matplotlib decide the smallest meaningful value
     if x_min <= 0 < x_max:
-        LOGGER.warning('x-axis scale is logarithmic, but lower x bound (%s) is negative: x-axis will be truncated to positive values', x_min)
+        LOGGER.warning('x-axis scale is logarithmic, but lower x bound (%s) is negative, x-axis will be truncated to positive values', x_min)
         return (None, x_max)
 
     if x_max <= 0:
-        LOGGER.error('x-axis scale is logarithmic, but both lower (%s) and upper (%s) x bounds are negative: cannot graph anything', x_min, x_max)
-        return ()
+        LOGGER.critical('x-axis scale is logarithmic, but both lower (%s) and upper (%s) x bounds are negative, cannot graph anything', x_min, x_max)
+        return None
 
     # Both bounds are already > 0
     return (x_min, x_max)
@@ -101,14 +101,14 @@ def _generate_graphs(parameters: PlotParameters, inputs: np.ndarray) -> list[Gra
         try:
             rpn = shunting_yard(expression, case_sensitive=True, variable=parameters.variable)
         except MismatchedBracketsError:
-            LOGGER.warning("mismatched brackets in the expression '%s'", expression)
+            LOGGER.error("mismatched brackets in the expression '%s'", expression)
             continue
         except Exception:
-            LOGGER.warning("unknown error in the expression '%s'", expression)
+            LOGGER.error("unknown error in the expression '%s'", expression)
             continue
 
         if (error := get_rpn_errors(rpn, variable=parameters.variable)) is not None:
-            LOGGER.warning("error for expression '%s' : %s", expression, error)
+            LOGGER.error("error for expression '%s' : %s", expression, error)
             continue
 
         if (unknown_characters := _get_unrecognized_characters(expression, rpn)):
@@ -131,7 +131,7 @@ def _get_y_lim_graph(parameters: PlotParameters) -> tuple[float, float]:
         y_max = parameters.y_lim[1]
 
     if y_max < y_min:
-        LOGGER.warning('the upper y bound (%s) is inferior to the lower y bound (%s), they will be swapped.', y_max, y_min)
+        LOGGER.warning('the upper y bound (%s) is inferior to the lower y bound (%s), they will be swapped', y_max, y_min)
         y_min, y_max = y_max, y_min
 
     if parameters.must_contain_zero and parameters.is_y_log:
@@ -145,14 +145,14 @@ def _get_y_lim_graph(parameters: PlotParameters) -> tuple[float, float]:
         if y_min > 0 and parameters.must_contain_zero and not parameters.is_y_log:
             y_min = 0
         elif y_min <= 0 and parameters.is_y_log:
-            LOGGER.warning('y-axis scale is logarithmic, but lower y bound (%s) is negative: y-axis will be truncated to positive values', y_min)
+            LOGGER.warning('y-axis scale is logarithmic, but lower y bound (%s) is negative, y-axis will be truncated to positive values', y_min)
             y_min = None
 
         return (y_min, y_max)
 
     # If y_max <= 0, there are 4 cases and only two binary variables: must contain zero or not, log scale or not
     if parameters.is_y_log:
-        LOGGER.error('y-axis scale is logarithmic, but both lower (%s) and upper (%s) y bounds are negative: cannot graph anything', y_min, y_max)
+        LOGGER.critical('y-axis scale is logarithmic, but both lower (%s) and upper (%s) y bounds are negative: cannot graph anything', y_min, y_max)
         return ()
 
     if parameters.must_contain_zero:
@@ -209,23 +209,23 @@ def _manage_derivatives(parameters: PlotParameters, graphs: list[Graph]):
 
 def _manage_zeros(parameters: PlotParameters, graphs: list[Graph]):
     if parameters.is_integer:
-        LOGGER.warning('forcing the inputs to be integers may cause to miss some zeros.')
+        LOGGER.info('forcing the inputs to be integers may cause to miss some zeros.')
 
     try:
         compute_and_print_zeros(parameters, graphs)
     except OSError:
-        LOGGER.warning("error while saving zeros to file '%s'.", parameters.zeros_file)
+        LOGGER.error("error while saving zeros to file '%s'.", parameters.zeros_file)
     except Exception:
-        LOGGER.warning("error while computing zeros.")
+        LOGGER.error("error while computing zeros.")
 
 
 def _manage_integrals(parameters: PlotParameters, graphs: list[Graph]):
     try:
         compute_and_print_integrals(parameters, graphs)
     except OSError:
-        LOGGER.warning("error while saving integrals to file '%s'.", parameters.zeros_file)
+        LOGGER.error("error while saving integrals to file '%s'.", parameters.zeros_file)
     except Exception:
-        LOGGER.warning("error while computing integrals")
+        LOGGER.error("error while computing integrals")
 
 
 def _save_data(parameters: PlotParameters, graphs: list[Graph]):
@@ -265,14 +265,14 @@ def _save_data(parameters: PlotParameters, graphs: list[Graph]):
             for index in range(max_column_height):
                 csvwriter.writerow(column[index] for column in data)
     except OSError:
-        LOGGER.warning("error while saving data to file '%s'.", parameters.save_data_path)
+        LOGGER.error("error while saving data to file '%s'.", parameters.save_data_path)
 
 
 def _save_figure(parameters: PlotParameters):
     try:
         plt.savefig(parameters.save_figure_path, bbox_inches='tight')
     except OSError:
-        LOGGER.warning("error while saving figure to file '%s'.", parameters.save_figure_path)
+        LOGGER.error("error while saving figure to file '%s'.", parameters.save_figure_path)
 
 
 def plot(parameters: PlotParameters) -> None:
@@ -299,7 +299,7 @@ def plot(parameters: PlotParameters) -> None:
         graphs.extend(compute_regressions(parameters, graphs))
 
     if not graphs:
-        LOGGER.error('no expression without errors, cannot plot anything.')
+        LOGGER.critical('no expression without errors, cannot plot anything.')
         return
 
     if parameters.derivation_orders is not None:

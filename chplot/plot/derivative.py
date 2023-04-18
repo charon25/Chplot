@@ -107,6 +107,6 @@ def compute_derivatives(parameters: PlotParameters, graphs: list[Graph]) -> list
                 )
                 derivatives.append(derivative_graph)
             except Exception:
-                LOGGER.warning("error while computing derivate of order %s of '%s'.", order, graph.expression)
+                LOGGER.error("error while computing derivate of order %s of '%s'", order, graph.expression)
 
     return derivatives

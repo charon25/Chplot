@@ -57,7 +57,7 @@ DEFAULT_PARAMETERS = PlotParameters(
     n_points=10001,
     is_integer=False,
 
-    x_lim=(None, None), #("0.0", "1.0"),
+    x_lim=(None, None),
     is_x_log=False,
 
     y_lim=(None, None),
@@ -138,19 +138,18 @@ def convert_parameters_expression(parameters: PlotParameters) -> None:
             constant_name, constant_expression = constant.split('=')
             constant_name = constant_name.strip()
         except Exception:
-            LOGGER.warning("cannot parse constant assignement '%s', it will be ignored. If it is a file, this may error may be generated if errors occured during file opening.", constant)
+            LOGGER.error("cannot parse constant assignement '%s', it will be ignored", constant)
             continue
 
         constant_value = _convert_single_expression(constant_expression, default_value_error=None, default_value_nan=math.nan)
         if constant_value is None:
-            LOGGER.warning("error while computing constant expression '%s' (of constant '%s'), it will be ignored.", constant_expression, constant_name)
+            LOGGER.error("error while computing constant expression '%s' (of constant '%s'), it will be ignored", constant_expression, constant_name)
             continue
 
         # 0 indicates it's a constant and do not require parameters
         if constant_name in FUNCTIONS:
-            LOGGER.warning("constant '%s' will replace an already defined constant or function.", constant_name)
+            LOGGER.warning("constant '%s' will replace an already defined constant or function", constant_name)
         FUNCTIONS[constant_name] = (0, constant_value)
-        # constants_function_dict[constant_name] = (0, constant_value)
 
     parameters.constants = constants_function_dict
 
@@ -167,10 +166,14 @@ def _get_decorated_functions(python: ModuleType) -> list[tuple[int, str, Callabl
 
             # This happens only if the decorator is without bracket
             if 'def decorator_plottable(func: Callable) -> Callable:' in source_code:
-                LOGGER.warning("the @plottable decorator is missing brackets on function '%s' of python file '%s.py'.", func.__name__, python.__name__)
+                LOGGER.error(
+                    "the @plottable decorator is missing brackets on function '%s' of python file '%s.py', its source code is therefore inaccessible",
+                    func.__name__,
+                    python.__name__
+                )
 
         except OSError:
-            LOGGER.warning("error while getting source code of function '%s' of python file '%s.py'.", func.__name__, python.__name__)
+            LOGGER.error("error while getting source code of function '%s' of python file '%s.py'", func.__name__, python.__name__)
             continue
 
         if (match := re.findall(DECORATOR_GETTER_REGEX, source_code)):
@@ -190,7 +193,7 @@ def retrieve_python_functions(parameters: PlotParameters):
         try:
             # The file must be in the current directory
             if pathlib.Path(python_file).parent.parts:
-                LOGGER.warning("python file '%s' is not in the current directory.", python_file)
+                LOGGER.error("python file must be in the current directory ('%s')", python_file)
                 continue
 
             # Remove the .py extension
@@ -199,17 +202,17 @@ def retrieve_python_functions(parameters: PlotParameters):
             for arg_count, func_name, func in _get_decorated_functions(python):
                 try:
                     if func_name in FUNCTIONS:
-                        LOGGER.warning("function or constant '%s' will replace an already defined constant or function.", func_name)
+                        LOGGER.warning("function or constant '%s' will replace an already defined constant or function", func_name)
                     # If the function is a constant (= does not have any argument), call it directly to optimize future computations
                     if arg_count == 0:
                         FUNCTIONS[func_name] = (0, func())
                     else:
                         FUNCTIONS[func_name] = (arg_count, func)
                 except TypeError:
-                    LOGGER.warning("constant function '%s' of python file '%s' expected some arguments.", func_name, python_file)
+                    LOGGER.error("constant function '%s' of python file '%s' expected some arguments.", func_name, python_file)
 
         except (ImportError, ModuleNotFoundError):
-            LOGGER.warning("error while importing python file '%s'.", python_file)
+            LOGGER.error("error while importing python file '%s'.", python_file)
         except Exception:
-            LOGGER.warning("unknown error while importing python file '%s'.", python_file)
+            LOGGER.error("unknown error while importing python file '%s'.", python_file)
 

@@ -15,9 +15,9 @@ def get_functions_from_module(module: ModuleType, function_names: tuple[int, str
         try:
             function_dictionary[function_name] = (parameter_count, getattr(module, function_name))
         except AttributeError:
-            LOGGER.warning("'%s' module does not contain function '%s'", module.__name__, function_name)
+            LOGGER.error("'%s' module does not contain function '%s'", module.__name__, function_name)
         except Exception:
-            LOGGER.warning("Unknown error while trying to get function '%s' of module '%s'", function_name, module.__name__)
+            LOGGER.error("unknown error while trying to get function '%s' of module '%s'", function_name, module.__name__)
 
     return function_dictionary
 
@@ -29,8 +29,8 @@ def get_renamed_functions_from_module(module: ModuleType, function_names: tuple[
         try:
             function_dictionary[new_name] = (parameter_count, getattr(module, function_name))
         except AttributeError:
-            LOGGER.warning("'%s' module does not contain function '%s'", module.__name__, function_name)
+            LOGGER.error("'%s' module does not contain function '%s'", module.__name__, function_name)
         except Exception:
-            LOGGER.warning("Unknown error while trying to get function '%s' of module '%s'", function_name, module.__name__)
+            LOGGER.error("unknown error while trying to get function '%s' of module '%s'", function_name, module.__name__)
 
     return function_dictionary

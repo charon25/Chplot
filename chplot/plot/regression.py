@@ -41,15 +41,15 @@ def _check_regression_expression(parameters: PlotParameters) -> Optional[str]:
     try:
         rpn = shunting_yard(parameters.regression_expression, case_sensitive=True, variable=parameters.variable)
     except MismatchedBracketsError:
-        LOGGER.warning("mismatched brackets in the regression expression '%s'.", parameters.regression_expression)
+        LOGGER.error("mismatched brackets in the regression expression '%s'.", parameters.regression_expression)
         return None
     except Exception:
-        LOGGER.warning("unknown error in the regression expression '%s'.", parameters.regression_expression)
+        LOGGER.error("unknown error in the regression expression '%s'.", parameters.regression_expression)
         return None
 
     # Check that there are regression parameters in the expression
     if not re.findall(REGRESSION_PARAMETERS_REGEX, rpn):
-        LOGGER.warning("error: no regression parameters (string starting with '_r' in the regression expression)")
+        LOGGER.error("error: no regression parameters (string starting with '_r' in the regression expression)")
         return None
 
     # Replace every regression parameters with 0 to check if the rest of the RPN is valid
@@ -59,7 +59,7 @@ def _check_regression_expression(parameters: PlotParameters) -> Optional[str]:
         rpn_check = re.sub(REGRESSION_PARAMETERS_REGEX, r'\g<1>0\g<3>', rpn_check)
 
     if (error := get_rpn_errors(rpn_check, variable=parameters.variable)) is not None:
-        LOGGER.warning("error in the regression expression '%s' : %s", parameters.regression_expression, error)
+        LOGGER.error("error in the regression expression '%s' : %s", parameters.regression_expression, error)
         return None
 
     return rpn
@@ -133,7 +133,7 @@ def compute_regressions(parameters: PlotParameters, graphs: list[Graph]) -> list
         inputs_without_nan, values_without_nan = _remove_nan(graph.inputs, graph.values)
 
         if inputs_without_nan.size < len(parameters_names):
-            LOGGER.warning(
+            LOGGER.error(
                 "not enough non-nan input points on graph '%s' to compute specified regression ('%s' found, at least '%s' needed)",
                 graph.expression, inputs_without_nan.size, len(parameters_names)
             )
@@ -150,7 +150,7 @@ def compute_regressions(parameters: PlotParameters, graphs: list[Graph]) -> list
             )
         except (OptimizeWarning, RuntimeError):
             pbar.close()
-            LOGGER.warning("error while computing regression of '%s', try reducing the number of parameters or simplifying the expression", graph.expression)
+            LOGGER.error("error while computing regression of '%s', try reducing the number of parameters or simplifying the expression", graph.expression)
             continue
 
         pbar.close()
@@ -167,6 +167,7 @@ def compute_regressions(parameters: PlotParameters, graphs: list[Graph]) -> list
             values=_regression_function(custom_inputs, *parameters_values)
         ))
 
+
         file.write(f'The coefficients of the regression of the {"data series" if graph.type == GraphType.FILE else "function f(x) = "} {graph.expression} are:\n')
         for param_name, param_value in zip(parameters_names, parameters_values):
             file.write(f'  {param_name[2:]} = {param_value}\n')
@@ -175,7 +176,4 @@ def compute_regressions(parameters: PlotParameters, graphs: list[Graph]) -> list
         file.write(f'  |err| <= {max_error}\n')
         file.write(f'Copyable expression: f(x) = {_get_fit_expression(parameters.regression_expression, parameters_names, parameters_values)}\n\n')
 
-    pbar.close()
-
     return regression_graphs
-

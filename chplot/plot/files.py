@@ -147,10 +147,10 @@ def read_files(parameters: PlotParameters) -> list[Graph]:
         try:
             graphs.extend(_read_one_file(filepath))
         except FileNotFoundError:
-            LOGGER.warning("file '%s' does not exist or is unreachable.", filepath)
+            LOGGER.error("file '%s' does not exist or is unreachable", filepath)
         except OSError:
-            LOGGER.warning("error while opening file '%s'.", filepath)
+            LOGGER.error("error while opening file '%s'", filepath)
         except Exception:
-            LOGGER.warning("unknown error while reading file '%s'.", filepath)
+            LOGGER.error("unknown error while reading file '%s'", filepath)
 
     return graphs

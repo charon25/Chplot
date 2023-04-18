@@ -1,6 +1,5 @@
 TODO :
 
- - revoir le nom et l'emplacement des loggers
  - revoir l'affichage des zéros, intégraless et regressions
  - règles reg, zeros, int, deriv ?
  - PEP8
