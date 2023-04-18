@@ -130,4 +130,3 @@ class TestYLimGraph(unittest.TestCase):
     def test_negative_zero_log(self):
         parameters = MockParameters(y_lim=(-2, -1), must_contain_zero=True, is_y_log=True)
         self.assertTupleEqual(_get_y_lim_graph(parameters), ())
-

@@ -1,8 +1,5 @@
 TODO :
 
- - règles reg, zeros, int, deriv ?
- - PEP8
-
 Paramètres CLI :
  - une ou plusieurs expressions entre guillemets OK
  - -x pour changer les bornes x (suivi de deux expressions mathématiques (inclue int ou float) ; ATTENTION à ne pas commencer l'expression par un tiret (mettre 0-EXP plutôt que -EXP)) OK

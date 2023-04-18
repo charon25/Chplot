@@ -19,4 +19,3 @@ class TestUnrecognizedCharacters(unittest.TestCase):
 
     def test_multiple_unrecognized_characters(self):
         self.assertSetEqual(_get_unrecognized_characters('x?4$5%', 'x 4 5'), {'?', '$', '%'})
-

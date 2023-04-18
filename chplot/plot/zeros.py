@@ -1,6 +1,7 @@
 import math
-import numpy as np
 import sys
+
+import numpy as np
 
 from chplot.plot.plot_parameters import PlotParameters
 from chplot.plot.utils import _round as round
@@ -18,8 +19,8 @@ def _compute_simple_zero(parameters: PlotParameters, inputs: np.ndarray, rpn_tok
     xa, xb = map(float, inputs[zero_index:zero_index + 2]) # convert to real float for the rpn compute algorithm
     fa = compute_rpn_unsafe(rpn_tokens, xa, variable=parameters.variable)
 
-    it = 0
-    while it < MAX_ITERATIONS and xb - xa > TARGET_ERROR:
+    iterations = 0
+    while iterations < MAX_ITERATIONS and xb - xa > TARGET_ERROR:
         xm = (xa + xb) / 2
         fm = compute_rpn_unsafe(rpn_tokens, xm, variable=parameters.variable)
         if fa * fm > 0:
@@ -30,15 +31,15 @@ def _compute_simple_zero(parameters: PlotParameters, inputs: np.ndarray, rpn_tok
         else:
             return xm
 
-        it += 1
+        iterations += 1
 
     return xa
 
 
 def _compute_simple_zero_with_interpolation(graph: Graph, zero_index: int) -> float:
     (x1, x2), (y1, y2) = graph.inputs[zero_index:zero_index + 2], graph.values[zero_index:zero_index + 2]
-    a = (y2 - y1) / (x2 - x1)
-    return x2 - y2 / a
+    slope = (y2 - y1) / (x2 - x1)
+    return x2 - y2 / slope
 
 
 def _compute_zero_zone(parameters: PlotParameters, inputs: np.ndarray, rpn_tokens: list[str], zone_start: int, zone_end: int) -> tuple[float, float]:
@@ -99,7 +100,7 @@ def _compute_zeros(parameters: PlotParameters, graph: Graph) -> ZerosList:
         if y1 * y2 > 0:
             continue
         # Opposite sign, there is a simple zero
-        elif y1 * y2 < 0:
+        if y1 * y2 < 0:
             simple_zeros_indexes.append(index)
         elif y1 * y2 == 0:
             # Start of a zero "zone" only we are not at the end, else a simple zero we cannot compute further
@@ -129,7 +130,7 @@ def _compute_zeros(parameters: PlotParameters, graph: Graph) -> ZerosList:
     if len(zero_zones_indexes) % 2 == 1:
         zero_zones_indexes.append(len(inputs) - 1)
 
-    if graph.type == GraphType.BASE or graph.type == GraphType.REGRESSION:
+    if graph.type in (GraphType.BASE, GraphType.REGRESSION):
         rpn_tokens = graph.rpn.split(' ')
         simple_zeros.extend(_compute_simple_zero(parameters, inputs, rpn_tokens, zero_index) for zero_index in simple_zeros_indexes)
 
@@ -159,7 +160,7 @@ def compute_and_print_zeros(parameters: PlotParameters, graphs: list[Graph]):
         file = sys.stdout
     else:
         file = open(parameters.zeros_file, 'w', encoding='utf-8')
-    
+
     file.write('\n===== ZEROS OF THE FUNCTIONS =====\n')
     file.write('Note that non-continuous functions may give false zeros. Furthermore, some zeros may be missing if the graph is tangent to the x-axis.\n\n')
 

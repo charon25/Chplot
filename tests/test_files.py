@@ -153,4 +153,3 @@ class TestReadFile(unittest.TestCase):
         graphs = read_files(parameters)
         self.assertGraphEqual(graphs[0], [0, 1, 2], 'no_column_names.csv - Column 1', [3, 4, 5])
         self.assertGraphEqual(graphs[1], [0, 1, 2], 'no_column_names.csv - Column 2', [6, 7, 8])
-

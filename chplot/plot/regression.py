@@ -31,7 +31,7 @@ def _get_unique_regression_parameters(rpn: str) -> list[str]:
                 parameters_names.append(param_name)
         else:
             break
-            
+
     return parameters_names
 
 
@@ -91,13 +91,13 @@ def _get_fit_expression(expression: str, parameters_names: list[str], parameters
     return expression
 
 
-def _remove_nan(x: Union[list[float], np.ndarray], y: Union[list[float], np.ndarray]) -> tuple[np.ndarray, np.ndarray]:
-    """Remove the values of both array where at least one of them is nan."""
+def _remove_nan(arr1: Union[list[float], np.ndarray], arr2: Union[list[float], np.ndarray]) -> tuple[np.ndarray, np.ndarray]:
+    """Remove the values of both arrays where at least one of them is nan."""
 
-    x = np.array(x)
-    y = np.array(y)
-    not_nan_indices = ~(np.isnan(x) | np.isnan(y))
-    return (x[not_nan_indices], y[not_nan_indices])
+    arr1 = np.array(arr1)
+    arr2 = np.array(arr2)
+    not_nan_indices = ~(np.isnan(arr1) | np.isnan(arr2))
+    return (arr1[not_nan_indices], arr2[not_nan_indices])
 
 
 # Ref : https://stackoverflow.com/questions/19189362/getting-the-r-squared-value-using-curve-fit

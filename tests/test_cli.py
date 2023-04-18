@@ -122,4 +122,3 @@ class TestGetDefaultRegressionExpression(unittest.TestCase):
         self.assertEqual(get_default_regression_expression('poly0'), '_ra0')
         self.assertEqual(get_default_regression_expression('poly1'), '_ra1 * x + _ra0')
         self.assertEqual(get_default_regression_expression('poly5'), '_ra5 * x^5 + _ra4 * x^4 + _ra3 * x^3 + _ra2 * x^2 + _ra1 * x + _ra0')
-

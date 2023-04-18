@@ -177,4 +177,3 @@ class TestConvertParametersConstants(unittest.TestCase):
         convert_parameters_expression(parameters)
 
         self.assertFunctionDictContains(FUNCTIONS, {'a': (0, 1), 'b': (0, 2), 'c': (0, 3)})
-

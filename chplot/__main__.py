@@ -59,4 +59,3 @@ if __name__ == '__main__':
     parameters.regression_expression = get_default_regression_expression(parameters.regression_expression)
 
     plot(parameters)
-

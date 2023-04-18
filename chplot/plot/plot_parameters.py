@@ -215,4 +215,3 @@ def retrieve_python_functions(parameters: PlotParameters):
             LOGGER.error("error while importing python file '%s'.", python_file)
         except Exception:
             LOGGER.error("unknown error while importing python file '%s'.", python_file)
-

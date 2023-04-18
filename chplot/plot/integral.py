@@ -1,6 +1,7 @@
 import math
-import numpy as np
 import sys
+
+import numpy as np
 
 from chplot.plot.derivative import _get_second_derivative
 from chplot.plot.plot_parameters import PlotParameters

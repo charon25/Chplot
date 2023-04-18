@@ -33,8 +33,8 @@ def retrieve_constants(parameters: PlotParameters) -> None:
     final_constants: list[str] = []
     for constant in constants:
         try:
-            with open(constant, 'r', encoding='utf-8') as fi:
-                final_constants.extend(_get_non_empty_lines(fi))
+            with open(constant, 'r', encoding='utf-8') as file:
+                final_constants.extend(_get_non_empty_lines(file))
 
         # If the file is not found, it means it should be an expression
         except (FileNotFoundError, OSError):
@@ -53,8 +53,8 @@ def retrieve_expressions(parameters: PlotParameters) -> None:
     final_expressions: list[str] = []
     for expression in parameters.expressions:
         try:
-            with open(expression, 'r', encoding='utf-8') as fi:
-                final_expressions.extend(_get_non_empty_lines(fi))
+            with open(expression, 'r', encoding='utf-8') as file:
+                final_expressions.extend(_get_non_empty_lines(file))
 
         # If the file is not found, it means it should be an expression
         except (FileNotFoundError, OSError):
@@ -83,7 +83,7 @@ def get_default_regression_expression(regression_expression: Optional[str]) -> O
 
     if regression_expression in CONSTANT_DEFAULT_REGRESSION_KEYWORDS:
         return CONSTANT_DEFAULT_REGRESSION_KEYWORDS[regression_expression]
-    
+
     # Matches pX, polyX or polynomialX where X is any non negative integer
     if (match := re.findall(r'^p(?:(?:oly)(?:nomial)?)?(\d+)$', regression_expression)):
         degree = int(match[0])

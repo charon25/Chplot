@@ -45,7 +45,7 @@ def get_rpn_errors(rpn: str, variable: str = 'x') -> Optional[str]:
             stack.append(result)
 
     if len(stack) > 1:
-        return f"expression does not give only one result."
+        return "expression does not give only one result."
 
     return None
 

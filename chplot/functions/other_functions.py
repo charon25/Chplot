@@ -17,11 +17,11 @@ def _sign(x: float) -> float:
         return -1
     return 1 if x > 0 else 0
 
-def _lerp(x: float, xa: float, xb: float, ya: float, yb: float) -> float:
-    return ya + ((x - xa) / (xb - xa)) * (yb - ya)
+def _lerp(x: float, x_min: float, x_max: float, y_min: float, y_max: float) -> float:
+    return y_min + ((x - x_min) / (x_max - x_min)) * (y_max - y_min)
 
-def _lerpt(t: float, mn: float, mx: float) -> float:
-    return mx + t * (mx - mn)
+def _lerpt(t: float, _min: float, _max: float) -> float:
+    return _max + t * (_max - _min)
 
 def _heaviside(x: float) -> float:
     if x < 0:

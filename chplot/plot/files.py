@@ -45,12 +45,12 @@ def _get_line_format(lines: list[str]) -> tuple[str, DecimalSeparator]:
             decimal_separator, column_separator = result[0]
             return (column_separator, DecimalSeparator.COMMA if decimal_separator == ',' else DecimalSeparator.UNKNOWN)
 
-        elif (result := re.findall(REGEX_DOT_DECIMAL_SEP, line)):
+        if (result := re.findall(REGEX_DOT_DECIMAL_SEP, line)):
             decimal_separator, column_separator = result[0]
+
             if decimal_separator == '.' or (decimal_separator == '' and column_separator == ','):
                 return (column_separator, DecimalSeparator.DOT)
-            else:
-                return (column_separator, DecimalSeparator.UNKNOWN)
+            return (column_separator, DecimalSeparator.UNKNOWN)
 
     return ('', DecimalSeparator.UNKNOWN)
 
@@ -93,8 +93,8 @@ def _get_filename(filepath: str) -> str:
 
 def _read_one_file(filepath: str) -> list[Graph]:
     # read all at once because we may need to backtrack to get the title line
-    with open(filepath, 'r', encoding='utf-8') as fi:
-        lines = fi.read().splitlines()
+    with open(filepath, 'r', encoding='utf-8') as file:
+        lines = file.read().splitlines()
 
     column_separator, decimal_separator = _get_line_format(lines)
     column_names: list[str] = []

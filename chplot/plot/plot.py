@@ -3,7 +3,6 @@ import math
 from typing import Any
 
 import numpy as np
-np.seterr('raise')
 import matplotlib.pyplot as plt
 from shunting_yard import MismatchedBracketsError, shunting_yard
 
@@ -260,8 +259,8 @@ def _save_data(parameters: PlotParameters, graphs: list[Graph]):
 
 
     try:
-        with open(parameters.save_data_path, 'w', encoding='utf-8') as fo:
-            csvwriter = csv.writer(fo, lineterminator='\n')
+        with open(parameters.save_data_path, 'w', encoding='utf-8') as file:
+            csvwriter = csv.writer(file, lineterminator='\n')
             csvwriter.writerow(column_names)
             for index in range(max_column_height):
                 csvwriter.writerow(column[index] for column in data)

@@ -102,4 +102,3 @@ class TestRpnList(unittest.TestCase):
 
         # The values are zeta(2) and zeta(3)
         self.assertListEqual(list(compute_rpn_list(rpn, inputs)), [math.nan, 1.6449340668482264, 1.2020569031595942])
-
