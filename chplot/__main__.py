@@ -1,5 +1,5 @@
 import argparse
-from chplot.convert_args import retrieve_constants, retrieve_expressions
+from chplot.convert_args import get_default_regression_expression, retrieve_constants, retrieve_expressions
 
 from chplot.plot import plot
 
@@ -57,6 +57,7 @@ if __name__ == '__main__':
     print(parameters)
     retrieve_constants(parameters)
     retrieve_expressions(parameters)
+    parameters.regression_expression = get_default_regression_expression(parameters.regression_expression)
 
     plot(parameters)
 

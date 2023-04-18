@@ -5,6 +5,7 @@ import unittest
 
 import numpy as np
 
+from chplot.plot.regression import _get_unique_regression_parameters
 from chplot.plot.regression import _check_regression_expression, compute_regressions
 from chplot.plot.regression import  _get_fit_expression, _get_fit_rpn
 from chplot.plot.utils import Graph, GraphType
@@ -35,6 +36,27 @@ class TestCheckRegressionExpression(unittest.TestCase):
 
         parameters = MockParameters(regression_expression='_ra * sin(x, 1)', variable='x')
         self.assertIsNone(_check_regression_expression(parameters))
+
+    def test_overlapping_parameters(self):
+        parameters = MockParameters(regression_expression='_ra * _rb', variable='x')
+        self.assertIsNotNone(_check_regression_expression(parameters))
+
+
+class TestGetUniqueRegressionParameters(unittest.TestCase):
+
+    def test_get_simple(self):
+        self.assertListEqual(_get_unique_regression_parameters('_ra'), ['_ra'])
+        self.assertListEqual(_get_unique_regression_parameters('_ra 1 +'), ['_ra'])
+        self.assertListEqual(_get_unique_regression_parameters('1 x + _ra sin *'), ['_ra'])
+
+    def test_get_multiples(self):
+        self.assertListEqual(_get_unique_regression_parameters('_ra x + _rb *'), ['_ra', '_rb'])
+
+    def test_get_repeated(self):
+        self.assertListEqual(_get_unique_regression_parameters('_ra x + _rb * _ra +'), ['_ra', '_rb'])
+
+    def test_get_overlapping(self):
+        self.assertListEqual(_get_unique_regression_parameters('_ra _rb *'), ['_ra', '_rb'])
 
 
 class TestFitRPN(unittest.TestCase):
