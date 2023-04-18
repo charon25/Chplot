@@ -1,8 +1,6 @@
 TODO :
 
  - revoir le nom et l'emplacement des loggers
- - gérer exception regression (runtimeerror) (TypeError: The number of func parameters=4 must not exceed the number of data points=2)
- - gérer file de la regression
  - revoir l'affichage des zéros, intégraless et regressions
  - règles reg, zeros, int, deriv ?
  - PEP8

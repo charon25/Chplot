@@ -1,9 +1,9 @@
 import logging
-
 logger = logging.getLogger(__name__)
 import math
-from typing import Optional
+from typing import Optional, Union
 
+import numpy as np
 from tqdm import tqdm
 
 from chplot.functions import FUNCTIONS
@@ -87,6 +87,10 @@ def compute_rpn_unsafe(rpn_tokens: list[str], x: float, variable: str = 'x') -> 
     return stack[0] if not math.isinf(stack[0]) else math.nan
 
 
-def compute_rpn_list(rpn: str, inputs: float, variable: str = 'x') -> list[float]:
+def compute_rpn_list(rpn: str, inputs: Union[np.ndarray, list[float]], variable: str = 'x', progress_bar: bool = True) -> list[float]:
     rpn_tokens = rpn.split()
-    return [compute_rpn_unsafe(rpn_tokens, float(x), variable) for x in tqdm(inputs, total=len(inputs), leave=False)]
+    if progress_bar:
+        inputs_iter = tqdm(inputs, total=len(inputs), leave=False)
+    else:
+        inputs_iter = iter(inputs)
+    return [compute_rpn_unsafe(rpn_tokens, float(x), variable) for x in inputs_iter]

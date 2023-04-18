@@ -2,10 +2,11 @@ import logging
 import re
 import sys
 from typing import Optional, Union
-import numpy as np
 
-from scipy.optimize import curve_fit
+import numpy as np
+from scipy.optimize import curve_fit, OptimizeWarning
 from shunting_yard import MismatchedBracketsError, shunting_yard
+from tqdm import tqdm
 
 from chplot.functions import FUNCTIONS
 from chplot.plot.plot_parameters import PlotParameters
@@ -99,9 +100,12 @@ def _compute_r_squared_and_error(ydata: np.ndarray, yfit: np.ndarray) -> tuple[f
     sum_sq_res = np.sum(residuals ** 2)
     sum_sq_tot = np.sum((ydata - np.mean(ydata)) ** 2)
 
-    print(sum_sq_res, sum_sq_tot)
+    max_error = np.max(np.abs(residuals))
 
-    return (1 - sum_sq_res / sum_sq_tot, np.max(np.abs(residuals)))
+    if sum_sq_tot == 0:
+        return (1, max_error)
+
+    return (1 - sum_sq_res / sum_sq_tot, max_error)
 
 
 def compute_regressions(parameters: PlotParameters, graphs: list[Graph]) -> list[Graph]:
@@ -120,7 +124,9 @@ def compute_regressions(parameters: PlotParameters, graphs: list[Graph]) -> list
         for (param_name, param_value) in zip(parameters_names, regression_parameters):
             FUNCTIONS[param_name] = (0, param_value)
 
-        return compute_rpn_list(rpn, xdata, parameters.variable) #compute_rpn_unsafe(rpn_tokens, x, parameters.variable)
+        pbar.update(1)
+
+        return compute_rpn_list(rpn, xdata, parameters.variable, progress_bar=False)
 
     regression_graphs: list[Graph] = []
 
@@ -128,13 +134,28 @@ def compute_regressions(parameters: PlotParameters, graphs: list[Graph]) -> list
         # Remove all nan values for the curve_fit computation
         inputs_without_nan, values_without_nan = _remove_nan(graph.inputs, graph.values)
 
-        parameters_values, _ = curve_fit(
-            f=_regression_function,
-            xdata=inputs_without_nan,
-            ydata=values_without_nan,
-            p0=[1.0]*len(parameters_names),
-            maxfev=5000
-        )
+        if inputs_without_nan.size < len(parameters_names):
+            logger.warning(
+                "not enough non-nan input points on graph '%s' to compute specified regression ('%s' found, at least '%s' needed)",
+                graph.expression, inputs_without_nan.size, len(parameters_names)
+            )
+            continue
+
+        try:
+            # Default max number of iterations of curve_fit
+            pbar = tqdm(total=200 * (len(parameters_names) + 1), leave=False)
+            parameters_values, _ = curve_fit(
+                f=_regression_function,
+                xdata=inputs_without_nan,
+                ydata=values_without_nan,
+                p0=[1.0]*len(parameters_names)
+            )
+        except (OptimizeWarning, RuntimeError):
+            pbar.close()
+            logger.warning("error while computing regression of '%s', try reducing the number of parameters or simplifying the expression", graph.expression)
+            continue
+
+        pbar.close()
 
         custom_inputs = np.linspace(graph.inputs.min(), graph.inputs.max(), parameters.n_points, endpoint=True)
 
@@ -153,8 +174,10 @@ def compute_regressions(parameters: PlotParameters, graphs: list[Graph]) -> list
             file.write(f'  {param_name[2:]} = {param_value}\n')
         file.write(f'On the interval [{graph.inputs.min():.3f} ; {graph.inputs.max():.3f}] :\n')
         file.write(f'  R2 = {r2}\n')
-        file.write(f'  |err] <= {max_error}\n')
+        file.write(f'  |err| <= {max_error}\n')
         file.write(f'Copyable expression: f(x) = {_get_fit_expression(parameters.regression_expression, parameters_names, parameters_values)}\n\n')
+
+    pbar.close()
 
     return regression_graphs
 
