@@ -49,11 +49,17 @@ def read_parameters() -> argparse.Namespace:
     parser.add_argument('-d', dest='save_data_path', metavar='DATA_FILE', help='Save all points to a csv file.')
     parser.add_argument('-p', nargs='+', dest='python_files', metavar=('PYTHON_FILE', 'PYTHON_FILE'), help='Python file contaning @plottable decorated functions that can be used in the ploting step.')
 
+    parser.add_argument('--version', action='store_true', dest='version', help='Print the version.')
+
     return parser.parse_args()
 
 
 if __name__ == '__main__':
     parameters = read_parameters()
+
+    if parameters.version:
+        print('1.0.0')
+
     retrieve_constants(parameters)
     retrieve_expressions(parameters)
     parameters.regression_expression = get_default_regression_expression(parameters.regression_expression)

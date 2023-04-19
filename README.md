@@ -1,29 +1,40 @@
-TODO :
+# Chplot - Arbitrary functions plotting and computations
 
-Paramètres CLI :
- - une ou plusieurs expressions entre guillemets OK
- - -x pour changer les bornes x (suivi de deux expressions mathématiques (inclue int ou float) ; ATTENTION à ne pas commencer l'expression par un tiret (mettre 0-EXP plutôt que -EXP)) OK
- - -y pour forcer les bornes y (suivi de deux int/float) OK
- - -v pour changer la variable du graphique (def x) OK
- - -n pour changer le nombre de point (def 100000?) OK
- - -i pour forcer les entrées à être des entiers (linspace -> floor -> unique) OK
- - -xlog/-ylog pour mettre l'axe en échelle logs OK
- - -z pour forcer 0 à être dans l'échelle verticale (override les commandes -y) OK
+Chplot is a Python >= 3.9 module to plot any arbitrary mathematical expressions as well as data series from files, and compute its derivatives and integrals, where it equals zero, and much more!
 
- - -xl/-yl pour ajouter un titre aux axes OK
- - -t pour ajouter un titre au graphique OK
- - -rl pour retirer la légende OK
- - --no-plot pour ne pas plot la fonction OK
- - --dis pour enlever les interpolations linéaires OK
+## Installation
 
- - --zeros pour calculer les zéros OK
- - --integral pour calculer l'intégrale sur l'interval considéré OK
- - --deriv pour afficher des dérivées (suivies par une liste d'ordre de dérivation) OK
- - --reg pour calculer une régression arbitraire sur les données des fichiers (suivi par une expression quelconque)
+You can install `chplot` through Pypi, with the command:
+```bash
+python -m pip install chplot
+```
 
- - -s pour enregistrer la figure (avec nom fichier)
- - -c pour charger des constantes (au moins 1 paramètres, soit de la forme "\<nom\>=\<expression\>" soit un fichier contenant ce format, un par ligne) OK
- - -f pour charger un fichier contenant des points (possible d'en mettre plusieurs) OK
- - -d pour enregistrer les valeurs des points des fonctions dans un fichier csv OK
- - -e pour lire les équations depuis un ou plusieurs fichiers (une par ligne) OK
- - -p pour charger des fonctions customs (dans un fichier python avec un décorateur spécifique) OK
+You can also install it by cloning this repo and installing it directly:
+```bash
+git clone https://github.com/charon25/Chplot.git
+cd Chplot
+python -m pip install .
+```
+
+To check it is properly installed, just run and check it outputs the current version:
+```bash
+python -m chplot --version
+```
+
+This module requires the following third-party modules:
+- matplotlib >= 3.6.1
+- mpmath >= 1.2.1
+- numpy >= 1.23.4
+- scipy >= 1.9.3
+- [shuting_yard](https://pypi.org/project/shunting-yard/) >= 1.0.9
+- tqdm >= 4.64.1
+
+## Usage
+
+
+## CLI parameters
+
+## Available functions
+
+## Examples
+
