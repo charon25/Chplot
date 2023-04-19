@@ -4,6 +4,7 @@ TODO
 
 import logging
 import sys
+import warnings
 
 import numpy as np
 
@@ -18,3 +19,5 @@ logging.basicConfig(
     level=logging.INFO,
     format='[%(name)s] %(levelname)s: %(message)s'
 )
+
+warnings.filterwarnings("ignore")

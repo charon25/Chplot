@@ -6,3 +6,5 @@ build
 check_float.py
 python_files
 heart.png
+chplot.csv
+.~lock*

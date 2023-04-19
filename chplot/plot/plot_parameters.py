@@ -74,7 +74,8 @@ def _convert_single_expression(expression: Optional[str], default_value_error: A
 
     rpn = shunting_yard(str(expression), case_sensitive=True, variable=None)
 
-    if get_rpn_errors(rpn, variable=None) is not None:
+    if (error := get_rpn_errors(rpn, variable=None)) is not None:
+        LOGGER.warning("error while computing expression '%s': %s", expression, error)
         return default_value_error
 
     value = compute_rpn_unsafe(rpn.split(' '), 0, variable=None)
@@ -83,24 +84,8 @@ def _convert_single_expression(expression: Optional[str], default_value_error: A
 
 def convert_parameters_expression(parameters: PlotParameters) -> None:
     """Convert in-place every mathematical expression in fields (except the 'expressions' field) to its float value. In-place."""
-    parameters.x_lim = (
-        _convert_single_expression(
-            parameters.x_lim[0], default_value_error=DEFAULT_PARAMETERS.x_lim[0]
-        ),
-        _convert_single_expression(
-            parameters.x_lim[1], default_value_error=DEFAULT_PARAMETERS.x_lim[1]
-        ),
-    )
 
-    parameters.y_lim = (
-        _convert_single_expression(
-            parameters.y_lim[0], default_value_error=DEFAULT_PARAMETERS.y_lim[0]
-        ),
-        _convert_single_expression(
-            parameters.y_lim[1], default_value_error=DEFAULT_PARAMETERS.y_lim[1]
-        ),
-    )
-
+    # Starts by the constant so they can be used by the x and y limits
     constants_function_dict: FunctionDict = {}
     for constant in parameters.constants:
         try:
@@ -119,6 +104,24 @@ def convert_parameters_expression(parameters: PlotParameters) -> None:
         if constant_name in FUNCTIONS:
             LOGGER.warning("constant '%s' will replace an already defined constant or function", constant_name)
         FUNCTIONS[constant_name] = (0, constant_value)
+
+    parameters.x_lim = (
+        _convert_single_expression(
+            parameters.x_lim[0], default_value_error=DEFAULT_PARAMETERS.x_lim[0]
+        ),
+        _convert_single_expression(
+            parameters.x_lim[1], default_value_error=DEFAULT_PARAMETERS.x_lim[1]
+        ),
+    )
+
+    parameters.y_lim = (
+        _convert_single_expression(
+            parameters.y_lim[0], default_value_error=DEFAULT_PARAMETERS.y_lim[0]
+        ),
+        _convert_single_expression(
+            parameters.y_lim[1], default_value_error=DEFAULT_PARAMETERS.y_lim[1]
+        ),
+    )
 
     parameters.constants = constants_function_dict
 
