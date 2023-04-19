@@ -59,6 +59,7 @@ if __name__ == '__main__':
 
     if parameters.version:
         print('1.0.0')
+        exit()
 
     retrieve_constants(parameters)
     retrieve_expressions(parameters)

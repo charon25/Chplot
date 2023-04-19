@@ -1,4 +1,4 @@
-from dataclasses import dataclass, fields
+from dataclasses import dataclass, field, fields
 import importlib
 import inspect
 import math
@@ -18,70 +18,39 @@ from chplot.rpn import compute_rpn_unsafe, get_rpn_errors
 
 @dataclass
 class PlotParameters:
-    expressions: list[str]
-    variable: Optional[str]
+    expressions: list[str] = field(default_factory=lambda: [])
+    variable: Optional[str] = 'x'
 
-    n_points: Optional[int]
-    is_integer: Optional[bool]
+    n_points: Optional[int] = 10001
+    is_integer: Optional[bool] = False
 
-    x_lim: Optional[Union[tuple[str, str], tuple[float, float]]]
-    is_x_log: Optional[bool]
+    x_lim: Optional[Union[tuple[str, str], tuple[float, float], tuple[None, None]]] = (None, None)
+    is_x_log: Optional[bool] = False
 
-    y_lim: Optional[Union[tuple[str, str], tuple[float, float]]]
-    must_contain_zero: Optional[bool]
-    is_y_log: Optional[bool]
+    y_lim: Optional[Union[tuple[str, str], tuple[float, float], tuple[None, None]]]  = (None, None)
+    must_contain_zero: Optional[bool] = False
+    is_y_log: Optional[bool] = False
 
-    x_label: Optional[str]
-    y_label: Optional[str]
-    title: Optional[str]
-    remove_legend: Optional[bool]
-    no_plot: Optional[bool]
-    plot_without_lines: Optional[bool]
+    x_label: Optional[str] = None
+    y_label: Optional[str] = None
+    title: Optional[str] = None
+    remove_legend: Optional[bool] = False
+    no_plot: Optional[bool] = False
+    plot_without_lines: Optional[bool] = False
 
-    zeros_file: Optional[Union[Literal[0], str]]
-    integral_file: Optional[Union[Literal[0], str]]
-    derivation_orders: Optional[list[int]]
-    regression_expression: Optional[str]
+    zeros_file: Optional[Union[Literal[0], str]] = None
+    integral_file: Optional[Union[Literal[0], str]] = None
+    derivation_orders: Optional[list[int]] = None
+    regression_expression: Optional[str] = None
 
-    constants: Optional[Union[list[str], FunctionDict]]
-    data_files: Optional[list[str]]
-    save_figure_path: Optional[str]
-    save_data_path: Optional[str]
-    python_files: Optional[str]
+    constants: Optional[Union[list[str], FunctionDict]] = field(default_factory=lambda: [])
+    data_files: Optional[list[str]] = None
+    save_figure_path: Optional[str] = None
+    save_data_path: Optional[str] = None
+    python_files: Optional[str] = None
 
 
-DEFAULT_PARAMETERS = PlotParameters(
-    expressions=[],
-    variable='x',
-
-    n_points=10001,
-    is_integer=False,
-
-    x_lim=(None, None),
-    is_x_log=False,
-
-    y_lim=(None, None),
-    must_contain_zero=False,
-    is_y_log=False,
-
-    x_label=None,
-    y_label=None,
-    title=None,
-    remove_legend=False,
-    no_plot=False,
-    plot_without_lines=False,
-
-    zeros_file=None,
-    integral_file=None,
-    derivation_orders=None,
-    regression_expression=None,
-
-    constants=lambda:[], # prevents reference copying
-    data_files=None,
-    save_figure_path=None,
-    save_data_path=None,
-    python_files=None,
-)
+DEFAULT_PARAMETERS = PlotParameters()
 
 
 def set_default_values(parameters: PlotParameters) -> None:

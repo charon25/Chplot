@@ -211,12 +211,12 @@ def _manage_zeros(parameters: PlotParameters, graphs: list[Graph]):
     if parameters.is_integer:
         LOGGER.info('forcing the inputs to be integers may cause to miss some zeros.')
 
-    # try:
-    compute_and_print_zeros(parameters, graphs)
-    # except OSError:
-    #     LOGGER.error("error while saving zeros to file '%s'.", parameters.zeros_file)
-    # except Exception:
-    #     LOGGER.error("error while computing zeros.")
+    try:
+        compute_and_print_zeros(parameters, graphs)
+    except OSError:
+        LOGGER.error("error while saving zeros to file '%s'.", parameters.zeros_file)
+    except Exception:
+        LOGGER.error("error while computing zeros.")
 
 
 def _manage_integrals(parameters: PlotParameters, graphs: list[Graph]):
@@ -276,7 +276,7 @@ def _save_figure(parameters: PlotParameters):
 
 
 def plot(parameters: PlotParameters) -> None:
-    """_summary_
+    """_summary_ TODO
 
     Args:
         parameters (PlotParameters): Object containing all the plot parameters.
