@@ -65,4 +65,7 @@ if __name__ == '__main__':
     retrieve_expressions(parameters)
     parameters.regression_expression = get_default_regression_expression(parameters.regression_expression)
 
-    plot(parameters)
+    try:
+        plot(parameters)
+    except KeyboardInterrupt:
+        print('\n\nInterrupted by user.')
