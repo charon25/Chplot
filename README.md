@@ -216,18 +216,40 @@ python -m chplot "inc(invradius(x, 5))" -x 1 inc(2) -p functions.py
 
 ## Available functions
 
-Chplot is bundled by default with 40 mathematical and physical constants and over 200 mathematical functions from the default `math` module, `mpmath`, `scipy.special` as well as custom made ones. They are all described in the following sections. The documentation of functions from `math` or the third-party modules can be found in their respective wikis: [math](https://docs.python.org/3/library/math.html), [scipy.special](https://docs.scipy.org/doc/scipy/reference/special.html), [mpmath](https://mpmath.org/doc/current/).
+Chplot is bundled by default with almost 40 mathematical and physical constants and over 200 mathematical functions from the default `math` module, `mpmath`, `scipy.special` as well as custom made ones. They are all described in the following sections. The documentation of functions from `math` or the third-party modules can be found in their respective wikis: [math](https://docs.python.org/3/library/math.html), [scipy.special](https://docs.scipy.org/doc/scipy/reference/special.html), [mpmath](https://mpmath.org/doc/current/).
 
 There are also the 5 base operations : `+`, `-`, `*`, `/`, `^`.
 
 ### Constants
+
+#### Mathematical
+
+|`chplot` name|Name                       |Usual symbol|Exact value|`chplot` value       |
+|-------------|---------------------------|:----------:|:---------:|:---------------:|
+|`pi`         |Pi                         | $\pi$      | $\pi$     |3.141 592 653 589 793|
+|`tau`        |Tau                        | $\tau$     | $2\pi$    |6.283 185 307 179 586|
+|`e`          |Euler's number           | $e$         | $\exp(1)$          |2.718 281 828 459 045|
+|`ga`<br>`em` |Euler-Mascheroni constant| $\gamma$| $$\lim_{n\to\infty} \left( \sum_{k=1}^n \left( \frac{1}{k}\right) - \log n \right)$$ |0.577 215 664 901 532 9|
+|`phi`        |Golden ratio               | $\phi$           | $\frac{1}{2} (1 + \sqrt{5})$ |1.618 033 988 749 895|
+|`sqrt2`      |Square root of 2           | $\sqrt{2}$ | $\sqrt{2}$ |1.414 213 562 373 095 1|
+|`catalan`    |Catalan's constant         | $G$ | $$\sum_{n=0}^{+\infty} \frac{(-1)^n}{(2n + 1)^2} $$ |0.915 965 594 177 219|
+|`apery`      |Apery's constant           || $$\zeta(3) = \sum_{n=1}^{+\infty} \frac{1}{n^3} $$ |1.202 056 903 159 594|
+|`khinchin`   |Khinchin's constant| $K_0$ | $$\prod_{r=1}^{+\infty} \left(1 + \frac{1}{r(r+2)} \right)^{\log_2 r}$$|2.685 452 001 065 306 2|
+|`glaisher`   |Glaisher-Khinkelin constant| $A$ | $$\lim_{n\to\infty} \frac{\prod_{k=1}^{n} k^k}{n^{\frac{n^2}{2} + \frac{n}{2} + \frac{1}{12}}\cdot\mathrm{e}^{-\frac{n^2}{4}}}$$ |1.282 427 129 100 622 6|
+|`mertens`    |Meissel-Mertens constant| $M$ | $$\gamma + \sum_{p\text{ prime}}\left(\ln\left(1 - \frac{1}{p}\right) + \frac{1}{p} \right)$$ |0.261 497 212 847 642 77|
+|`brun`       |Brun's constant| $B_2$ |Sum of the reciprocal of the twin primes|1.902 160 583 104|
+|`feigenbaumd`|First Feigenbaum constant| $\delta$ |           |4.669 201 609 102 990 67|
+|`feigenbauma`|Second Feigenbaum constant| $\alpha$ |           |2.502 907 875 095 892 82|
+
+#### Physical
+
 
 ### From default `math` module
 
 Documentation : https://docs.python.org/3/library/math.html
 
 | `chplot` name(s)      | `math` name   | Number of arguments | Notes |
-|-----------------------|---------------|---------------------|-------|
+|:---------------------:|:-------------:|:-------------------:|:-----:|
 | `acos`                | `acos`        | 1                   |       |
 | `acosh`               | `acosh`       | 1                   |       |
 | `asin`                | `asin`        | 1                   |       |
