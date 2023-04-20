@@ -215,5 +215,20 @@ python -m chplot "inc(invradius(x, 5))" -x 1 inc(2) -p functions.py
 
 ## Available functions
 
-## Examples
+Chplot is bundled by default with 40 mathematical and physical constants and over 200 mathematical functions from the default `math` module, `mpmath`, `scipy.special` as well as custom made ones. They are all described in the following sections. The documentation of functions from `math` or the third-party modules can be found in their respective wikis: [math](https://docs.python.org/3/library/math.html), [scipy.special](https://docs.scipy.org/doc/scipy/reference/special.html), [mpmath](https://mpmath.org/doc/current/).
+
+### Constants
+
+### From default `math` module
+
+### From `mpmath`
+
+### From `scipy.special`
+
+### Probability functions
+
+### Other functions
+
+
+## Graph and computations examples
 
