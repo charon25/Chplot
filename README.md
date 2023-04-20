@@ -89,7 +89,7 @@ No option is mandatory.
 |`-t`<br>`--title` |title: str |One string |Title of the graph. Defaults to nothing. |
 |`-rl`<br>`--remove-legend`|remove_legend: bool |$\emptyset$ |Removes the graph legend. Defaults to False. |
 |`--no-plot` |no_plot: bool |$\emptyset$ |Does not show the plot. However, does not prevent saving the figure. Defaults to False. |
-|`--dis` |plot_without_lines: bool |$\emptyset$ |Removes the lines between each point of the graph. Does nothing if the --integer flag is present. Defaults to False. |
+|`--dis`<br>`--discontinuous` |markersize: int&#124;None |One optional positive integer (excluding zero) |Transforms the style of the graph from a continuous line to discrete points with the specified radius. If present without a value, will defaults to a radius of 1. If the `--integer` flag is also present, will still affect the points radius. |
 |`-c`<br>`--constants` |constants: list[str] |One string or more, either a filepath or of the forme `<name>=<expression>`|Adds constants which may be used by any other expressions (including axis bounds). They must either be of the form `<name>=<expression>` (eg `a=4sin(pi/4)`) or be filepath containing lines respecting this format. Note that filepaths are only accepted in the CLI. Defaults to nothing. |
 |`-f`<br>`--file` |data_files: list[str] |One or more filepaths |Adds data contained in CSV files as new functions to the graph. See the [CSV files format](#cli-files-format) section for more details. Defaults to nothing. |
 |`-s`<br>`--save-graph` |save_figure_path: str |One filepath |Saves the graph at the specified path. If not included, will not save the figure (default behavior). |
@@ -153,9 +153,24 @@ Will result in the following functions:
 - `y2`: (0, 2.1), (0.3, 2.5), (0.6, 2.123), (1, 2.99)
 
 
-### Additional Python function format
-
 ### Regression default keywords
+
+When using Chplot from the command line and using the `--regression` command, a keyword can be specified instead of an expression to get usual regression expression. Those keywords are listed below :
+
+|Keyword|Mathematical function|Equivalent expression|
+|-------|:-------------------:|:-------------------:|
+|`const`<br>`constant`| $f(x) = m$ |`_rm`|
+|`lin`<br>`linear`| $f(x) = ax + b$ |`_ra * x + _rb`|
+|`pN`<br>`polyN`<br>`polynomialN`<br>where $N \in \mathbb{N} $ | $f(x) = \sum_{i=0}^N a_i x^i$ |`_ra0`<br>`_ra1 * x + _ra0`<br>`_ra2 * x^2 + _ra1 * x + _r0`<br>`...`|
+|`power`| $f(x) = k x^\alpha$ |`_rk * x^_ralpha`|
+|`powery`| $f(x) = k x^\alpha + y_0$ |`_rk * x^_ralpha + r_y0`|
+|`log`| $f(x) =  a \ln(x) + b$ |`_ra * ln(x) + _rb`|
+|`exp`| $f(x) = a \mathrm{e}^{bx}$ |`_ra * exp(x * _rb)`|
+|`expy`| $f(x) = a \mathrm{e}^{bx} +  y_0$ |`_ra * exp(x * _rb) + _ry0`|
+
+Note that `poly0` is equivalent to `constant` and `poly1` is equivalent to `linear`.
+
+### Additional Python function format
 
 
 ## Available functions

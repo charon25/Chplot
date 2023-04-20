@@ -7,7 +7,7 @@ from chplot.plot.utils import LOGGER
 
 CONSTANT_DEFAULT_REGRESSION_KEYWORDS: dict[str, str] = {
     'const': '_rm',
-    'constante': '_rm',
+    'constant': '_rm',
     'lin': '_ra * x + _rb',
     'linear': '_ra * x + _rb',
     'power': '_rk * (x^_ralpha)',
