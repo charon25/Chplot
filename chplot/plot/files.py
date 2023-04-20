@@ -34,7 +34,7 @@ def _is_line_numeric(line: str) -> bool:
 
 
 def _get_line_format(lines: list[str]) -> tuple[str, DecimalSeparator]:
-    """Return the delimiter of the csv file."""
+    """Return the delimiter of the csv file. If none is found, return an empty string."""
 
     for line in lines:
         line = line.strip()
@@ -97,6 +97,10 @@ def _read_one_file(filepath: str) -> list[Graph]:
         lines = file.read().splitlines()
 
     column_separator, decimal_separator = _get_line_format(lines)
+    if column_separator == '':
+        LOGGER.error("file '%s' contains only one column, nothing to add to the graph", filepath)
+        return []
+
     column_names: list[str] = []
     inputs_list: list[list[float]] = []
     values_list: list[list[float]] = []
@@ -110,6 +114,10 @@ def _read_one_file(filepath: str) -> list[Graph]:
             x, *values = map(_to_float_or_nan, line.split(column_separator))
             # If there are no x value, just ignore the line
             if math.isnan(x):
+                continue
+
+            # If no numerical values on the line, ignore it
+            if len(values) == 0 or all(map(math.isnan, values)):
                 continue
 
             # If there are suddenly a new columns, increase the inputs and values count
@@ -135,7 +143,10 @@ def _read_one_file(filepath: str) -> list[Graph]:
             f'{_get_filename(filepath)} - Column {index + offset}'
             for index in range(len(values_list) - len(column_names))
         ])
-
+    
+    if inputs_list == [] and values_list == []:
+        LOGGER.error("file '%s' does not contain any data that can be plotted", filepath)
+        return []
 
     return [
         Graph(np.array(inputs_list[index]), GraphType.FILE, column_names[index], None, values)

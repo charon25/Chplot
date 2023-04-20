@@ -154,8 +154,18 @@ class TestReadFile(unittest.TestCase):
         self.assertGraphEqual(graphs[0], [0, 1, 2], 'no_column_names.csv - Column 1', [3, 4, 5])
         self.assertGraphEqual(graphs[1], [0, 1, 2], 'no_column_names.csv - Column 2', [6, 7, 8])
 
-    def test_missing__xvalue(self):
+    def test_missing_x_value(self):
         parameters = MockParameters(data_files=[fp("missing_x_value")])
         graphs = read_files(parameters)
         self.assertGraphEqual(graphs[0], [0, 2], 'missing_x_value.csv - colB', [3, 5])
         self.assertGraphEqual(graphs[1], [0, 2], 'missing_x_value.csv - colC', [6, 8])
+
+    def test_one_column(self):
+        parameters = MockParameters(data_files=[fp("one_numerical_column")])
+        graphs = read_files(parameters)
+        self.assertListEqual(graphs, [])
+
+    def test_no_values(self):
+        parameters = MockParameters(data_files=[fp("no_values")])
+        graphs = read_files(parameters)
+        self.assertListEqual(graphs, [])
