@@ -36,7 +36,7 @@ def read_parameters() -> argparse.Namespace:
     parser.add_argument('-t', metavar='TITLE', dest='title', help='The plot title.')
     parser.add_argument('-rl', action='store_true', dest='remove_legend', help='Remove the plot legend.')
     parser.add_argument('--no-plot', action='store_true', dest='no_plot', help='If present, will not graph the functions at all.')
-    parser.add_argument('--dis', action='store_true', dest='plot_without_lines', help='Remove line segment between points. Does nothing if the -i flag is present.')
+    parser.add_argument('--dis', nargs='?', const=1, type=positive_integer, dest='markersize', help='Remove line segment between points. Does nothing if the -i flag is present.')
 
     parser.add_argument('--zeros', nargs='?', const=0, dest='zeros_file', help='Indicate if the zeros of the functions should be computed. If no arguments are provided, will write to stdout, otherwise to the specified file.')
     parser.add_argument('--integral', nargs='?', const=0, dest='integral_file', help='Indicate if the integral of the functions should be computed. If no arguments are provided, will write to stdout, otherwise to the specified file.')

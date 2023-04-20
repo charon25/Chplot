@@ -36,7 +36,7 @@ class PlotParameters:
     title: Optional[str] = None
     remove_legend: Optional[bool] = False
     no_plot: Optional[bool] = False
-    plot_without_lines: Optional[bool] = False
+    markersize: Optional[int] = None
 
     zeros_file: Optional[Union[Literal[0], str]] = None
     integral_file: Optional[Union[Literal[0], str]] = None

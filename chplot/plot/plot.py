@@ -165,11 +165,8 @@ def _get_graph_parameters(parameters: PlotParameters, graph: Graph) -> dict[str,
     if graph.type == GraphType.REGRESSION:
         return {'linestyle': '--', 'markersize': 0}
 
-    if parameters.is_integer:
-        return {'linestyle': ' ', 'marker': 'o', 'markersize': 3}
-
-    if parameters.plot_without_lines:
-        return {'linestyle': ' ', 'marker': 'o', 'markersize': 1}
+    if parameters.is_integer or parameters.markersize:
+        return {'linestyle': ' ', 'marker': 'o', 'markersize': parameters.markersize or 3}
 
     return {'linestyle': '-'}
 
