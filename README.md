@@ -162,7 +162,7 @@ When using Chplot from the command line and using the `--regression` command, a 
 |-------|:-------------------:|:-------------------:|
 |`const`<br>`constant`| $f(x) = m$ |`_rm`|
 |`lin`<br>`linear`| $f(x) = ax + b$ |`_ra * x + _rb`|
-|`pN`<br>`polyN`<br>`polynomialN`<br>where $N \in \mathbb{N} $ | $f(x) = \sum_{i=0}^N a_i x^i$ |`_ra0`<br>`_ra1 * x + _ra0`<br>`_ra2 * x^2 + _ra1 * x + _r0`<br>`...`|
+|`pN`<br>`polyN`<br>`polynomialN`<br>where $N \in \mathbb{N} $ | $f(x) = \Sigma_{i=0}^N a_i x^i$ |`_ra0`<br>`_ra1 * x + _ra0`<br>`_ra2 * x^2 + _ra1 * x + _r0`<br>`...`|
 |`power`| $f(x) = k x^\alpha$ |`_rk * x^_ralpha`|
 |`powery`| $f(x) = k x^\alpha + y_0$ |`_rk * x^_ralpha + r_y0`|
 |`log`| $f(x) =  a \ln(x) + b$ |`_ra * ln(x) + _rb`|
