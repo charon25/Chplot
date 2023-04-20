@@ -42,7 +42,8 @@ python -m chplot [expression1, [expression2, ...]] [additional-parameters...]
 
 Where all the additional parameters are documented in the [CLI options](#cli-options) section.
 
-==/!\\ Important note /!\\==
+#### Important note
+
 Due to the working of the `argparse` Python module and the majority of shells, you may have to surround any expression with double quotes (`"`) if it contains a caret (`^`). Furthermore, if it starts with a dash (`-`) you may also need to add a space or a `0` before it.
 For instance, you need to write `" -x"` or `"0-x"` to get the function `f(x) = -x` and `"x^2"` (instead of just `x^2`) to get the square function.
 
@@ -217,9 +218,50 @@ python -m chplot "inc(invradius(x, 5))" -x 1 inc(2) -p functions.py
 
 Chplot is bundled by default with 40 mathematical and physical constants and over 200 mathematical functions from the default `math` module, `mpmath`, `scipy.special` as well as custom made ones. They are all described in the following sections. The documentation of functions from `math` or the third-party modules can be found in their respective wikis: [math](https://docs.python.org/3/library/math.html), [scipy.special](https://docs.scipy.org/doc/scipy/reference/special.html), [mpmath](https://mpmath.org/doc/current/).
 
+There are also the 5 base operations : `+`, `-`, `*`, `/`, `^`.
+
 ### Constants
 
 ### From default `math` module
+
+Documentation : https://docs.python.org/3/library/math.html
+
+| `chplot` name(s)      | `math` name   | Number of arguments | Notes |
+|-----------------------|---------------|---------------------|-------|
+| `acos`                | `acos`        | 1                   |       |
+| `acosh`               | `acosh`       | 1                   |       |
+| `asin`                | `asin`        | 1                   |       |
+| `asinh`               | `asinh`       | 1                   |       |
+| `atan`                | `atan`        | 1                   |       |
+| `atanh`               | `atanh`       | 1                   |       |
+| `atan2`               | `atan2`       | 2                   |       |
+| `cbrt`                | `cbrt`        | 1                   |       |
+| `ceil`                | `ceil`        | 1                   |       |
+| `copysign`            | `copysign`    | 2                   |       |
+| `cos`                 | `cos`         | 1                   |       |
+| `cosh`                | `cosh`        | 1                   |       |
+| `degrees`             | `degrees`     | 1                   |       |
+| `erf`                 | `erf`         | 1                   |       |
+| `erfc`                | `erfc`        | 1                   |       |
+| `exp`                 | `exp`         | 1                   |       |
+| `expm1`               | `expm1`       | 1                   |       |
+| `floor`               | `floor`       | 1                   |       |
+| `fmod`                | `fmod`        | 2                   |       |
+| `gamma`               | `gamma`       | 1                   |       |
+| `hypot`               | `hypot`       | 2                   |       |
+| `lgamma`<br>`lngamma` | `lgamma`      | 1                   |       |
+| `log`<br>`ln`         | `log`         | 1                   |       |
+| `log10`               | `log10`       | 1                   |       |
+| `log1p`               | `log1p`       | 1                   |       |
+| `log2`                | `log2`        | 1                   |       |
+| `radians`             | `radians`     | 1                   |       |
+| `remainder`           | `remainder`   | 2                   |       |
+| `sin`                 | `sin`         | 1                   |       |
+| `sinh`                | `sinh`        | 1                   |       |
+| `sqrt`                | `sqrt`        | 1                   |       |
+| `tan`                 | `tan`         | 1                   |       |
+| `trunc`               | `trunc`       | 1                   |       |
+
 
 ### From `mpmath`
 

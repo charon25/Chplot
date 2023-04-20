@@ -22,6 +22,7 @@ _MATH_MODULE_FUNCTION_NAMES: tuple[int, str] = [
 ]
 
 _MATH_MODULE_FUNCTION_RENAMED: tuple[str, int, str] = {
+    ('lngamma', 1, 'lgamma'),
     ('ln', 1, 'log')
 }
 

@@ -11,7 +11,7 @@ _SCIPY_SPECIAL_MODULE_FUNCTION_NAMES: tuple[int, str] = [
     (1, 'factorial'), 
     (2, 'binom'),
 
-    (1, 'rgamma'), (1, 'gammaln'), (1, 'loggamma'),
+    (1, 'rgamma'), (1, 'loggamma'),
     (2, 'gammainc'), (2, 'gammaincinv'), (2, 'gammaincc'), (2, 'gammainccinv'),
     (1, 'psi'), (1, 'digamma'),
 
