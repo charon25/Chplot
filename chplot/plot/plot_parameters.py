@@ -4,7 +4,7 @@ import inspect
 import math
 import pathlib
 import re
-from types import ModuleType
+from types import BuiltinFunctionType, ModuleType
 from typing import Any, Callable, Literal, Optional, Union
 
 from shunting_yard import shunting_yard
@@ -59,24 +59,21 @@ def set_default_values(parameters: PlotParameters) -> None:
         field_name = field.name
         if not hasattr(parameters, field_name) or getattr(parameters, field_name) is None:
             default_attr = getattr(DEFAULT_PARAMETERS, field_name)
-            if callable(default_attr):
-                setattr(parameters, field_name, default_attr())
-            else:
-                setattr(parameters, field_name, default_attr)
+            setattr(parameters, field_name, default_attr)
 
 
-def _convert_single_expression(expression: Optional[str], default_value_error: Any, default_value_nan: Any = None) -> float:
+def _convert_single_expression(expression: Optional[str], default_value_nan: Any = None) -> float:
     if expression is None:
-        return default_value_error
+        return None
 
     if default_value_nan is None:
-        default_value_nan = default_value_error
+        default_value_nan = None
 
     rpn = shunting_yard(str(expression), case_sensitive=True, variable=None)
 
     if (error := get_rpn_errors(rpn, variable=None)) is not None:
         LOGGER.warning("error while computing expression '%s': %s", expression, error)
-        return default_value_error
+        return None
 
     value = compute_rpn_unsafe(rpn.split(' '), 0, variable=None)
     return value if not math.isnan(value) else default_value_nan
@@ -95,7 +92,7 @@ def convert_parameters_expression(parameters: PlotParameters) -> None:
             LOGGER.error("cannot parse constant assignement '%s', it will be ignored", constant)
             continue
 
-        constant_value = _convert_single_expression(constant_expression, default_value_error=None, default_value_nan=math.nan)
+        constant_value = _convert_single_expression(constant_expression, default_value_nan=math.nan)
         if constant_value is None:
             LOGGER.error("error while computing constant expression '%s' (of constant '%s'), it will be ignored", constant_expression, constant_name)
             continue
@@ -105,25 +102,38 @@ def convert_parameters_expression(parameters: PlotParameters) -> None:
             LOGGER.warning("constant '%s' will replace an already defined constant or function", constant_name)
         FUNCTIONS[constant_name] = (0, constant_value)
 
-    parameters.x_lim = (
-        _convert_single_expression(
-            parameters.x_lim[0], default_value_error=DEFAULT_PARAMETERS.x_lim[0]
-        ),
-        _convert_single_expression(
-            parameters.x_lim[1], default_value_error=DEFAULT_PARAMETERS.x_lim[1]
-        ),
-    )
-
-    parameters.y_lim = (
-        _convert_single_expression(
-            parameters.y_lim[0], default_value_error=DEFAULT_PARAMETERS.y_lim[0]
-        ),
-        _convert_single_expression(
-            parameters.y_lim[1], default_value_error=DEFAULT_PARAMETERS.y_lim[1]
-        ),
-    )
-
     parameters.constants = constants_function_dict
+
+
+    x_min, x_max = parameters.x_lim
+
+    if x_min is not None:
+        x_min = _convert_single_expression(x_min)
+        if x_min is None:
+            LOGGER.warning("cannot compute lower bound of x-axis")
+
+    if x_max is not None:
+        x_max = _convert_single_expression(x_max)
+        if x_max is None:
+            LOGGER.warning("cannot compute upper bound of x-axis")
+
+    parameters.x_lim = (x_min, x_max)
+
+
+    y_min, y_max = parameters.y_lim
+
+    if y_min is not None:
+        y_min = _convert_single_expression(y_min)
+        if y_min is None:
+            LOGGER.warning("cannot compute lower bound of y-axis")
+
+    if y_max is not None:
+        y_max = _convert_single_expression(y_max)
+        if y_max is None:
+            LOGGER.warning("cannot compute upper bound of y-axis")
+
+    parameters.y_lim = (y_min, y_max)
+
 
 
 def _get_decorated_functions(python: ModuleType) -> list[tuple[int, str, Callable]]:
@@ -134,6 +144,10 @@ def _get_decorated_functions(python: ModuleType) -> list[tuple[int, str, Callabl
             continue
 
         try:
+            # do not care about built-ins
+            if isinstance(func, BuiltinFunctionType):
+                continue
+
             source_code = inspect.getsource(func)
 
             # This happens only if the decorator is without bracket
@@ -144,7 +158,7 @@ def _get_decorated_functions(python: ModuleType) -> list[tuple[int, str, Callabl
                     python.__name__
                 )
 
-        except OSError:
+        except (OSError, TypeError):
             LOGGER.error("error while getting source code of function '%s' of python file '%s.py'", func.__name__, python.__name__)
             continue
 
@@ -162,7 +176,7 @@ def retrieve_python_functions(parameters: PlotParameters):
         return
 
     for python_file in parameters.python_files:
-        try:
+        # try:
             # The file must be in the current directory
             if pathlib.Path(python_file).parent.parts:
                 LOGGER.error("python file must be in the current directory ('%s')", python_file)
@@ -183,7 +197,7 @@ def retrieve_python_functions(parameters: PlotParameters):
                 except TypeError:
                     LOGGER.error("constant function '%s' of python file '%s' expected some arguments.", func_name, python_file)
 
-        except (ImportError, ModuleNotFoundError):
-            LOGGER.error("error while importing python file '%s'.", python_file)
-        except Exception:
-            LOGGER.error("unknown error while importing python file '%s'.", python_file)
+        # except (ImportError, ModuleNotFoundError):
+        #     LOGGER.error("error while importing python file '%s'.", python_file)
+        # except Exception:
+        #     LOGGER.error("unknown error while importing python file '%s'.", python_file)

@@ -28,8 +28,11 @@ def _get_x_lim(parameters: PlotParameters) -> tuple[float, float]:
     if x_max is None:
         x_max = 1
 
+    if x_max == x_min:
+        LOGGER.warning('upper and lower bounds of the x-axis equal to each other (%s)', x_min)
+
     if x_max < x_min:
-        LOGGER.warning('the upper x bound (%s) is inferior to the lower x bound (%s), they will be swapped', x_max, x_min)
+        LOGGER.warning('the upper bound (%s) of the x-axis is inferior to the lower bound (%s), they will be swapped', x_max, x_min)
         return (x_max, x_min)
 
     return (x_min, x_max)
@@ -49,7 +52,7 @@ def _get_x_lim_graph(parameters: PlotParameters, graphs: list[Graph]) -> tuple[f
     # Else, notify them if the min of the graphs is lower
     else:
         if x_min_graph < x_min:
-            LOGGER.info('lower x bound of graph was decreased to %s to accomodate all data', round(x_min_graph, 3))
+            LOGGER.info('lower bound of the x-axis was decreased to %s to accomodate all data', round(x_min_graph, 3))
             x_min = x_min_graph
 
     # Same but reversed for the max
@@ -57,7 +60,7 @@ def _get_x_lim_graph(parameters: PlotParameters, graphs: list[Graph]) -> tuple[f
         x_max = x_max_graph
     else:
         if x_max_graph > x_max:
-            LOGGER.info('upper x bound of graph was increased to %s to accomodate all data', round(x_max_graph, 3))
+            LOGGER.info('upper bound of the x-axis was increased to %s to accomodate all data', round(x_max_graph, 3))
             x_max = x_max_graph
 
     if x_min > x_max:
@@ -68,11 +71,11 @@ def _get_x_lim_graph(parameters: PlotParameters, graphs: list[Graph]) -> tuple[f
 
     # If the x-axis is on a log-scale and x_min < 0, we let matplotlib decide the smallest meaningful value
     if x_min <= 0 < x_max:
-        LOGGER.warning('x-axis scale is logarithmic, but lower x bound (%s) is negative, x-axis will be truncated to positive values', x_min)
+        LOGGER.warning('x-axis scale is logarithmic, but its lower bound (%s) is negative, x-axis will be truncated to positive values', x_min)
         return (None, x_max)
 
     if x_max <= 0:
-        LOGGER.critical('x-axis scale is logarithmic, but both lower (%s) and upper (%s) x bounds are negative, cannot graph anything', x_min, x_max)
+        LOGGER.critical('x-axis scale is logarithmic, but both its lower (%s) and upper (%s) bounds are negative, cannot graph anything', x_min, x_max)
         return (None, None)
 
     # Both bounds are already > 0
@@ -130,8 +133,11 @@ def _get_y_lim_graph(parameters: PlotParameters) -> tuple[float, float]:
     if parameters.y_lim[1] is not None:
         y_max = parameters.y_lim[1]
 
+    if y_min == y_max:
+        LOGGER.warning('upper and lower bounds of the y-axis equal to each other (%s), matplotlib will automatically adjust the bounds', y_min)
+
     if y_max < y_min:
-        LOGGER.warning('the upper y bound (%s) is inferior to the lower y bound (%s), they will be swapped', y_max, y_min)
+        LOGGER.warning('the upper bound (%s) of the y-axis is inferior to the lower bound (%s), they will be swapped', y_max, y_min)
         y_min, y_max = y_max, y_min
 
     if parameters.must_contain_zero and parameters.is_y_log:
@@ -145,14 +151,14 @@ def _get_y_lim_graph(parameters: PlotParameters) -> tuple[float, float]:
         if y_min > 0 and parameters.must_contain_zero and not parameters.is_y_log:
             y_min = 0
         elif y_min <= 0 and parameters.is_y_log:
-            LOGGER.warning('y-axis scale is logarithmic, but lower y bound (%s) is negative, y-axis will be truncated to positive values', y_min)
+            LOGGER.warning('y-axis scale is logarithmic, but its lower bound (%s) is negative, y-axis will be truncated to positive values', y_min)
             y_min = None
 
         return (y_min, y_max)
 
     # If y_max <= 0, there are 4 cases and only two binary variables: must contain zero or not, log scale or not
     if parameters.is_y_log:
-        LOGGER.critical('y-axis scale is logarithmic, but both lower (%s) and upper (%s) y bounds are negative: cannot graph anything', y_min, y_max)
+        LOGGER.critical('y-axis scale is logarithmic, but both its lower (%s) and upper (%s) bounds are negative: cannot graph anything', y_min, y_max)
         return ()
 
     if parameters.must_contain_zero:
@@ -283,8 +289,8 @@ def plot(parameters: PlotParameters) -> None:
     """
 
     set_default_values(parameters)
-    convert_parameters_expression(parameters)
     retrieve_python_functions(parameters)
+    convert_parameters_expression(parameters)
 
     inputs = _generate_inputs(parameters)
     graphs = _generate_graphs(parameters, inputs)
