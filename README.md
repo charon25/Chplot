@@ -228,20 +228,20 @@ There are also the 5 base operations : `+`, `-`, `*`, `/`, `^`.
 
 |`chplot` name|Name |Usual symbol|Exact value|`chplot` value |
 |-------------|---------------------------|:----------:|:---------:|:---------------:|
-|`pi` |Pi | $\pi$ | $\pi$ |3.141 592 653 589 793|
-|`tau` |Tau | $\tau$ | $2\pi$ |6.283 185 307 179 586|
-|`e` |Euler's number | $e$ | $$\exp(1) = \sum_{n=0}^{+\infty} \frac{1}{n!}$$ |2.718 281 828 459 045|
-|`ga`<br>`em` |Euler-Mascheroni's constant| $\gamma$| $$\lim_{n\to\infty} \left( \sum_{k=1}^n \left( \frac{1}{k}\right) - \log n \right)$$ |0.577 215 664 901 532 9|
-|`phi` |Golden ratio | $\phi$ | $\frac{1}{2} (1 + \sqrt{5})$ |1.618 033 988 749 895|
-|`sqrt2` |Square root of 2 | $\sqrt{2}$ | $\sqrt{2}$ |1.414 213 562 373 095 1|
-|`apery` |Apery's constant || $$\zeta(3) = \sum_{n=1}^{+\infty} \frac{1}{n^3} $$ |1.202 056 903 159 594|
-|`brun` |Brun's constant| $B_2$ |Sum of the reciprocal of the twin primes|1.902 160 583 104|
-|`catalan` |Catalan's constant | $G$ | $$\sum_{n=0}^{+\infty} \frac{(-1)^n}{(2n + 1)^2} $$ |0.915 965 594 177 219|
-|`feigenbaumd`|First Feigenbaum's constant| $\delta$ | |4.669 201 609 102 990 67|
-|`feigenbauma`|Second Feigenbaum's constant| $\alpha$ | |2.502 907 875 095 892 82|
-|`glaisher` |Glaisher-Khinkelin's constant| $A$ | $$\lim_{n\to\infty} \frac{\Pi_{k=1}^{n} k^k}{n^{\frac{n^2}{2} + \frac{n}{2} + \frac{1}{12}}\cdot\mathrm{e}^{-\frac{n^2}{4}}}$$ |1.282 427 129 100 622 6|
-|`khinchin` |Khinchin's constant| $K_0$ | $$\prod_{r=1}^{+\infty} \left(1 + \frac{1}{r(r+2)} \right)^{\log_2 r}$$|2.685 452 001 065 306 2|
-|`mertens` |Meissel-Mertens's constant| $M$ | $$\gamma + \sum_{p\text{ prime}}\left(\ln\left(1 - \frac{1}{p}\right) + \frac{1}{p} \right)$$ |0.261 497 212 847 642 77|
+|`pi` |Pi | $\pi$ | $\pi$ |$3.141\,592\,653\,589\,793$|
+|`tau` |Tau | $\tau$ | $2\pi$ |$6.283\,185\,307\,179\,586$|
+|`e` |Euler's number | $e$ | $$\exp(1) = \sum_{n=0}^{+\infty} \frac{1}{n!}$$ |$2.718\,281\,828\,459\,045$|
+|`ga`<br>`em` |Euler-Mascheroni's constant| $\gamma$| $$\lim_{n\to\infty} \left( \sum_{k=1}^n \left( \frac{1}{k}\right) - \log n \right)$$ |$0.577\,215\,664\,901\,532 9$|
+|`phi` |Golden ratio | $\phi$ | $\frac{1}{2} (1 + \sqrt{5})$ |$1.618\,033\,988\,749\,895$|
+|`sqrt2` |Square root of 2 | $\sqrt{2}$ | $\sqrt{2}$ |$1.414\,213\,562\,373\,095\,1$|
+|`apery` |Apery's constant || $$\zeta(3) = \sum_{n=1}^{+\infty} \frac{1}{n^3} $$ |$1.202\,056\,903\,159\,594$|
+|`brun` |Brun's constant| $B_2$ |Sum of the reciprocal of the twin primes|$1.902\,160\,583\,104$|
+|`catalan` |Catalan's constant | $G$ | $$\sum_{n=0}^{+\infty} \frac{(-1)^n}{(2n + 1)^2} $$ |$0.915\,965\,594\,177\,219$|
+|`feigenbaumd`|First Feigenbaum's constant| $\delta$ | |$4.669\,201\,609\,102\,990\,67$|
+|`feigenbauma`|Second Feigenbaum's constant| $\alpha$ | |$2.502\,907\,875\,095\,892\,82$|
+|`glaisher` |Glaisher-Khinkelin's constant| $A$ | $$\lim_{n\to\infty} \frac{\Pi_{k=1}^{n} k^k}{n^{\frac{n^2}{2} + \frac{n}{2} + \frac{1}{12}}\cdot\mathrm{e}^{-\frac{n^2}{4}}}$$ |$1.282\,427\,129\,100\,622\,6$|
+|`khinchin` |Khinchin's constant| $K_0$ | $$\prod_{r=1}^{+\infty} \left(1 + \frac{1}{r(r+2)} \right)^{\log_2 r}$$|$2.685\,452\,001\,065\,306\,2$|
+|`mertens` |Meissel-Mertens's constant| $M$ | $$\gamma + \sum_{p\text{ prime}}\left(\ln\left(1 - \frac{1}{p}\right) + \frac{1}{p} \right)$$ |$0.261\,497\,212\,847\,642\,77$|
 
 #### Physical constants
 
@@ -249,55 +249,55 @@ The constants, their values and their units are taken from https://en.wikipedia.
 
 |`chplot` name|Quantity|Symbol|`chplot` value (in SI units)|Units|
 |-------------|----|:----:|:------------:|:---:|
-|`a0`       |Bohr's radius| $a_0$ | $5.291 772 109 03\times10^{-11}$ | $\text{m}$ |
-|`alpha`    |Fine-structure constant| $\alpha$ | $7.297 352 569 3\times10^{-3}$ | --- |
-|`b`        |Wien's wavelength displacement law constant| $b$ | $2.897 771 955\times10^{-3}$ | $\text{m}\cdot\text{K}$ |
-|`bp`       |Wien's entropy displacement law constant| $b_{\text{entropy}}$ | $3.002 916 077\times10^{-3}$ | $\text{m}\cdot\text{K}$ |
-|`bp`       |Wien's frequency displacement law constant| $b'$ | $5.878 925 757\times10^{10}$ | $\text{Hz}\cdot\text{K}^{-1}$ |
-|`c`        |Speed of light in vacuum| $c$ | $2.997 924 58\times10^8$ | $\text{m}\cdot\text{s}^{-1}$ |
-|`c1`       |First radiation constant| $c_1$ | $3.741 771 852\times10^{-16}$ | $\text{W}\cdot\text{m}^2$ |
-|`c1L`      |Second radiation constant | $c_{1L}$ | $1.191 042 972 397 188\times10^{-16}$ | $\text{W}\cdot\text{m}^2\cdot\text{sr}^{-1}$ |
-|`c2`       |Second radiation constant| $c_2$ | $1.438 776 877\times10^{-2}$ | $\text{m}\cdot\text{K}$ |
-|`dnuCs`    |Hyperfine transistion frequency of Cesium-133| $\Delta\nu_{\text{Cs}}$ | $9.192 631 770\times10^{9}$ | $\text{Hz}$ |
-|`ec`       |Elementary charge| $e$ | $1.602 176 634\times10^{-19}$ | $\text{C}$ |
-|`Eh`       |Hartree's energy| $E_h$ | $4.359 744 722 207 1\times10^{-18}$ | $\text{J}$ |
-|`epsilon0`<br>`eps0` |Vacuum electric permittivity    | $\varepsilon_0$ | $8.854 187 812 8\times10^{-12}$ | $\text{F}\cdot\text{m}^{-1}$ |
-|`F`        |Faraday's constant| $F$ | $9.648 533 212 331 002\times10^4$ | $\text{C}\cdot\text{mol}^{-1}$ |
-|`G`        |Gravitational constant| $G$ | $6.674 3\times10^{-11}$ | $\text{m}^3\cdot\text{kg}^{-1}\cdot\text{s}^{-2}$ |
-|`g`        |Gravity of Earth| $g$ | $9.806 65$ | $\text{m}\cdot\text{s}^{-2}$ |
-|`G0`       |Conductance quantum| $G_0$ | $7.748 091 729\times10^{-5}$ | $\text{S}$ |
-|`ge`       |Electron g-factor| $g_e$ | $-2.002 319 304 362 56$ | --- |
-|`GF0`      |Fermi coupling constant<br>Reduced Fermi constant| $$G^0_F$$ | $4.543 795 7\times10^{14}$ | $\text{J}^{-2}$ |
-|`gmu`      |Muon g-factor| $g_\mu$ | $-2.002 331 841 8$ | --- |
-|`gP`       |Proton g-factor| $g_P$ | $5.585 694 689 3$ | --- |
-|`h`        |Planck's constant| $h$ | $6.626 070 15\times10^{-34}$ | $\text{J}\cdot\text{Hz}^{-1}$ |
-|`hb`       |Reduced Planck's constant | $\hbar$ | $1.054 571 817\times10^{-34}$ | $\text{J}\cdot\text{s}$ |
-|`kB`       |Boltzmann's constant    | $k$, $k_B$ | $1.380 649\times10^{-23}$ | $\text{J}\cdot\text{K}^{-1}$ |
-|`ke`       |Coulomb's constant    | $k_e$ | $8.987 551 792 3\times10^9$ | $\text{N}\cdot\text{m}^2\cdot\text{C}^{-2}$ |
-|`KJ`       |Josephson's constant| $K_J$ | $4.835 978 484\times10^{14}$ | $\text{Hz}\cdot\text{V}^{-1}$ |
-|`m12C`     |Atomic mass of carbon-12| $m(^{12}\text{C})$ | $1.992 646 879 92\times10^{26}$ | $\text{kg}$ |
-|`M12C`     |Molar mass of carbon-12| $M(^{12}\text{C})$ | $1.199 999 999 58\times10^{-2}$ | $\text{kg}\cdot\text{mol}^{-1}$ |
-|`me`       |Electron mass| $m_e$ | $9.109 383 701 5\times10^{-31}$ | $\text{kg}$ |
-|`mmu`      |Muon mass| $m_\mu$ | $1.883 531 627\times10^{-28}$ | $\text{kg}$ |
-|`mn`       |Neutron mass| $m_n$ | $1.674 927 498 04\times10^{-27}$ | $\text{kg}$ |
-|`mp`       |Proton mass| $m_p$ | $1.672 621 923 69\times10^{-27}$ | $\text{kg}$ |
-|`mt`       |Top quark mass| $m_t$ | $3.078 4\times10^{-25}$ | $\text{kg}$ |
-|`mtau`     |Tau mass| $m_\tau$ | $3.167 54\times10^{-27}$ | $\text{kg}$ |
-|`mu`       |Atomic mass constant| $m_u$ | $1.660 539 066 6\times10^{-27}$ | $\text{kg}$ |
-|`Mu`       |Molar mass constant| $M_u$ | $9.999 999 996 5\times10^{-4}$ | $\text{kg}\cdot\text{mol}^{-1}$ |
-|`mu0`      |Vacuum magnetic parmeability    | $\mu_0$ | $1.256 637 602 12\times10^{-6}$ | $\text{N}\cdot\text{A}^{-2}$ |
-|`muB`      |Bohr's magneton| $\mu_B$ | $9.274 010 078 3\times10^{-24}$ | $\text{J}\cdot\text{T}^{-1}$ |
-|`muN`      |Nuclear magneton| $\mu_N$ | $5.050 783 746 1\times10^{-27}$ | $\text{J}\cdot\text{T}^{-1}$ |
-|`NA`       |Avogadro constant| $N_A$ | $6.022 140 76\times10^{23}$ | $\text{mol}^{-1}$ |
-|`R`        |Molar gas constant| $R$ | $8.314 462 618 153 24$ | $\text{J}\cdot\text{mol}^{-1}\cdot\text{K}^{-1}$ |
-|`re`       |Classical electron radius| $r_e$ | $2.817 940 326 2\times10^{-15}$ | $\text{m}$ |
-|`Rinf`     |Rydberg's constant| $R_\infty$ | $1.097 373 156 816\times10^7$ | $\text{m}^{-1}$ |
-|`RK`       |Von Klitzing's constant| $R_K$ | $2.581 280 745\times10^{4}$ | $\Omega$ |
-|`Ry`       |Rydberg's unit of energy| $R_y$ | $2.179 872 361 103 5\times10^{-18}$ | $\text{J}$ |
-|`sigma`    |Stefan-Boltzmann's constant| $\sigma$ | $5.670 374 419\times10^{-8}$ | $\text{W}\cdot\text{m}^{-2}\cdot\text{K}^{-4}$ |
-|`sigmae`   |Thomson's cross section| $\sigma_e$ | $6.652 458 732 1\times10^{-29}$ | $\text{m}^2$ |
-|`VmSi`     |Molar volume of silicon| $V_m(\text{Si})$ | $1.205 883 199\times10^{-5}$ | $\text{m}^3\cdot\text{mol}^{-1}$ |
-|`Z0`       |Characteristic impedance of vacuum    | $Z_0$ | $376 .730 313 668 $ | $\Omega$ |
+|`a0`       |Bohr's radius| $a_0$ | $5.291\,772\,109\,03\times10^{-11}$ | $\text{m}$ |
+|`alpha`    |Fine-structure constant| $\alpha$ | $7.297\,352\,569\,3\times10^{-3}$ | --- |
+|`b`        |Wien's wavelength displacement law constant| $b$ | $2.897\,771\,955\times10^{-3}$ | $\text{m}\cdot\text{K}$ |
+|`bp`       |Wien's entropy displacement law constant| $b_{\text{entropy}}$ | $3.002\,916\,077\times10^{-3}$ | $\text{m}\cdot\text{K}$ |
+|`bp`       |Wien's frequency displacement law constant| $b'$ | $5.878\,925\,757\times10^{10}$ | $\text{Hz}\cdot\text{K}^{-1}$ |
+|`c`        |Speed of light in vacuum| $c$ | $2.997\,924\,58\times10^8$ | $\text{m}\cdot\text{s}^{-1}$ |
+|`c1`       |First radiation constant| $c_1$ | $3.741\,771\,852\times10^{-16}$ | $\text{W}\cdot\text{m}^2$ |
+|`c1L`      |Second radiation constant | $c_{1L}$ | $1.191\,042\,972\,397\,188\times10^{-16}$ | $\text{W}\cdot\text{m}^2\cdot\text{sr}^{-1}$ |
+|`c2`       |Second radiation constant| $c_2$ | $1.438\,776\,877\times10^{-2}$ | $\text{m}\cdot\text{K}$ |
+|`dnuCs`    |Hyperfine transistion frequency of Cesium-133| $\Delta\nu_{\text{Cs}}$ | $9.192\,631\,770\times10^{9}$ | $\text{Hz}$ |
+|`ec`       |Elementary charge| $e$ | $1.602\,176\,634\times10^{-19}$ | $\text{C}$ |
+|`Eh`       |Hartree's energy| $E_h$ | $4.359\,744\,722\,207\,1\times10^{-18}$ | $\text{J}$ |
+|`epsilon0`<br>`eps0` |Vacuum electric permittivity    | $\varepsilon_0$ | $8.854\,187\,812\,8\times10^{-12}$ | $\text{F}\cdot\text{m}^{-1}$ |
+|`F`        |Faraday's constant| $F$ | $9.648\,533\,212\,331\,002\times10^4$ | $\text{C}\cdot\text{mol}^{-1}$ |
+|`G`        |Gravitational constant| $G$ | $6.674\,3\times10^{-11}$ | $\text{m}^3\cdot\text{kg}^{-1}\cdot\text{s}^{-2}$ |
+|`g`        |Gravity of Earth| $g$ | $9.806\,65$ | $\text{m}\cdot\text{s}^{-2}$ |
+|`G0`       |Conductance quantum| $G_0$ | $7.748\,091\,729\times10^{-5}$ | $\text{S}$ |
+|`ge`       |Electron g-factor| $g_e$ | $-2.002\,319\,304\,362\,56$ | --- |
+|`GF0`      |Fermi coupling constant<br>Reduced Fermi constant| $$G^0_F$$ | $4.543\,795\,7\times10^{14}$ | $\text{J}^{-2}$ |
+|`gmu`      |Muon g-factor| $g_\mu$ | $-2.002\,331\,841\,8$ | --- |
+|`gP`       |Proton g-factor| $g_P$ | $5.585\,694\,689\,3$ | --- |
+|`h`        |Planck's constant| $h$ | $6.626\,070\,15\times10^{-34}$ | $\text{J}\cdot\text{Hz}^{-1}$ |
+|`hb`       |Reduced Planck's constant | $\hbar$ | $1.054\,571\,817\times10^{-34}$ | $\text{J}\cdot\text{s}$ |
+|`kB`       |Boltzmann's constant    | $k$, $k_B$ | $1.380\,649\times10^{-23}$ | $\text{J}\cdot\text{K}^{-1}$ |
+|`ke`       |Coulomb's constant    | $k_e$ | $8.987\,551\,792\,3\times10^9$ | $\text{N}\cdot\text{m}^2\cdot\text{C}^{-2}$ |
+|`KJ`       |Josephson's constant| $K_J$ | $4.835\,978\,484\times10^{14}$ | $\text{Hz}\cdot\text{V}^{-1}$ |
+|`m12C`     |Atomic mass of carbon-12| $m(^{12}\text{C})$ | $1.992\,646\,879\,92\times10^{26}$ | $\text{kg}$ |
+|`M12C`     |Molar mass of carbon-12| $M(^{12}\text{C})$ | $1.199\,999\,999\,58\times10^{-2}$ | $\text{kg}\cdot\text{mol}^{-1}$ |
+|`me`       |Electron mass| $m_e$ | $9.109\,383\,701\,5\times10^{-31}$ | $\text{kg}$ |
+|`mmu`      |Muon mass| $m_\mu$ | $1.883\,531\,627\times10^{-28}$ | $\text{kg}$ |
+|`mn`       |Neutron mass| $m_n$ | $1.674\,927\,498\,04\times10^{-27}$ | $\text{kg}$ |
+|`mp`       |Proton mass| $m_p$ | $1.672\,621\,923\,69\times10^{-27}$ | $\text{kg}$ |
+|`mt`       |Top quark mass| $m_t$ | $3.078\,4\times10^{-25}$ | $\text{kg}$ |
+|`mtau`     |Tau mass| $m_\tau$ | $3.167\,54\times10^{-27}$ | $\text{kg}$ |
+|`mu`       |Atomic mass constant| $m_u$ | $1.660\,539\,066\,6\times10^{-27}$ | $\text{kg}$ |
+|`Mu`       |Molar mass constant| $M_u$ | $9.999\,999\,996\,5\times10^{-4}$ | $\text{kg}\cdot\text{mol}^{-1}$ |
+|`mu0`      |Vacuum magnetic parmeability    | $\mu_0$ | $1.256\,637\,602\,12\times10^{-6}$ | $\text{N}\cdot\text{A}^{-2}$ |
+|`muB`      |Bohr's magneton| $\mu_B$ | $9.274\,010\,078\,3\times10^{-24}$ | $\text{J}\cdot\text{T}^{-1}$ |
+|`muN`      |Nuclear magneton| $\mu_N$ | $5.050\,783\,746\,1\times10^{-27}$ | $\text{J}\cdot\text{T}^{-1}$ |
+|`NA`       |Avogadro constant| $N_A$ | $6.022\,140\,76\times10^{23}$ | $\text{mol}^{-1}$ |
+|`R`        |Molar gas constant| $R$ | $8.314\,462\,618\,153\,24$ | $\text{J}\cdot\text{mol}^{-1}\cdot\text{K}^{-1}$ |
+|`re`       |Classical electron radius| $r_e$ | $2.817\,940\,326\,2\times10^{-15}$ | $\text{m}$ |
+|`Rinf`     |Rydberg's constant| $R_\infty$ | $1.097\,373\,156\,816\times10^7$ | $\text{m}^{-1}$ |
+|`RK`       |Von Klitzing's constant| $R_K$ | $2.581\,280\,745\times10^{4}$ | $\Omega$ |
+|`Ry`       |Rydberg's unit of energy| $R_y$ | $2.179\,872\,361\,103\,5\times10^{-18}$ | $\text{J}$ |
+|`sigma`    |Stefan-Boltzmann's constant| $\sigma$ | $5.670\,374\,419\times10^{-8}$ | $\text{W}\cdot\text{m}^{-2}\cdot\text{K}^{-4}$ |
+|`sigmae`   |Thomson's cross section| $\sigma_e$ | $6.652\,458\,732\,1\times10^{-29}$ | $\text{m}^2$ |
+|`VmSi`     |Molar volume of silicon| $V_m(\text{Si})$ | $1.205\,883\,199\times10^{-5}$ | $\text{m}^3\cdot\text{mol}^{-1}$ |
+|`Z0`       |Characteristic impedance of vacuum    | $Z_0$ | $376\,.730\,313\,668\,$ | $\Omega$ |
 
 
 
