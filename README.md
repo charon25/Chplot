@@ -158,7 +158,7 @@ Will result in the following functions:
 
 When using Chplot from the command line and using the `--regression` command, a keyword can be specified instead of an expression to get usual regression expression. Those keywords are listed below :
 
-|Keyword|Mathematical function|Equivalent expression|
+|Keyword|<div style="width:300px">Mathematical function</div>|Equivalent expression|
 |-------|:-------------------:|:-------------------:|
 |`const`<br>`constant`| $f(x) = m$ |`_rm`|
 |`lin`<br>`linear`| $f(x) = ax + b$ |`_ra * x + _rb`|
