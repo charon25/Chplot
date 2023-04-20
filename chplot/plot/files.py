@@ -108,6 +108,9 @@ def _read_one_file(filepath: str) -> list[Graph]:
                 line = line.replace(',', '.')
 
             x, *values = map(_to_float_or_nan, line.split(column_separator))
+            # If there are no x value, just ignore the line
+            if math.isnan(x):
+                continue
 
             # If there are suddenly a new columns, increase the inputs and values count
             if len(values) > len(inputs_list):
