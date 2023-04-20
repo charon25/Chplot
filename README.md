@@ -90,7 +90,7 @@ No option is mandatory.
 |`-rl`<br>`--remove-legend`|remove_legend: bool |$\emptyset$ |Removes the graph legend. Defaults to False. |
 |`--no-plot` |no_plot: bool |$\emptyset$ |Does not show the plot. However, does not prevent saving the figure. Defaults to False. |
 |`--dis`<br>`--discontinuous` |markersize: int&#124;None |One optional positive integer (excluding zero) |Transforms the style of the graph from a continuous line to discrete points with the specified radius. If present without a value, will defaults to a radius of 1. If the `--integer` flag is also present, will still affect the points radius. |
-|`-c`<br>`--constants` |constants: list[str] |One string or more, either a filepath or of the forme `<name>=<expression>`|Adds constants which may be used by any other expressions (including axis bounds). They must either be of the form `<name>=<expression>` (eg `a=4sin(pi/4)`) or be filepath containing lines respecting this format. Note that filepaths are only accepted in the CLI. Defaults to nothing. |
+|`-c`<br>`--constants` |constants: list[str] |One string or more, either a filepath or of the forme `<name>=<expression>`|Adds constants which may be used by any other expressions (including axis bounds). They must either be of the form `<name>=<expression>` (eg `a=4sin(pi/4)`) or be filepath containing lines respecting this format. Note that filepaths are only accepted in the CLI. May override already existing constants and functions. If a constant refers to another one, it should be defined after. Defaults to nothing. |
 |`-f`<br>`--file` |data_files: list[str] |One or more filepaths |Adds data contained in CSV files as new functions to the graph. See the [CSV files format](#cli-files-format) section for more details. Defaults to nothing. |
 |`-s`<br>`--save-graph` |save_figure_path: str |One filepath |Saves the graph at the specified path. If not included, will not save the figure (default behavior). |
 |`-d`<br>`--save-data` |save_data_path: str |One filepath |Saves the graph data (x and y values) at the specified path in CSV format. If not included, will not save the data (default behavior). |
@@ -172,6 +172,46 @@ Note that `poly0` is equivalent to `constant` and `poly1` is equivalent to `line
 
 ### Additional Python function format
 
+Chplot expression can accept functions usable in any expression directly from other Python files. Those file must respect those rules:
+- they must be in the same directory as the console when using the CLI (and in the same directory as the python execution when using the code version [NOT TESTED]) ;
+- all functions to add must be decorated with the `@plottable` decorator (importable with `from chplot import plottable`). The decorator **must** indicate how many arguments is expected by the function, either directly or with the `arg_count` keyword (i.e. `@plottable(1)` or `@plottable(arg_count=2)`) ;
+- all functions must only accept `int` or `float` and must only return **one** value accepted by the `float()` built-in function of Python, such as `int`, `float` or `bool` (if not, will be considered as the same as a raised Exception) ;
+- to indicate an error in the computation (such as a division by zero or the square root of a negative number), the function can either raise an exception or return `math.nan` (or `float('nan')`). Note that an exception will completely stop the computation at that point while `nan` will be used in the rest of the expression, which may change the result slightly.
+
+Everything other than those rules is allowed, such as importing other modules.
+The name of the Python function will be the same as the name used in the expression.
+
+#### Examples
+
+The Python file `functions.py`
+```python
+from chplot import plottable
+import math
+
+@plottable(1)
+def inc(x: float) -> float:
+    return x + 1
+
+@plottable(arg_count=2)
+def invradius(x: float, y: float) -> float:
+    if x == y == 0:
+        raise ZeroDivisionError
+    
+    return 1 / math.sqrt(x * x + y * y)
+
+def dec(x: float) -> float:
+    return x - 1
+
+@plottable
+def double(x: float) -> float:
+    return x * 2
+```
+Will define **2** new functions usable in expression: `inc` and `invradius`. `dec` does not have the decorator and will be ignored, and `double` does not indicate how many parameters it accepts, and therefore will also be ignored (but a Warning will be logged).
+
+This means, the following command is valid:
+```bash
+python -m chplot "inc(invradius(x, 5))" -x 1 inc(2) -p functions.py
+```
 
 ## Available functions
 

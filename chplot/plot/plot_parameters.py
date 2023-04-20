@@ -153,8 +153,7 @@ def _get_decorated_functions(python: ModuleType) -> list[tuple[int, str, Callabl
             # This happens only if the decorator is without bracket
             if 'def decorator_plottable(func: Callable) -> Callable:' in source_code:
                 LOGGER.error(
-                    "the @plottable decorator is missing brackets on function '%s' of python file '%s.py', its source code is therefore inaccessible",
-                    func.__name__,
+                    "the @plottable decorator is missing brackets on a function the python file '%s.py', its source code is therefore inaccessible",
                     python.__name__
                 )
 
