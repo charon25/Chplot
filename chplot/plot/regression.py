@@ -40,7 +40,12 @@ def _check_regression_expression(parameters: PlotParameters) -> Optional[str]:
     """Check if the regression expression is valid. Return its RPN if yes, None if no."""
 
     try:
-        rpn = shunting_yard(parameters.regression_expression, case_sensitive=True, variable=parameters.variable)
+        rpn = shunting_yard(
+            expression=parameters.regression_expression,
+            case_sensitive=True,
+            variable=parameters.variable,
+            convert_scientific_notation=not parameters.disable_scientific_notation
+        )
     except MismatchedBracketsError:
         LOGGER.error("mismatched brackets in the regression expression '%s'.", parameters.regression_expression)
         return None

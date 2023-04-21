@@ -20,6 +20,7 @@ from chplot.rpn import compute_rpn_unsafe, get_rpn_errors
 class PlotParameters:
     expressions: list[str] = field(default_factory=lambda: [])
     variable: Optional[str] = 'x'
+    disable_scientific_notation: Optional[bool] = False
 
     n_points: Optional[int] = 10001
     is_integer: Optional[bool] = False
@@ -62,14 +63,19 @@ def set_default_values(parameters: PlotParameters) -> None:
             setattr(parameters, field_name, default_attr)
 
 
-def _convert_single_expression(expression: Optional[str], default_value_nan: Any = None) -> float:
+def _convert_single_expression(expression: Optional[str], default_value_nan: Any = None, disable_scientific_notation: bool = False) -> float:
     if expression is None:
         return None
 
     if default_value_nan is None:
         default_value_nan = None
 
-    rpn = shunting_yard(str(expression), case_sensitive=True, variable=None)
+    rpn = shunting_yard(
+        expression=str(expression),
+        case_sensitive=True,
+        variable=None,
+        convert_scientific_notation=not disable_scientific_notation
+    )
 
     if (error := get_rpn_errors(rpn, variable=None)) is not None:
         LOGGER.warning("error while computing expression '%s': %s", expression, error)
@@ -92,7 +98,7 @@ def convert_parameters_expression(parameters: PlotParameters) -> None:
             LOGGER.error("cannot parse constant assignement '%s', it will be ignored", constant)
             continue
 
-        constant_value = _convert_single_expression(constant_expression, default_value_nan=math.nan)
+        constant_value = _convert_single_expression(constant_expression, default_value_nan=math.nan, disable_scientific_notation=parameters.disable_scientific_notation)
         if constant_value is None:
             LOGGER.error("error while computing constant expression '%s' (of constant '%s'), it will be ignored", constant_expression, constant_name)
             continue
@@ -108,12 +114,12 @@ def convert_parameters_expression(parameters: PlotParameters) -> None:
     x_min, x_max = parameters.x_lim
 
     if x_min is not None:
-        x_min = _convert_single_expression(x_min)
+        x_min = _convert_single_expression(x_min, disable_scientific_notation=parameters.disable_scientific_notation)
         if x_min is None:
             LOGGER.warning("cannot compute lower bound of x-axis")
 
     if x_max is not None:
-        x_max = _convert_single_expression(x_max)
+        x_max = _convert_single_expression(x_max, disable_scientific_notation=parameters.disable_scientific_notation)
         if x_max is None:
             LOGGER.warning("cannot compute upper bound of x-axis")
 
@@ -123,12 +129,12 @@ def convert_parameters_expression(parameters: PlotParameters) -> None:
     y_min, y_max = parameters.y_lim
 
     if y_min is not None:
-        y_min = _convert_single_expression(y_min)
+        y_min = _convert_single_expression(y_min, disable_scientific_notation=parameters.disable_scientific_notation)
         if y_min is None:
             LOGGER.warning("cannot compute lower bound of y-axis")
 
     if y_max is not None:
-        y_max = _convert_single_expression(y_max)
+        y_max = _convert_single_expression(y_max, disable_scientific_notation=parameters.disable_scientific_notation)
         if y_max is None:
             LOGGER.warning("cannot compute upper bound of y-axis")
 

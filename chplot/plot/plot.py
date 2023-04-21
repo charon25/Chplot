@@ -106,7 +106,12 @@ def _generate_graphs(parameters: PlotParameters, inputs: np.ndarray) -> list[Gra
 
     for expression in parameters.expressions:
         try:
-            rpn = shunting_yard(expression, case_sensitive=True, variable=parameters.variable)
+            rpn = shunting_yard(
+                expression=expression,
+                case_sensitive=True,
+                variable=parameters.variable,
+                convert_scientific_notation=not parameters.disable_scientific_notation
+            )
         except MismatchedBracketsError:
             LOGGER.error("mismatched brackets in the expression '%s'", expression)
             continue

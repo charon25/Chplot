@@ -76,20 +76,21 @@ No option is mandatory.
 
 |<div style="width:125px">CLI options</div>|`PlotParameters` class equivalent |Expected arguments |Effect |
 |---------------------|--------------------------------------------|---------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-|$\emptyset$ |expressions: list[str] |Any number of expressions (including none of them) |The expressions of the mathematical functions to plot and do computations on. There can by none of them. |
+| $\emptyset$ |expressions: list[str] |Any number of expressions (including none of them) |The expressions of the mathematical functions to plot and do computations on. There can by none of them. |
 |`-v`<br>`--variable` |variable: str |One string |The variable going of the horizontal axis. Can be more than one character. Note that the variable will override any constant of function with the same same. Defaults to `x`. |
+|`--no-sn`|disable_scientific_notation: bool| $\emptyset$ |Disable the automatic conversion of scientific notation in every expression (e.g. `1.24e-1` to `1.24*10^(-1)`). Defaults to False.|
 |`-n`<br>`--n-points` |n_points: int |One positive integer (excluding zero) |The number of points on the horizontal axis for the plotting of the expressions. Defaults to 10001. |
-|`-i`<br>`--integers` |is_integer: bool |$\emptyset$ |Forces the points where the expressions are computed to be integers between the specified limits. Defaults to False. |
+|`-i`<br>`--integers` |is_integer: bool | $\emptyset$ |Forces the points where the expressions are computed to be integers between the specified limits. Defaults to False. |
 |`-x`<br>`--x-lim` |x_lim: tuple[float&#124;str&#124;None, float&#124;str&#124;None]|Two expressions |The horizontal axis bounds where the expression are computed. First argument is the min, second is the max. Any expression (such as `2pi` or `1+exp(2)`) is valid. It is also the graph default horizontal axis, but they can be modified to accomodate other data. Defaults to `0 1`. |
-|`-xlog`<br>`--xlog` |is_x_log: bool |$\emptyset$ |Forces a logarithmic scale on the horizontal axis. If some horizontal axis bounds are ? 0, will modify them. Defaults to False. |
+|`-xlog`<br>`--xlog` |is_x_log: bool | $\emptyset$ |Forces a logarithmic scale on the horizontal axis. If some horizontal axis bounds are ? 0, will modify them. Defaults to False. |
 |`-y`<br>`--y-lim` |y_lim: tuple[float&#124;str&#124;None, float&#124;str&#124;None]|Two expressions |The vertical axis bounds of the graph. First argument is the min, second is the max. Any expression (such as `2pi` or `1+exp(2)`) is valid. If not specified, will use matplotlib default ones to accomodate all data. Will restrict the graph to them is specified. |
-|`-z`<br>`--y-zero` |must_contain_zero: bool |$\emptyset$ |Forces the vertical axis to contain zero. Defaults to False. |
-|`-ylog`<br>`--ylog` |is_y_log: bool |$\emptyset$ |Forces a logarithmic scale on the vertical axis. If some vertical axis bounds are ? 0, will modify them. Defaults to False. |
+|`-z`<br>`--y-zero` |must_contain_zero: bool | $\emptyset$ |Forces the vertical axis to contain zero. Defaults to False. |
+|`-ylog`<br>`--ylog` |is_y_log: bool | $\emptyset$ |Forces a logarithmic scale on the vertical axis. If some vertical axis bounds are ? 0, will modify them. Defaults to False. |
 |`-xl`<br>`--x-label` |x_label: str |One string |Label of the horizontal axis. Defaults to nothing. |
 |`-y`<br>`--y-label` |y_label: str |One string |Label of the vertical axis. Defaults to nothing. |
 |`-t`<br>`--title` |title: str |One string |Title of the graph. Defaults to nothing. |
-|`-rl`<br>`--remove-legend`|remove_legend: bool |$\emptyset$ |Removes the graph legend. Defaults to False. |
-|`--no-plot` |no_plot: bool |$\emptyset$ |Does not show the plot. However, does not prevent saving the figure. Defaults to False. |
+|`-rl`<br>`--remove-legend`|remove_legend: bool | $\emptyset$ |Removes the graph legend. Defaults to False. |
+|`--no-plot` |no_plot: bool | $\emptyset$ |Does not show the plot. However, does not prevent saving the figure. Defaults to False. |
 |`--dis`<br>`--discontinuous` |markersize: int&#124;None |One optional positive integer (excluding zero) |Transforms the style of the graph from a continuous line to discrete points with the specified radius. If present without a value, will defaults to a radius of 1. If the `--integer` flag is also present, will still affect the points radius. |
 |`-c`<br>`--constants` |constants: list[str] |One string or more, either a filepath or of the forme `<name>=<expression>`|Adds constants which may be used by any other expressions (including axis bounds). They must either be of the form `<name>=<expression>` (eg `a=4sin(pi/4)`) or be filepath containing lines respecting this format. Note that filepaths are only accepted in the CLI. May override already existing constants and functions. If a constant refers to another one, it should be defined after. Defaults to nothing. |
 |`-f`<br>`--file` |data_files: list[str] |One or more filepaths |Adds data contained in CSV files as new functions to the graph. See the [CSV files format](#cli-files-format) section for more details. Defaults to nothing. |
@@ -228,20 +229,20 @@ There are also the 5 base operations : `+`, `-`, `*`, `/`, `^`.
 
 |`chplot` name|Name |Usual symbol|Exact value|`chplot` value |
 |-------------|---------------------------|:----------:|:---------:|:---------------:|
-|`pi` |Pi | $\pi$ | $\pi$ |$3.141\ 592\ 653\ 589\ 793$|
-|`tau` |Tau | $\tau$ | $2\pi$ |$6.283\ 185\ 307\ 179\ 586$|
-|`e` |Euler's number | $e$ | $$\exp(1) = \sum_{n=0}^{+\infty} \frac{1}{n!}$$ |$2.718\ 281\ 828\ 459\ 045$|
-|`ga`<br>`em` |Euler-Mascheroni's constant| $\gamma$| $$\lim_{n\to\infty} \left( \sum_{k=1}^n \left( \frac{1}{k}\right) - \log n \right)$$ |$0.577\ 215\ 664\ 901\ 532 9$|
-|`phi` |Golden ratio | $\phi$ | $\frac{1}{2} (1 + \sqrt{5})$ |$1.618\ 033\ 988\ 749\ 895$|
-|`sqrt2` |Square root of 2 | $\sqrt{2}$ | $\sqrt{2}$ |$1.414\ 213\ 562\ 373\ 095\ 1$|
-|`apery` |Apery's constant || $$\zeta(3) = \sum_{n=1}^{+\infty} \frac{1}{n^3} $$ |$1.202\ 056\ 903\ 159\ 594$|
-|`brun` |Brun's constant| $B_2$ |Sum of the reciprocal of the twin primes|$1.902\ 160\ 583\ 104$|
-|`catalan` |Catalan's constant | $G$ | $$\sum_{n=0}^{+\infty} \frac{(-1)^n}{(2n + 1)^2} $$ |$0.915\ 965\ 594\ 177\ 219$|
-|`feigenbaumd`|First Feigenbaum's constant| $\delta$ | |$4.669\ 201\ 609\ 102\ 990\ 67$|
-|`feigenbauma`|Second Feigenbaum's constant| $\alpha$ | |$2.502\ 907\ 875\ 095\ 892\ 82$|
-|`glaisher` |Glaisher-Khinkelin's constant| $A$ | $$\lim_{n\to\infty} \frac{\Pi_{k=1}^{n} k^k}{n^{\frac{n^2}{2} + \frac{n}{2} + \frac{1}{12}}\cdot\mathrm{e}^{-\frac{n^2}{4}}}$$ |$1.282\ 427\ 129\ 100\ 622\ 6$|
-|`khinchin` |Khinchin's constant| $K_0$ | $$\prod_{r=1}^{+\infty} \left(1 + \frac{1}{r(r+2)} \right)^{\log_2 r}$$|$2.685\ 452\ 001\ 065\ 306\ 2$|
-|`mertens` |Meissel-Mertens's constant| $M$ | $$\gamma + \sum_{p\text{ prime}}\left(\ln\left(1 - \frac{1}{p}\right) + \frac{1}{p} \right)$$ |$0.261\ 497\ 212\ 847\ 642\ 77$|
+|`pi` |Pi | $\pi$ | $\pi$ | $3.141\ 592\ 653\ 589\ 793$|
+|`tau` |Tau | $\tau$ | $2\pi$ | $6.283\ 185\ 307\ 179\ 586$|
+|`e` |Euler's number | $e$ | $$\exp(1) = \sum_{n=0}^{+\infty} \frac{1}{n!}$$ | $2.718\ 281\ 828\ 459\ 045$|
+|`ga`<br>`em` |Euler-Mascheroni's constant| $\gamma$| $$\lim_{n\to\infty} \left( \sum_{k=1}^n \left( \frac{1}{k}\right) - \log n \right)$$ | $0.577\ 215\ 664\ 901\ 532 9$|
+|`phi` |Golden ratio | $\phi$ | $\frac{1}{2} (1 + \sqrt{5})$ | $1.618\ 033\ 988\ 749\ 895$|
+|`sqrt2` |Square root of 2 | $\sqrt{2}$ | $\sqrt{2}$ | $1.414\ 213\ 562\ 373\ 095\ 1$|
+|`apery` |Apery's constant || $$\zeta(3) = \sum_{n=1}^{+\infty} \frac{1}{n^3} $$ | $1.202\ 056\ 903\ 159\ 594$|
+|`brun` |Brun's constant| $B_2$ |Sum of the reciprocal of the twin primes| $1.902\ 160\ 583\ 104$|
+|`catalan` |Catalan's constant | $G$ | $$\sum_{n=0}^{+\infty} \frac{(-1)^n}{(2n + 1)^2} $$ | $0.915\ 965\ 594\ 177\ 219$|
+|`feigenbaumd`|First Feigenbaum's constant| $\delta$ | | $4.669\ 201\ 609\ 102\ 990\ 67$|
+|`feigenbauma`|Second Feigenbaum's constant| $\alpha$ | | $2.502\ 907\ 875\ 095\ 892\ 82$|
+|`glaisher` |Glaisher-Khinkelin's constant| $A$ | $$\lim_{n\to\infty} \frac{\Pi_{k=1}^{n} k^k}{n^{\frac{n^2}{2} + \frac{n}{2} + \frac{1}{12}}\cdot\mathrm{e}^{-\frac{n^2}{4}}}$$ | $1.282\ 427\ 129\ 100\ 622\ 6$|
+|`khinchin` |Khinchin's constant| $K_0$ | $$\prod_{r=1}^{+\infty} \left(1 + \frac{1}{r(r+2)} \right)^{\log_2 r}$$| $2.685\ 452\ 001\ 065\ 306\ 2$|
+|`mertens` |Meissel-Mertens's constant| $M$ | $$\gamma + \sum_{p\text{ prime}}\left(\ln\left(1 - \frac{1}{p}\right) + \frac{1}{p} \right)$$ | $0.261\ 497\ 212\ 847\ 642\ 77$|
 
 #### Physical constants
 
