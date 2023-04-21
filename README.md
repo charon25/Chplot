@@ -31,7 +31,7 @@ This module requires the following third-party modules:
 
 ## Usage
 
-In the rest of this README, the term "expression" will refer to any mathematical expression that is the function of one variable (by default `x` but can be changed).
+In the rest of this README, the term "expression" will refer to any mathematical expression, possibly with one variable (by default `x` but can be changed).
 
 ### CLI
 
@@ -77,7 +77,7 @@ No option is mandatory.
 |<div style="width:125px">CLI options</div>|`PlotParameters` class equivalent |Expected arguments |Effect |
 |---------------------|--------------------------------------------|---------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 |$\emptyset$ |expressions: list[str] |Any number of expressions (including none of them) |The expressions of the mathematical functions to plot and do computations on. There can by none of them. |
-|`-v`<br>`--variable` |variable: str |One string |The variable going of the horizontal axis. Can be more than one character. Defaults to `x`. |
+|`-v`<br>`--variable` |variable: str |One string |The variable going of the horizontal axis. Can be more than one character. Note that the variable will override any constant of function with the same same. Defaults to `x`. |
 |`-n`<br>`--n-points` |n_points: int |One positive integer (excluding zero) |The number of points on the horizontal axis for the plotting of the expressions. Defaults to 10001. |
 |`-i`<br>`--integers` |is_integer: bool |$\emptyset$ |Forces the points where the expressions are computed to be integers between the specified limits. Defaults to False. |
 |`-x`<br>`--x-lim` |x_lim: tuple[float&#124;str&#124;None, float&#124;str&#124;None]|Two expressions |The horizontal axis bounds where the expression are computed. First argument is the min, second is the max. Any expression (such as `2pi` or `1+exp(2)`) is valid. It is also the graph default horizontal axis, but they can be modified to accomodate other data. Defaults to `0 1`. |
@@ -262,6 +262,7 @@ The constants, their values and their units are taken from https://en.wikipedia.
 |`ec`       |Elementary charge| $e$ | $1.602\ 176\ 634\times10^{-19}$ | $\text{C}$ |
 |`Eh`       |Hartree's energy| $E_h$ | $4.359\ 744\ 722\ 207\ 1\times10^{-18}$ | $\text{J}$ |
 |`epsilon0`<br>`eps0` |Vacuum electric permittivity    | $\varepsilon_0$ | $8.854\ 187\ 812\ 8\times10^{-12}$ | $\text{F}\cdot\text{m}^{-1}$ |
+|`eV`       |Electronvolt value in Joule|  | $1.602\ 176\ 634\times10^{-19}$ | $\text{J}$ |
 |`F`        |Faraday's constant| $F$ | $9.648\ 533\ 212\ 331\ 002\times10^4$ | $\text{C}\cdot\text{mol}^{-1}$ |
 |`G`        |Gravitational constant| $G$ | $6.674\ 3\times10^{-11}$ | $\text{m}^3\cdot\text{kg}^{-1}\cdot\text{s}^{-2}$ |
 |`g`        |Gravity of Earth| $g$ | $9.806\ 65$ | $\text{m}\cdot\text{s}^{-2}$ |
@@ -297,9 +298,44 @@ The constants, their values and their units are taken from https://en.wikipedia.
 |`sigma`    |Stefan-Boltzmann's constant| $\sigma$ | $5.670\ 374\ 419\times10^{-8}$ | $\text{W}\cdot\text{m}^{-2}\cdot\text{K}^{-4}$ |
 |`sigmae`   |Thomson's cross section| $\sigma_e$ | $6.652\ 458\ 732\ 1\times10^{-29}$ | $\text{m}^2$ |
 |`VmSi`     |Molar volume of silicon| $V_m(\text{Si})$ | $1.205\ 883\ 199\times10^{-5}$ | $\text{m}^3\cdot\text{mol}^{-1}$ |
-|`Z0`       |Characteristic impedance of vacuum    | $Z_0$ | $376\ .730\ 313\ 668\ $ | $\Omega$ |
+|`Z0`       |Characteristic impedance of vacuum    | $Z_0$ | $3.767\ 303\ 136 \ 68\times10^2$ | $\Omega$ |
 
 
+### Astronomical constants
+
+All the planets data are taken from : https://nssdc.gsfc.nasa.gov.
+
+|`chplot` name|Quantity|`chplot` value (in SI units)|Units|
+|-------------|----|:------------:|:---:|
+|`Msun`       |Sun mass| $1.988\ 5\times10^{30}$ | $\text{kg}$ |
+|`Mmercury`   |Mercury mass| $3.301\times10^{23}$ | $\text{kg}$ |
+|`Mvenus`     |Venus mass| $4.867\ 3\times10^{24}$ | $\text{kg}$ |
+|`Mearth`     |Earth mass| $5.972\ 2\times10^{24}$ | $\text{kg}$ |
+|`Mmoon`      |Moon mass| $7.346\times10^{22}$ | $\text{kg}$ |
+|`Mmars`      |Mars mass| $6.416\ 9\times10^{23}$ | $\text{kg}$ |
+|`Mjupiter`   |Jupiter mass| $1.898\ 13\times10^{27}$ | $\text{kg}$ |
+|`Msaturn`    |Saturn mass| $5.683\ 2\times10^{26}$ | $\text{kg}$ |
+|`Muranus`    |Uranus mass| $8.681\ 1\times10^{25}$ | $\text{kg}$ |
+|`Mneptune`   |Neptune mass| $1.024\ 09\times10^{26}$ | $\text{kg}$ |
+|`Mpluto`     |Pluto mass| $1.303\times10^{22}$ | $\text{kg}$ |
+|`Mcharon`    |Charon mass| $1.586\times10^{21}$ | $\text{kg}$ |
+|||||
+|`Rsun`       |Sun volumetric mean radius| $6.957\times10^{8}$ | $\text{m}$ |
+|`Rmercury`   |Mercury volumetric mean radius| $2.439\ 7\times10^{6}$ | $\text{m}$ |
+|`Rvenus`     |Venus volumetric mean radius| $6.051\ 8\times10^{6}$ | $\text{m}$ |
+|`Rearth`     |Earth volumetric mean radius| $6.371\times10^{6}$ | $\text{m}$ |
+|`Rmoon`      |Moon volumetric mean radius| $1.737\ 4\times10^{6}$ | $\text{m}$ |
+|`Rmars`      |Mars volumetric mean radius| $3.389\ 5\times10^{6}$ | $\text{m}$ |
+|`Rjupiter`   |Jupiter volumetric mean radius| $6.991\ 1\times10^{7}$ | $\text{m}$ |
+|`Rsaturn`    |Saturn volumetric mean radius| $5.8232\times10^{7}$ | $\text{m}$ |
+|`Ruranus`    |Uranus volumetric mean radius| $2.536\ 2\times10^{7}$ | $\text{m}$ |
+|`Rneptune`   |Neptune volumetric mean radius| $2.462\ 2\times10^{7}$ | $\text{m}$ |
+|`Rpluto`     |Pluto volumetric mean radius| $1.188\times10^{6}$ | $\text{m}$ |
+|`Rcharon`    |Charon volumetric mean radius| $6.06\times10^{5}$ | $\text{m}$ |
+|||||
+|`AU`|Astronomical unit in meters| $1.495\ 978\ 707\times10^{11}$ | $\text{m}$ |
+|`ly`|Light-year in meters| $9.460\ 730\ 472\ 580\ 8\times10^{15}$ | $\text{m}$ |
+|`pc`|Parsec in meters| $3.085\ 677\ 581\ 491\ 367\ 3\times10^{11}$ | $\text{m}$ |
 
 ### From default `math` module
 

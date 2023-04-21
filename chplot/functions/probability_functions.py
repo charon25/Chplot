@@ -97,5 +97,4 @@ PROBABILITY_FUNCTIONS: FunctionDict = {
     # Cauchy distribution
     'cauchypdf': (3, _cauchy_pdf),
     'cauchycdf': (3, _cauchy_cdf),
-
 }

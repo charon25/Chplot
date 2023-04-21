@@ -74,11 +74,47 @@ _PHYSICS_CONSTANTS: FunctionDict = {
     'VmSi': (0, 1.205_883_199e-5),
     'NA': (0, 6.022_140_76e23),
     'R': (0, 8.314_462_618_153_24),
-    'dnuCs': (0, 9_192_631_770.0)
+    'dnuCs': (0, 9_192_631_770.0),
+
+    'eV': (0, 1.602_176_634e-19),
+}
+
+
+# Planets data source: https://nssdc.gsfc.nasa.gov
+_ASTRONOMY_CONSTANTS: FunctionDict = {
+    'Msun': (0, 1.988_5e30),
+    'Rsun': (0, 6.957e8),
+    'Mmercury': (0, 3.301e23),
+    'Rmercury': (0, 2.439_7e6),
+    'Mvenus': (0, 4.867_3e24),
+    'Rvenus': (0, 6.051_8e6),
+    'Mearth': (0, 5.972_2e24),
+    'Rearth': (0, 6.371e6),
+    'Mmoon': (0, 7.346e22),
+    'Rmoon': (0, 1.737_4e6),
+    'Mmars': (0, 6.416_9e23),
+    'Rmars': (0, 3.389_5e6),
+    'Mjupiter': (0, 1.898_13e27),
+    'Rjupiter': (0, 6.991_1e7),
+    'Msaturn': (0, 5.683_2e26),
+    'Rsaturn': (0, 5.8232e7),
+    'Muranus': (0, 8.681_1e25),
+    'Ruranus': (0, 2.536_2e7),
+    'Mneptune': (0, 1.024_09e26),
+    'Rneptune': (0, 2.462_2e7),
+    'Mpluto': (0, 1.303e22),
+    'Rpluto': (0, 1.188e6),
+    'Mcharon': (0, 1.586e21),
+    'Rcharon': (0, 6.06e5),
+
+    'AU': (0, 1.495_978_707e11),
+    'ly': (0, 9.460_730_472_580_8e15),
+    'pc': (0, 3.085_677_581_491_367_3e16),
 }
 
 
 CONSTANTS_FUNCTIONS: FunctionDict = {
     **_MATH_CONSTANTS,
     **_PHYSICS_CONSTANTS,
+    **_ASTRONOMY_CONSTANTS,
 }
