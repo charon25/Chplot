@@ -6,10 +6,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 from shunting_yard import MismatchedBracketsError, shunting_yard
 
+from chplot.functions import FUNCTIONS
 from chplot.plot.derivative import compute_derivatives
 from chplot.plot.files import read_files
 from chplot.plot.integral import compute_and_print_integrals
-from chplot.plot.plot_parameters import convert_parameters_expression, PlotParameters, retrieve_python_functions, set_default_values
+from chplot.plot.plot_parameters import convert_parameters_expression, PlotParameters, replace_implicit_variable_multiplication, retrieve_python_functions, set_default_values
 from chplot.plot.regression import compute_regressions
 from chplot.plot.utils import _round as round
 from chplot.plot.utils import Graph, NORMAL_UNRECOGNIZED_CHARACTERS, GraphType
@@ -99,6 +100,9 @@ def _get_unrecognized_characters(expression: str, rpn: str) -> set[str]:
 
 def _generate_graphs(parameters: PlotParameters, inputs: np.ndarray) -> list[Graph]:
     graphs: list[Graph] = []
+
+    if parameters.variable in FUNCTIONS:
+        LOGGER.warning("variable '%s' is overriding function or constant '%s'", parameters.variable, parameters.variable)
 
     for expression in parameters.expressions:
         try:
@@ -291,6 +295,7 @@ def plot(parameters: PlotParameters) -> None:
     set_default_values(parameters)
     retrieve_python_functions(parameters)
     convert_parameters_expression(parameters)
+    replace_implicit_variable_multiplication(parameters)
 
     inputs = _generate_inputs(parameters)
     graphs = _generate_graphs(parameters, inputs)

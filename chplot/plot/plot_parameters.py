@@ -175,7 +175,7 @@ def retrieve_python_functions(parameters: PlotParameters):
         return
 
     for python_file in parameters.python_files:
-        # try:
+        try:
             # The file must be in the current directory
             if pathlib.Path(python_file).parent.parts:
                 LOGGER.error("python file must be in the current directory ('%s')", python_file)
@@ -196,7 +196,37 @@ def retrieve_python_functions(parameters: PlotParameters):
                 except TypeError:
                     LOGGER.error("constant function '%s' of python file '%s' expected some arguments.", func_name, python_file)
 
-        # except (ImportError, ModuleNotFoundError):
-        #     LOGGER.error("error while importing python file '%s'.", python_file)
-        # except Exception:
-        #     LOGGER.error("unknown error while importing python file '%s'.", python_file)
+        except (ImportError, ModuleNotFoundError):
+            LOGGER.error("error while importing python file '%s'.", python_file)
+        except Exception:
+            LOGGER.error("unknown error while importing python file '%s'.", python_file)
+
+
+def replace_implicit_variable_multiplication(parameters: PlotParameters):
+    """Replace in-place any implicit multiplication between the variable and brackets in all expressions including the variable."""
+
+    REGEX = rf'(\b{parameters.variable})\('
+
+    for index, expression in enumerate(parameters.expressions):
+        parameters.expressions[index], changed = re.subn(REGEX, r'\1*(', expression)
+        if changed > 0:
+            LOGGER.info(
+                "replaced %s implicit multiplication%s in expression '%s': '%s'",
+                changed,
+                's' if changed > 1 else '',
+                expression,
+                parameters.expressions[index]
+            )
+    
+    if parameters.regression_expression is not None:
+        new_regression_expression, changed = re.subn(REGEX, r'\1*(', parameters.regression_expression)
+        if changed > 0:
+            LOGGER.info(
+                "replaced %s implicit multiplication%s in regression expression '%s': '%s'",
+                changed,
+                's' if changed > 1 else '',
+                parameters.regression_expression,
+                new_regression_expression
+            )
+
+        parameters.regression_expression = new_regression_expression

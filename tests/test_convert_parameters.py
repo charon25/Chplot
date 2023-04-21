@@ -8,7 +8,7 @@ import unittest
 
 from chplot.functions import FUNCTIONS
 from chplot.functions.utils import FunctionDict
-from chplot.plot.plot_parameters import convert_parameters_expression, retrieve_python_functions, set_default_values
+from chplot.plot.plot_parameters import convert_parameters_expression, replace_implicit_variable_multiplication, set_default_values
 from mock_parameters import MockParameters
 
 
@@ -177,3 +177,35 @@ class TestConvertParametersConstants(unittest.TestCase):
         convert_parameters_expression(parameters)
 
         self.assertFunctionDictContains(FUNCTIONS, {'a': (0, 1), 'b': (0, 2), 'c': (0, 3)})
+
+
+class TestReplaceImplicitVariableMultiplication(unittest.TestCase):
+
+    def test_no_implicit_mult(self):
+        expressions = ['x * 5 + 1', 'sin(x)', '12 * x^3 + (4 * x)']
+        parameters = MockParameters(expressions=expressions, variable='x', regression_expression=None)
+        replace_implicit_variable_multiplication(parameters)
+
+        self.assertListEqual(parameters.expressions, expressions)
+
+    def test_implicit_mult(self):
+        expressions = ['x(x + 1)', 'x(x(x+1)+x)']
+        parameters = MockParameters(expressions=expressions, regression_expression='x(x(x+1)+x)', variable='x')
+        replace_implicit_variable_multiplication(parameters)
+
+        self.assertListEqual(parameters.expressions, ['x*(x + 1)', 'x*(x*(x+1)+x)'])
+        self.assertEqual(parameters.regression_expression, 'x*(x*(x+1)+x)')
+
+    def test_variable_in_function_name(self):
+        expressions = ['y2x(1)', 'max(x, 1)']
+        parameters = MockParameters(expressions=expressions, variable='x', regression_expression=None)
+        replace_implicit_variable_multiplication(parameters)
+
+        self.assertListEqual(parameters.expressions, expressions)
+
+    def test_other_variable(self):
+        expressions = ['x(x + 1)', 'x(x(x+1)+x)']
+        parameters = MockParameters(expressions=expressions, variable='y', regression_expression=None)
+        replace_implicit_variable_multiplication(parameters)
+
+        self.assertListEqual(parameters.expressions, expressions)
