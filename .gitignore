@@ -1,5 +1,6 @@
 __pycache__
 .vscode
+.VSCodeCounter
 *.egg-info
 dist
 build
@@ -8,3 +9,4 @@ python_files
 heart.png
 chplot.csv
 .~lock*
+create_table.py

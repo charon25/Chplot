@@ -3,7 +3,6 @@ import sys
 from typing import Optional, Union
 
 import numpy as np
-from scipy.optimize import curve_fit, OptimizeWarning
 from shunting_yard import MismatchedBracketsError, shunting_yard
 from tqdm import tqdm
 
@@ -120,6 +119,10 @@ def _compute_r_squared_and_error(ydata: np.ndarray, yfit: np.ndarray) -> tuple[f
 
 
 def compute_regressions(parameters: PlotParameters, graphs: list[Graph]) -> list[Graph]:
+    # Import in this function, so it is not imported if no regression is computed
+    from scipy.optimize import curve_fit, OptimizeWarning
+
+
     if len(graphs) == 0:
         return []
 

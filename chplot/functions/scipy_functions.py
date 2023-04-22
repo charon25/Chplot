@@ -57,12 +57,21 @@ def _fresnelc(x: float) -> float:
 
 def _Ai(x: float) -> float:
     return scipy.special.airy(x)[0]
-def _Bi(x: float) -> float:
-    return scipy.special.airy(x)[1]
 def _Aip(x: float) -> float:
+    return scipy.special.airy(x)[1]
+def _Bi(x: float) -> float:
     return scipy.special.airy(x)[2]
 def _Bip(x: float) -> float:
     return scipy.special.airy(x)[3]
+
+def _eAi(x: float) -> float:
+    return scipy.special.airye(x)[0]
+def _eAip(x: float) -> float:
+    return scipy.special.airye(x)[1]
+def _eBi(x: float) -> float:
+    return scipy.special.airye(x)[2]
+def _eBip(x: float) -> float:
+    return scipy.special.airye(x)[3]
 
 def _Si(x: float) -> float:
     return scipy.special.sici(x)[0]
@@ -83,6 +92,10 @@ SCIPY_SPECIAL_FUNCTIONS.update({
     'Aip': (1, _Aip),
     'Bi': (1, _Bi),
     'Bip': (1, _Bip),
+    'eAi': (1, _eAi),
+    'eAip': (1, _eAip),
+    'eBi': (1, _eBi),
+    'eBip': (1, _eBip),
     'Si': (1, _Si),
     'Ci': (1, _Ci),
     'Shi': (1, _Shi),
