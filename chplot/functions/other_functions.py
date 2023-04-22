@@ -45,13 +45,13 @@ def _ifn(x: float, _true: float, _false: float) -> float:
     return _true if x <= 0 else _false
 
 def _ifz(x: float, _true: float, _false: float) -> float:
-    return _true if math.isclose(x, 0.0) else _false
+    return _true if x == 0 else _false
 
 def _in(x: float, lower: float, upper: float, _true: float, _false: float) -> float:
-    return _true if lower <= x < upper else _false
+    return _true if lower <= x <= upper else _false
 
 def _out(x: float, lower: float, upper: float, _true: float, _false: float) -> float:
-    return _false if lower <= x < upper else _true
+    return _false if lower <= x <= upper else _true
 
 
 OTHER_FUNCTIONS: FunctionDict = {

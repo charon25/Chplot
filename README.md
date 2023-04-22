@@ -537,30 +537,63 @@ Documentation: https://mpmath.org/doc/current/
 
 | `chplot` name | Name | Arguments | Expression |
 |---------------|------|:---------:|:----------:|
-| `normpdf` | Normal distribution PDF | $$x, \mu, \sigma$$ | $$\frac{1}{\sigma\sqrt{2\pi}}\mathrm{e}^{-\frac{1}{2}\left(\frac{x - \mu}{\sigma} \right)^2}$$ |
-| `normcdf` | Normal distribution CDF | $$x, \mu, \sigma$$ | $$\frac{1}{2}\left(1 + \mathrm{erf}\left(\frac{x - \mu}{\sigma\sqrt{2}}\right) \right)$$ |
-| `unormpdf` | Unit normal distribution PDF | $$x$$ | $$\frac{1}{\sqrt{2\pi}}\mathrm{e}^{-\frac{x^2}{2}}$$ |
-| `unormcdf` | Unit normal distribution CDF | $$x$$ | $$\frac{1}{2}\left(1 + \mathrm{erf}\left(\frac{x}{\sqrt{2}}\right) \right)$$ |
-| `tripdf` | Triangle distribution PDF | $$x, a, b, c$$ | $$0 \text{ if } x\leq a \text{ or } x > b$$ <br> $$\frac{2(x-a)}{(b-a)(c-a)} \text{ if } a < x\leq c$$ <br> $$\frac{2(b-x)}{(b-a)(b-c)} \text{ if } c < x\leq b$$ |
-| `tricdf` | Triangle distribution CDF | $$x, a, b, c$$ | $$0 \text{ if } x < a$$ <br> $$\frac{(x-a)^2}{(b-a)(c-a)} \text{ if } a\leq x\leq c$$ <br> $$1 - \frac{(b-x)^2}{(b-a)(b-c)} \text{ if } c < x\leq b$$ <br> $$1 \text{ if }b < x $$ |
-| `uniformpdf` | Uniform distribution PDF | $$x, a, b$$ | $$0 \text{ if } x < a \text{ or } x > b$$ <br> $$\frac{1}{b-a} \text{ if } a\leq x\leq b$$ |
-| `uniformcdf` | Uniform distribution CDF | $$x, a, b$$ | $$0 \text{ if } x < a$$ <br> $$\frac{x-a}{b-a} \text{ if } a\leq x\leq b$$ <br> $$1 \text{ if }b < x $$ |
-| `exppdf` | Exponential distribution PDF | $$x, \lambda$$ | $$0 \text{ if } x < 0$$ <br> $$\lambda\mathrm{e}^{-\lambda x} \text{ if } 0\leq x$$ |
-| `expcdf` | Exponential distribution CDF | $$x, \lambda$$ | $$0 \text{ if } x < 0$$ <br> $$1 - \mathrm{e}^{-\lambda x} \text{ if } 0\leq x$$ |
-| `studentpdf` | Student's t-distribution PDF | $$x, \nu$$ | [Wikipedia](https://en.wikipedia.org/wiki/Student%27s_t-distribution) |
-| `studentcdf` | Student's t-distribution CDF | $$x, \nu$$ | [Wikipedia](https://en.wikipedia.org/wiki/Student%27s_t-distribution) |
-| `betapdf` | Beta distribution PDF | $$x, \alpha, \beta$$ | [Wikipedia](https://en.wikipedia.org/wiki/Beta_distribution) |
-| `betacdf` | Beta distribution CDF | $$x, \alpha, \beta$$ | [Wikipedia](https://en.wikipedia.org/wiki/Beta_distribution) |
-| `chi2pdf`<br>`khi2pdf` | Chi-squared distribution PDF | $$x, k$$ | [Wikipedia](https://en.wikipedia.org/wiki/Chi-squared_distribution) |
-| `chi2cdf`<br>`khi2cdf` | Chi-squared distribution CDF | $$x, k$$ | [Wikipedia](https://en.wikipedia.org/wiki/Chi-squared_distribution) |
-| `gammapdf` | Gamma distribution PDF | $$x, \alpha, \beta$$ | [Wikipedia](https://en.wikipedia.org/wiki/Gamma_distribution) |
-| `gammacdf` | Gamma distribution CDF | $$x, \alpha, \beta$$ | [Wikipedia](https://en.wikipedia.org/wiki/Gamma_distribution) |
-| `cauchypdf` | Cauchy distribution PDF | $$x, x_0, \gamma$$ | $$\frac{1}{\pi\gamma\left(1 + \left(\frac{x - x_0}{\gamma}\right)^2\right)}$$ |
-| `cauchycdf` | Cauchy distribution CDF | $$x, x_0, \gamma$$ | $$\frac{1}{\pi}\arctan\left(\frac{x - x_0}{\gamma}\right) + \frac{1}{2}$$ |
+| `normpdf` | Normal distribution PDF | $x, \mu, \sigma$ | $$\frac{1}{\sigma\sqrt{2\pi}}\mathrm{e}^{-\frac{1}{2}\left(\frac{x - \mu}{\sigma} \right)^2}$$ |
+| `normcdf` | Normal distribution CDF | $x, \mu, \sigma$ | $$\frac{1}{2}\left(1 + \mathrm{erf}\left(\frac{x - \mu}{\sigma\sqrt{2}}\right) \right)$$ |
+| `unormpdf` | Unit normal distribution PDF | $x$ | $$\frac{1}{\sqrt{2\pi}}\mathrm{e}^{-\frac{x^2}{2}}$$ |
+| `unormcdf` | Unit normal distribution CDF | $x$ | $$\frac{1}{2}\left(1 + \mathrm{erf}\left(\frac{x}{\sqrt{2}}\right) \right)$$ |
+| `tripdf` | Triangle distribution PDF | $x, a, b, c$ | $$0 \text{ if } x\leq a \text{ or } x > b$$ <br> $$\frac{2(x-a)}{(b-a)(c-a)} \text{ if } a < x\leq c$$ <br> $$\frac{2(b-x)}{(b-a)(b-c)} \text{ if } c < x\leq b$$ |
+| `tricdf` | Triangle distribution CDF | $x, a, b, c$ | $$0 \text{ if } x < a$$ <br> $$\frac{(x-a)^2}{(b-a)(c-a)} \text{ if } a\leq x\leq c$$ <br> $$1 - \frac{(b-x)^2}{(b-a)(b-c)} \text{ if } c < x\leq b$$ <br> $$1 \text{ if }b < x $$ |
+| `uniformpdf` | Uniform distribution PDF | $x, a, b$ | $$0 \text{ if } x < a \text{ or } x > b$$ <br> $$\frac{1}{b-a} \text{ if } a\leq x\leq b$$ |
+| `uniformcdf` | Uniform distribution CDF | $x, a, b$ | $$0 \text{ if } x < a$$ <br> $$\frac{x-a}{b-a} \text{ if } a\leq x\leq b$$ <br> $$1 \text{ if }b < x $$ |
+| `exppdf` | Exponential distribution PDF | $x, \lambda$ | $$0 \text{ if } x < 0$$ <br> $$\lambda\mathrm{e}^{-\lambda x} \text{ if } 0\leq x$$ |
+| `expcdf` | Exponential distribution CDF | $x, \lambda$ | $$0 \text{ if } x < 0$$ <br> $$1 - \mathrm{e}^{-\lambda x} \text{ if } 0\leq x$$ |
+| `studentpdf` | Student's t-distribution PDF | $x, \nu$ | [Wikipedia](https://en.wikipedia.org/wiki/Student%27s_t-distribution) |
+| `studentcdf` | Student's t-distribution CDF | $x, \nu$ | [Wikipedia](https://en.wikipedia.org/wiki/Student%27s_t-distribution) |
+| `betapdf` | Beta distribution PDF | $x, \alpha, \beta$ | [Wikipedia](https://en.wikipedia.org/wiki/Beta_distribution) |
+| `betacdf` | Beta distribution CDF | $x, \alpha, \beta$ | [Wikipedia](https://en.wikipedia.org/wiki/Beta_distribution) |
+| `chi2pdf`<br>`khi2pdf` | Chi-squared distribution PDF | $x, k$ | [Wikipedia](https://en.wikipedia.org/wiki/Chi-squared_distribution) |
+| `chi2cdf`<br>`khi2cdf` | Chi-squared distribution CDF | $x, k$ | [Wikipedia](https://en.wikipedia.org/wiki/Chi-squared_distribution) |
+| `gammapdf` | Gamma distribution PDF | $x, \alpha, \beta$ | [Wikipedia](https://en.wikipedia.org/wiki/Gamma_distribution) |
+| `gammacdf` | Gamma distribution CDF | $x, \alpha, \beta$ | [Wikipedia](https://en.wikipedia.org/wiki/Gamma_distribution) |
+| `cauchypdf` | Cauchy distribution PDF | $x, x_0, \gamma$ | $$\frac{1}{\pi\gamma\left(1 + \left(\frac{x - x_0}{\gamma}\right)^2\right)}$$ |
+| `cauchycdf` | Cauchy distribution CDF | $x, x_0, \gamma$ | $$\frac{1}{\pi}\arctan\left(\frac{x - x_0}{\gamma}\right) + \frac{1}{2}$$ |
 
 To use the ( $k, \theta$ ) parametrization of the gamma distribution, just apply $\alpha = k$ and $\beta = \frac{1}{\theta}$.
 
 ### Other functions
+
+In this table, $\|x\|$ denotes the absolute value of x ( $|x|$ ).
+
+| `chplot` name | Arguments | Expression |
+|---------------|:---------:|:----------:|
+| `relu`<br>`ramp` | $x$ | $0 \text{ if } x < 0$ <br> $x \text{ if } 0\leq x$ |
+| `lrelu` | $x, a$ | $a\cdot x \text{ if } x < 0$ <br> $x \text{ if } 0\leq x$ |
+| `sigm`<br>`sigmoid` | $x$ | $$\frac{1}{1 + \mathrm{e}^{-x}}$$ |
+| `sign`<br>`sgn` | $x$ | $-1 \text{ if } x < 0$ <br> $0 \text{ if } x = 0$ <br> $+1 \text{ if } x > 0$ |
+| `lerp` | $x, m_x, M_x, m_y, M_y$ | $$m_y + (M_y - m_y)\frac{x - m_x}{M_x - m_x}$$ |
+| `lerpt` | $t, m, M$ | $M + t * (M - m)$ |
+| `heaviside` | $x$ | $0 \text{ if } x < 0$ <br> $\frac{1}{2} \text{ if } x = 0$ <br> $1 \text{ if } x > 0$ |
+| `rect` | $x$ | $0 \text{ if } x < -\frac{1}{2} \text{ or } x > \frac{1}{2}$ <br> $1 \text{ if } -\frac{1}{2} \leq x \leq \frac{1}{2}$ |
+| `triangle`<br>`tri` | $x$ | $0 \text{ if } x < -1 \text{ or } x > 1$ <br> $1 - \|x\|; \text{ if } -1 \leq x \leq 1$ |
+| `abs` | $x$ | $\|x\|$ |
+| `min` | $a, b$ | $\min(a,b)$ |
+| `min3` | $a, b, c$ | $\min(a,b,c)$ |
+| `min4` | $a, b, c, d$ | $\min(a,b,c,d)$ |
+| `max` | $a, b$ | $\max(a,b)$ |
+| `max3` | $a, b, c$ | $\max(a,b,c)$ |
+| `max4` | $a, b, c, d$ | $\max(a,b,c,d)$ |
+| `if` | $x, T, F$ | $F \text{ if } x < 0$ <br> $T \text{ if } 0\leq x$ |
+| `ifn` | $x, T, F$ | $T \text{ if } x\leq 0$ <br> $F \text{ if } 0 < x$ |
+| `ifz` | $x, T, F$ | $T \text{ if } x = 0$ <br> $F \text{ if } x\neq 0$ |
+| `in` | $x, L, U, T, F$ | $T \text{ if } L\leq x\leq U$ <br> $F \text{ if } x < L \text{ or } U < x$ |
+| `out` | $x, L, U, T, F$ | $F \text{ if } L\leq x\leq U$ <br> $T \text{ if } x < L \text{ or } U < x$ |
+
+Notes :
+- `out(x, L, U, T, F) = in(x, L, U, F, T)`
+- `if(x, T, F) = in(x, 0, inf, T, F)`
+- `ifn(x, T, F) = in(x, -inf, 0, T, F)`
+- `ifn(x, T, F) = if(-x, T, F)`
+- It is possible to use `_` inside one of these function to remove some part of the graph.
 
 ### Alphabetically-sorted list of every included constants and functions
 
