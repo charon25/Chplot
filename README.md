@@ -541,12 +541,12 @@ Documentation: https://mpmath.org/doc/current/
 | `normcdf` | Normal distribution CDF | $$x, \mu, \sigma$$ | $$\frac{1}{2}\left(1 + \mathrm{erf}\left(\frac{x - \mu}{\sigma\sqrt{2}}\right) \right)$$ |
 | `unormpdf` | Unit normal distribution PDF | $$x$$ | $$\frac{1}{\sqrt{2\pi}}\mathrm{e}^{-\frac{x^2}{2}}$$ |
 | `unormcdf` | Unit normal distribution CDF | $$x$$ | $$\frac{1}{2}\left(1 + \mathrm{erf}\left(\frac{x}{\sqrt{2}}\right) \right)$$ |
-| `tripdf` | Triangle distribution PDF | $$x, a, b, c$$ | $$0 \text{ if } x\leq a \text{ or } x > b$$ <br> $$\frac{2(x-a)}{(b-a)(c-a)} \text{ if } a< x\leq c$$ <br> $$\frac{2(b-x)}{(b-a)(b-c)} \text{ if } c<x\leq b $$ |
-| `tricdf` | Triangle distribution CDF | $$x, a, b, c$$ | $$0 \text{ if } x < a$$ <br> $$\frac{(x-a)^2}{(b-a)(c-a)} \text{ if } a\leq x\leq c$$ <br> $$1 - \frac{(b-x)^2}{(b-a)(b-c)} \text{ if } c<x\leq b$$ <br> $$1 \text{ if }b<x $$ |
-| `uniformpdf` | Uniform distribution PDF | $$x, a, b$$ | $$0 \text{ if } x< a \text{ or } x > b$$ <br> $$\frac{1}{b-a} \text{ if } a\leq x\leq b$$ |
-| `uniformcdf` | Uniform distribution CDF | $$x, a, b$$ | $$0 \text{ if } x < a$$ <br> $$\frac{x-a}{b-a} \text{ if } a\leq x\leq b$$ <br> $$1 \text{ if }b<x $$ |
-| `exppdf` | Exponential distribution PDF | $$x, \lambda$$ | $$0 \text{ if } x<0$$ <br> $$\lambda\mathrm{e}^{-\lambda x} \text{ if } 0\leq x$$ |
-| `expcdf` | Exponential distribution CDF | $$x, \lambda$$ | $$0 \text{ if } x<0$$ <br> $$1 - \mathrm{e}^{-\lambda x} \text{ if } 0\leq x$$ |
+| `tripdf` | Triangle distribution PDF | $$x, a, b, c$$ | $$0 \text{ if } x\leq a \text{ or } x > b$$ <br> $$\frac{2(x-a)}{(b-a)(c-a)} \text{ if } a < x\leq c$$ <br> $$\frac{2(b-x)}{(b-a)(b-c)} \text{ if } c < x\leq b$$ |
+| `tricdf` | Triangle distribution CDF | $$x, a, b, c$$ | $$0 \text{ if } x < a$$ <br> $$\frac{(x-a)^2}{(b-a)(c-a)} \text{ if } a\leq x\leq c$$ <br> $$1 - \frac{(b-x)^2}{(b-a)(b-c)} \text{ if } c < x\leq b$$ <br> $$1 \text{ if }b < x $$ |
+| `uniformpdf` | Uniform distribution PDF | $$x, a, b$$ | $$0 \text{ if } x < a \text{ or } x > b$$ <br> $$\frac{1}{b-a} \text{ if } a\leq x\leq b$$ |
+| `uniformcdf` | Uniform distribution CDF | $$x, a, b$$ | $$0 \text{ if } x < a$$ <br> $$\frac{x-a}{b-a} \text{ if } a\leq x\leq b$$ <br> $$1 \text{ if }b < x $$ |
+| `exppdf` | Exponential distribution PDF | $$x, \lambda$$ | $$0 \text{ if } x < 0$$ <br> $$\lambda\mathrm{e}^{-\lambda x} \text{ if } 0\leq x$$ |
+| `expcdf` | Exponential distribution CDF | $$x, \lambda$$ | $$0 \text{ if } x < 0$$ <br> $$1 - \mathrm{e}^{-\lambda x} \text{ if } 0\leq x$$ |
 | `studentpdf` | Student's t-distribution PDF | $$x, \nu$$ | [Wikipedia](https://en.wikipedia.org/wiki/Student%27s_t-distribution) |
 | `studentcdf` | Student's t-distribution CDF | $$x, \nu$$ | [Wikipedia](https://en.wikipedia.org/wiki/Student%27s_t-distribution) |
 | `betapdf` | Beta distribution PDF | $$x, \alpha, \beta$$ | [Wikipedia](https://en.wikipedia.org/wiki/Beta_distribution) |
