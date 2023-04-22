@@ -48,11 +48,9 @@ _MPMATH_MODULE_FUNCTION_RENAMED: tuple[str, int, str] = {
     ('W', 1, 'lambertw'),
     ('Ei', 1, 'ei'),
 
-    ('normsinc', 1, 'sincpi'), ('nsinc', 1, 'sincpi'),
-
     ('gammainc2', 3, 'gammainc'),
 
-    ('hurwitz', 2, 'zeta'), ('hurwitzzeta', 2, 'zeta'), ('eta', 1, 'altzeta'), ('nzetazeros', 1, 'nzeros')
+    ('eta', 1, 'altzeta'), ('nzetazeros', 1, 'nzeros')
 
 }
 

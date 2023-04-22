@@ -38,7 +38,7 @@ _SCIPY_SPECIAL_MODULE_FUNCTION_NAMES: tuple[int, str] = [
 _SCIPY_SPECIAL_MODULE_FUNCTION_RENAMED: tuple[str, int, str] = {
     ('binomial', 2, 'binom'),
 
-    ('normsinc', 1, 'sinc'), ('nsinc', 1, 'sinc'), ('sincpi', 1, 'sinc'),
+    ('sincpi', 1, 'sinc'),
 
     ('fac', 1, 'factorial'),
 
@@ -46,7 +46,7 @@ _SCIPY_SPECIAL_MODULE_FUNCTION_RENAMED: tuple[str, int, str] = {
 
     ('struveh', 2, 'struve'), ('struvel', 2, 'modstruve'),
 
-    ('hurwitz', 2, 'zeta'),
+    ('hurwitz', 2, 'zeta'), ('hurwitzzeta', 2, 'zeta'),
 
 }
 
