@@ -597,6 +597,69 @@ Notes :
 
 ### Alphabetically-sorted list of every included constants and functions
 
+<details>
+    <summary>Click to reveal</summary>
+
+    |   |   |   |   |   |   |
+    |:-:|:-:|:-:|:-:|:-:|:-:|
+    |`_`|`a0`|`abs`|`acos`|`acosh`|`acot`|
+    |`acoth`|`acsc`|`acsch`|`agm`|`Ai`|`Aip`|
+    |`alpha`|`altzeta`|`angerj`|`apery`|`asec`|`asech`|
+    |`asin`|`asinh`|`atan`|`atan2`|`atanh`|`AU`|
+    |`b`|`backlunds`|`barnesg`|`bei`|`beip`|`bent`|
+    |`ber`|`berp`|`besseli`|`besselj`|`besselk`|`bessely`|
+    |`beta`|`betacdf`|`betainc`|`betainc2`|`betaincinv`|`betaln`|
+    |`betapdf`|`Bi`|`binom`|`binomial`|`Bip`|`bp`|
+    |`brun`|`c`|`c1`|`c1L`|`c2`|`catalan`|
+    |`cauchycdf`|`cauchypdf`|`cbrt`|`ceil`|`chebyt`|`chebyu`|
+    |`Chi`|`chi2cdf`|`chi2pdf`|`Ci`|`clcos`|`clsin`|
+    |`copysign`|`cos`|`cosh`|`cospi`|`cot`|`coth`|
+    |`coulombc`|`coulombf`|`coulombg`|`csc`|`csch`|`degrees`|
+    |`digamma`|`dnuCs`|`e`|`eAi`|`eAip`|`eBi`|
+    |`eBip`|`ec`|`Eh`|`Ei`|`ellipe`|`ellipeinc`|
+    |`ellipf`|`ellipk`|`ellipkinc`|`ellippi`|`elliprc`|`elliprd`|
+    |`elliprf`|`elliprg`|`elliprj`|`em`|`eps0`|`epsilon0`|
+    |`erf`|`erfc`|`erfcinv`|`erfi`|`erfinv`|`eta`|
+    |`eV`|`exp`|`expcdf`|`expm1`|`exppdf`|`F`|
+    |`fac`|`fac2`|`factorial`|`feigenbauma`|`feigenbaumd`|`ff`|
+    |`fib`|`fibonacci`|`floor`|`fmod`|`fresnelc`|`fresnels`|
+    |`G`|`g`|`G0`|`ga`|`gamma`|`gammacdf`|
+    |`gammainc`|`gammainc2`|`gammaincc`|`gammainccinv`|`gammaincinv`|`gammapdf`|
+    |`ge`|`gegenbauer`|`GF0`|`glaisher`|`gmu`|`gP`|
+    |`h`|`harmonic`|`hb`|`heaviside`|`hermite`|`hurwitz`|
+    |`hurwitzzeta`|`hyp0f1`|`hyp1f1`|`hyp1f2`|`hyp2f0`|`hyp2f1`|
+    |`hyp2f3`|`hyp3f2`|`hyperfac`|`hyperu`|`hypot`|`if`|
+    |`ifn`|`ifz`|`in`|`inf`|`it2struve0`|`itmodstruve0`|
+    |`itstruve0`|`iv`|`jacobi`|`jv`|`kB`|`ke`|
+    |`kei`|`keip`|`ker`|`kerp`|`khi2cdf`|`khi2pdf`|
+    |`khinchin`|`KJ`|`kv`|`laguerre`|`lambertw`|`legendre`|
+    |`legenp`|`legenq`|`lerchphi`|`lerp`|`lerpt`|`lgamma`|
+    |`Li`|`li`|`ln`|`lngamma`|`log`|`log10`|
+    |`log1p`|`log2`|`loggamma`|`lommels1`|`lommels2`|`lrelu`|
+    |`ly`|`M12C`|`m12C`|`max`|`max3`|`max4`|
+    |`Mcharon`|`me`|`Mearth`|`mertens`|`min`|`min3`|
+    |`min4`|`Mjupiter`|`Mmars`|`Mmercury`|`Mmoon`|`mmu`|
+    |`mn`|`Mneptune`|`modstruve`|`mp`|`Mpluto`|`Msaturn`|
+    |`Msun`|`mt`|`mtau`|`Mu`|`mu`|`mu0`|
+    |`muB`|`muN`|`Muranus`|`Mvenus`|`NA`|`nan`|
+    |`normcdf`|`normpdf`|`nzetazeros`|`out`|`pc`|`pcfd`|
+    |`pcfu`|`pcfv`|`pcfw`|`phi`|`pi`|`polyexp`|
+    |`polylog`|`primepi`|`primezeta`|`psi`|`R`|`radians`|
+    |`ramp`|`Rcharon`|`re`|`Rearth`|`rect`|`relu`|
+    |`remainder`|`rf`|`rgamma`|`riemannr`|`Rinf`|`Rjupiter`|
+    |`RK`|`Rmars`|`Rmercury`|`Rmoon`|`Rneptune`|`Rpluto`|
+    |`Rsaturn`|`Rsun`|`Ruranus`|`Rvenus`|`Ry`|`scorergi`|
+    |`scorerhi`|`sec`|`sech`|`secondzeta`|`sgn`|`Shi`|
+    |`Si`|`siegeltheta`|`siegelz`|`sigm`|`sigma`|`sigmae`|
+    |`sigmoid`|`sign`|`sin`|`sinc`|`sincpi`|`sinh`|
+    |`sqrt`|`sqrt2`|`stieltjes`|`struve`|`struveh`|`struvel`|
+    |`studentcdf`|`studentpdf`|`superfac`|`tan`|`tanh`|`tau`|
+    |`tri`|`triangle`|`tricdf`|`tripdf`|`trunc`|`uniformcdf`|
+    |`uniformpdf`|`unormcdf`|`unormpdf`|`VmSi`|`W`|`webere`|
+    |`whitm`|`whitw`|`yv`|`Z0`|`zeta`||
+
+</details>
+
 
 ## Graph and computations examples
 
