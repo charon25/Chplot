@@ -357,6 +357,7 @@ Documentation: https://docs.python.org/3/library/math.html
 | `cos` | `cos` | 1 | |
 | `cosh` | `cosh` | 1 | |
 | `degrees` | `degrees` | 1 | |
+| `dist` | `dist` | 4 | `dist(x1, y1, x2, y2)` is interpreted as `math.dist((x1, y1), (x2, y2))` |
 | `erf` | `erf` | 1 | |
 | `erfc` | `erfc` | 1 | |
 | `exp` | `exp` | 1 | |
@@ -594,6 +595,8 @@ Notes :
 - It is possible to use `_` inside one of these function to remove some part of the graph.
 
 ### Alphabetically-sorted list of every included constants and functions
+
+TODO: mettre à jour ça à la fin
 
 <details>
     <summary>Click to reveal</summary>

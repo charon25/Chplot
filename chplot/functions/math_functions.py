@@ -26,5 +26,15 @@ _MATH_MODULE_FUNCTION_RENAMED: tuple[str, int, str] = {
     ('ln', 1, 'log')
 }
 
+
+def _dist(x1: float, y1: float, x2: float, y2: float) -> float:
+    return math.dist((x1, y1), (x2, y2))
+
+
 MATH_FUNCTIONS: FunctionDict = get_functions_from_module(math, _MATH_MODULE_FUNCTION_NAMES)
+
+MATH_FUNCTIONS.update({
+    'dist': (4, _dist),
+})
+
 MATH_FUNCTIONS.update(get_renamed_functions_from_module(math, _MATH_MODULE_FUNCTION_RENAMED))
