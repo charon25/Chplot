@@ -20,6 +20,8 @@ _MATH_CONSTANTS: FunctionDict = {
     'feigenbaumd': (0, 4.669_201_609_102_990_67),
     'feigenbauma': (0, 2.502_907_875_095_892_82),
     'nan': (0, math.nan),
+    '_': (0, math.nan),
+    'inf': (0, math.inf),
 }
 
 # Based on https://en.wikipedia.org/wiki/List_of_physical_constants

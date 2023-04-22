@@ -21,6 +21,24 @@ def _unit_norm_cdf(x: float) -> float:
     # 1.4142135623730951 = sqrt(2)
     return 0.5 * (1 + math.erf(x / 1.4142135623730951))
 
+
+def _triangle_pdf(x: float, a: float, b: float, c: float) -> float:
+    if x < a or x > b:
+        return 0
+    if x <= c:
+        return 2 * (x - a) / ((b - a) * (c - a))
+    return 2 * (b - x) / ((b - a) * (b - c))
+
+def _triangle_cdf(x: float, a: float, b: float, c: float) -> float:
+    if x < a:
+        return 0
+    if x <= c:
+        return ((x - a) ** 2) / ((b - a) * (c - a))
+    if x <= b:
+        return 1 - ((b - x) ** 2) / ((b - a) * (b - c))
+    return 1
+
+
 def _uniform_pdf(x: float, a: float, b: float) -> float:
     return 1 / (b - a) if a <= x <= b else 0
 
@@ -29,11 +47,13 @@ def _uniform_cdf(x: float, a: float, b: float) -> float:
         return (x - a) / (b - a)
     return 0 if x < a else 1
 
-def _expon_pdf(x: float, lamb: float) -> float:
-    return lamb * math.exp(-lamb * x) if x >= 0 else 0
 
-def _expon_cdf(x: float, lamb: float) -> float:
-    return 1 - math.exp(-lamb * x) if x >= 0 else 0
+def _expon_pdf(x: float, _lambda: float) -> float:
+    return _lambda * math.exp(-_lambda * x) if x >= 0 else 0
+
+def _expon_cdf(x: float, _lambda: float) -> float:
+    return 1 - math.exp(-_lambda * x) if x >= 0 else 0
+
 
 def _cauchy_pdf(x: float, x0: float, gamma: float) -> float:
     return 1 / (math.pi * gamma * (1 + ((x - x0) / gamma) ** 2))
@@ -42,17 +62,20 @@ def _cauchy_cdf(x: float, x0: float, gamma: float) -> float:
     # 0.3183098861837907 = 1 / pi
     return 0.5 + 0.3183098861837907 * math.atan((x - x0) / gamma)
 
+
 def _student_pdf(x: float, nu: float) -> float:
     return scipy.stats.t.pdf(x, nu)
 
 def _student_cdf(x: float, nu: float) -> float:
     return scipy.stats.t.cdf(x, nu)
 
+
 def _beta_pdf(x: float, alpha: float, beta: float) -> float:
     return scipy.stats.beta.pdf(x, alpha, beta)
 
 def _beta_cdf(x: float, alpha: float, beta: float) -> float:
     return scipy.stats.beta.cdf(x, alpha, beta)
+
 
 def _chi2_pdf(x: float, k: float) -> float:
     return scipy.stats.chi2.pdf(x, k)
@@ -74,12 +97,15 @@ PROBABILITY_FUNCTIONS: FunctionDict = {
     'unormpdf': (1, _unit_norm_pdf),
     'normcdf': (3, _norm_cdf),
     'unormcdf': (1, _unit_norm_cdf),
+    # Triangle distribution,
+    'tripdf': (4, _triangle_pdf),
+    'tricdf': (4, _triangle_cdf),
     # Uniform distribution
     'uniformpdf': (3, _uniform_pdf),
     'uniformcdf': (3, _uniform_cdf),
     # Exponential distribution
-    'exponpdf': (2, _expon_pdf),
-    'exponcdf': (2, _expon_cdf),
+    'exppdf': (2, _expon_pdf),
+    'expcdf': (2, _expon_cdf),
     # Student's t distribution
     'studentpdf': (2, _student_pdf),
     'studentcdf': (2, _student_cdf),

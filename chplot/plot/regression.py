@@ -105,17 +105,19 @@ def _remove_nan(arr1: Union[list[float], np.ndarray], arr2: Union[list[float], n
 
 
 # Ref : https://stackoverflow.com/questions/19189362/getting-the-r-squared-value-using-curve-fit
-def _compute_r_squared_and_error(ydata: np.ndarray, yfit: np.ndarray) -> tuple[float, float]:
+def _compute_r_squared_and_errors(ydata: np.ndarray, yfit: np.ndarray) -> tuple[float, float]:
     residuals = ydata - yfit
     sum_sq_res = np.sum(residuals ** 2)
     sum_sq_tot = np.sum((ydata - np.mean(ydata)) ** 2)
 
     max_error = np.max(np.abs(residuals))
+    non_zero_indices = ~np.isclose(ydata, 0)
+    max_rel_error = np.max(np.abs(residuals[non_zero_indices] / ydata[non_zero_indices]))
 
     if sum_sq_tot == 0:
-        return (1, max_error)
+        return (1, max_error, max_rel_error)
 
-    return (1 - sum_sq_res / sum_sq_tot, max_error)
+    return (1 - sum_sq_res / sum_sq_tot, max_error, max_rel_error)
 
 
 def compute_regressions(parameters: PlotParameters, graphs: list[Graph]) -> list[Graph]:
@@ -174,11 +176,16 @@ def compute_regressions(parameters: PlotParameters, graphs: list[Graph]) -> list
             LOGGER.error("error while computing regression of '%s', try reducing the number of parameters or simplifying the expression", graph.expression)
             continue
 
+        if np.isnan(parameters_values).any():
+            pbar.close()
+            LOGGER.error("error while computing regression of '%s', try changing the number of parameters or simplifying the expression", graph.expression)
+            continue
+
         pbar.close()
 
         custom_inputs = np.linspace(graph.inputs.min(), graph.inputs.max(), parameters.n_points, endpoint=True)
 
-        r2, max_error = _compute_r_squared_and_error(*_remove_nan(values_without_nan, _regression_function(inputs_without_nan, *parameters_values)))
+        r2, max_error, max_rel_error = _compute_r_squared_and_errors(*_remove_nan(values_without_nan, _regression_function(inputs_without_nan, *parameters_values)))
 
         regression_graphs.append(Graph(
             inputs=custom_inputs,
@@ -197,6 +204,7 @@ def compute_regressions(parameters: PlotParameters, graphs: list[Graph]) -> list
         file.write(f'\n  Accuracy on [{graph.inputs.min():.3f} ; {graph.inputs.max():.3f}]:\n')
         file.write(f'    R2 = {r2}\n')
         file.write(f'    |err| <= {max_error}\n')
+        file.write(f'    |rel err| <= {max_rel_error}\n')
         file.write(f'\n  Copyable expression:\n    f(x) = {_get_fit_expression(parameters.regression_expression, parameters_names, parameters_values)}\n\n\n')
 
     return regression_graphs
