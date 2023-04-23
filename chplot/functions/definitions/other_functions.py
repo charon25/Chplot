@@ -1,7 +1,5 @@
 import math
 
-from chplot.functions.utils import FunctionDict
-
 
 def _relu(x: float) -> float:
     return x if x > 0 else 0
@@ -52,39 +50,3 @@ def _in(x: float, lower: float, upper: float, _true: float, _false: float) -> fl
 
 def _out(x: float, lower: float, upper: float, _true: float, _false: float) -> float:
     return _false if lower <= x <= upper else _true
-
-
-OTHER_FUNCTIONS: FunctionDict = {
-    'relu': (1, _relu),
-    'lrelu': (2, _leaky_relu),
-
-    'sigm': (1, _sigmoid),
-    'sigmoid': (1, _sigmoid),
-
-    'sign': (1, _sign),
-    'sgn': (1, _sign),
-
-    'lerp': (5, _lerp),
-    'lerpt': (3, _lerpt),
-
-    'heaviside': (1, _heaviside),
-    'ramp': (1, _relu),
-    'rect': (1, _rect),
-    'triangle': (1, _triangle),
-    'tri': (1, _triangle),
-
-    'abs': (1, abs),
-
-    'min': (2, min),
-    'min3': (3, min),
-    'min4': (4, min),
-    'max': (2, max),
-    'max3': (3, max),
-    'max4': (4, max),
-
-    'if': (3, _if),
-    'ifn': (3, _ifn),
-    'ifz': (3, _ifz),
-    'in': (5, _in),
-    'out': (5, _out),
-}

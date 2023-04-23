@@ -667,7 +667,6 @@ TODO: mettre à jour ça à la fin
 
 ## Future improvements
 
-- Loading function from external package only when used by any expression.
 - Parallelizing computation of expressions.
 - Pre-computing any constant part in the expressions.
 

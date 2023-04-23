@@ -1,12 +1,12 @@
 import csv
 import math
-from typing import Any
+from typing import Any, Optional
 
 import numpy as np
 import matplotlib.pyplot as plt
 from shunting_yard import MismatchedBracketsError, shunting_yard
 
-from chplot.functions import FUNCTIONS
+from chplot.functions import FUNCTIONS, load_necessary_functions
 from chplot.plot.derivative import compute_derivatives
 from chplot.plot.files import read_files
 from chplot.plot.integral import compute_and_print_integrals
@@ -18,6 +18,41 @@ from chplot.plot.utils import LOGGER
 from chplot.plot.zeros import compute_and_print_zeros
 from chplot.rpn import compute_rpn_list, get_rpn_errors
 
+
+
+def _load_functions(parameters: PlotParameters) -> None:
+    """Compute the RPN of every expression, and load all functions necessary to compute them."""
+    all_expressions: list[str] = [
+        *parameters.expressions,
+        *parameters.x_lim,
+        *parameters.y_lim,
+        parameters.regression_expression,
+    ]
+
+    # Separate constants to check for error in the parsing
+    # But do not act on the error here
+    for constant in parameters.constants:
+        try:
+            all_expressions.append(constant.split('=')[1])
+        except Exception:
+            pass
+
+    all_rpns: list[str] = []
+
+    for expression in all_expressions:
+        try:
+            all_rpns.append(shunting_yard(
+                expression,
+                case_sensitive=True,
+                variable=parameters.variable,
+                convert_scientific_notation=not parameters.disable_scientific_notation,
+            ))
+        # The exception will be logged later when the RPN is re-computed in the relevant place
+        # Here, just ignore it
+        except Exception:
+            pass
+    
+    load_necessary_functions(all_rpns)
 
 
 def _get_x_lim(parameters: PlotParameters) -> tuple[float, float]:
@@ -113,10 +148,10 @@ def _generate_graphs(parameters: PlotParameters, inputs: np.ndarray) -> list[Gra
                 convert_scientific_notation=not parameters.disable_scientific_notation
             )
         except MismatchedBracketsError:
-            LOGGER.error("mismatched brackets in the expression '%s'", expression)
+            LOGGER.error("mismatched brackets in the plotted expression '%s'", expression)
             continue
         except Exception:
-            LOGGER.error("unknown error in the expression '%s'", expression)
+            LOGGER.error("unknown error in the plotted expression '%s'", expression)
             continue
 
         if (error := get_rpn_errors(rpn, variable=parameters.variable)) is not None:
@@ -298,6 +333,9 @@ def plot(parameters: PlotParameters) -> None:
     """
 
     set_default_values(parameters)
+
+    _load_functions(parameters)
+
     retrieve_python_functions(parameters)
     convert_parameters_expression(parameters)
     replace_implicit_variable_multiplication(parameters)

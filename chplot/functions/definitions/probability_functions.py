@@ -2,8 +2,6 @@ import math
 
 import scipy.stats
 
-from chplot.functions.utils import FunctionDict
-
 
 def _norm_pdf(x: float, mu: float, sigma: float) -> float:
     # 2.5066282746310002 = sqrt(2*pi)
@@ -89,38 +87,3 @@ def _gamma_pdf(x: float, alpha: float, beta: float) -> float:
 
 def _gamma_cdf(x: float, alpha: float, beta: float) -> float:
     return scipy.stats.gamma.cdf(x, alpha, scale=1/beta)
-
-
-PROBABILITY_FUNCTIONS: FunctionDict = {
-    # Normal distribution
-    'normpdf': (3, _norm_pdf),
-    'unormpdf': (1, _unit_norm_pdf),
-    'normcdf': (3, _norm_cdf),
-    'unormcdf': (1, _unit_norm_cdf),
-    # Triangle distribution,
-    'tripdf': (4, _triangle_pdf),
-    'tricdf': (4, _triangle_cdf),
-    # Uniform distribution
-    'uniformpdf': (3, _uniform_pdf),
-    'uniformcdf': (3, _uniform_cdf),
-    # Exponential distribution
-    'exppdf': (2, _expon_pdf),
-    'expcdf': (2, _expon_cdf),
-    # Student's t distribution
-    'studentpdf': (2, _student_pdf),
-    'studentcdf': (2, _student_cdf),
-    # Beta distribution
-    'betapdf': (3, _beta_pdf),
-    'betacdf': (3, _beta_cdf),
-    # Chi squared distribution
-    'chi2pdf': (2, _chi2_pdf),
-    'khi2pdf': (2, _chi2_pdf),
-    'chi2cdf': (2, _chi2_cdf),
-    'khi2cdf': (2, _chi2_cdf),
-    # Gamma distribution
-    'gammapdf': (3, _gamma_pdf),
-    'gammacdf': (3, _gamma_cdf),
-    # Cauchy distribution
-    'cauchypdf': (3, _cauchy_pdf),
-    'cauchycdf': (3, _cauchy_cdf),
-}

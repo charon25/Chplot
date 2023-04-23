@@ -7,7 +7,7 @@ import re
 from types import BuiltinFunctionType, ModuleType
 from typing import Any, Callable, Literal, Optional, Union
 
-from shunting_yard import shunting_yard
+from shunting_yard import MismatchedBracketsError, shunting_yard
 
 from chplot.functions import FUNCTIONS
 from chplot.functions.utils import FunctionDict
@@ -70,12 +70,19 @@ def _convert_single_expression(expression: Optional[str], default_value_nan: Any
     if default_value_nan is None:
         default_value_nan = None
 
-    rpn = shunting_yard(
-        expression=str(expression),
-        case_sensitive=True,
-        variable=None,
-        convert_scientific_notation=not disable_scientific_notation
-    )
+    try:
+        rpn = shunting_yard(
+            expression=str(expression),
+            case_sensitive=True,
+            variable=None,
+            convert_scientific_notation=not disable_scientific_notation
+        )
+    except MismatchedBracketsError:
+        LOGGER.error("mismatched brackets in the expression '%s'", expression)
+        return None
+    except Exception:
+        LOGGER.error("unknown error in the expression '%s'", expression)
+        return None
 
     if (error := get_rpn_errors(rpn, variable=None)) is not None:
         LOGGER.warning("error while computing expression '%s': %s", expression, error)
