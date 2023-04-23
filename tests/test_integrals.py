@@ -3,7 +3,7 @@ logging.disable(logging.CRITICAL)
 import math
 import unittest
 
-from chplot.plot.plot import _generate_graphs, _generate_inputs
+from chplot.plot.plot import _generate_graphs, _generate_inputs, _load_functions
 from chplot.plot.plot_parameters import convert_parameters_expression, set_default_values
 from chplot.plot.integral import _compute_integral
 from mock_parameters import MockParameters
@@ -44,6 +44,7 @@ class TestComputeIntegrals(unittest.TestCase):
     def test_integral_half_circle(self):
         parameters = MockParameters(expressions=['sqrt(1-x^2)'], x_lim=(-1, 1))
         set_default_values(parameters)
+        _load_functions(parameters)
         inputs = _generate_inputs(parameters)
         graph = _generate_graphs(parameters, inputs)[0]
         integral, abs_error = _compute_integral(parameters, graph)
@@ -63,6 +64,7 @@ class TestComputeIntegrals(unittest.TestCase):
     def test_integral_discontinuity(self):
         parameters = MockParameters(expressions=['heaviside(x)'], x_lim=(-2, 2))
         set_default_values(parameters)
+        _load_functions(parameters)
         inputs = _generate_inputs(parameters)
         graph = _generate_graphs(parameters, inputs)[0]
         integral, abs_error = _compute_integral(parameters, graph)
@@ -72,6 +74,7 @@ class TestComputeIntegrals(unittest.TestCase):
     def test_integral_nan(self):
         parameters = MockParameters(expressions=['sqrt(abs(x) - 2)'], x_lim=(-4, 4))
         set_default_values(parameters)
+        _load_functions(parameters)
         inputs = _generate_inputs(parameters)
         graph = _generate_graphs(parameters, inputs)[0]
         integral, abs_error = _compute_integral(parameters, graph)

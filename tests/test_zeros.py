@@ -5,7 +5,7 @@ import unittest
 
 import numpy as np
 
-from chplot.plot.plot import _generate_graphs, _generate_inputs
+from chplot.plot.plot import _generate_graphs, _generate_inputs, _load_functions
 from chplot.plot.plot_parameters import set_default_values
 from chplot.plot.utils import GraphType, ZerosList
 from chplot.plot.zeros import _compute_zeros, _compute_simple_zero_with_interpolation
@@ -88,6 +88,7 @@ class TestComputeZeros(unittest.TestCase):
     def test_one_zero_interval(self):
         parameters = MockParameters(expressions=['1-rect(x)'], x_lim=(-2, 2))
         set_default_values(parameters)
+        _load_functions(parameters)
         inputs = _generate_inputs(parameters)
         graph = _generate_graphs(parameters, inputs)[0]
 
@@ -96,6 +97,7 @@ class TestComputeZeros(unittest.TestCase):
     def test_one_zero_interval_one_simple_zero(self):
         parameters = MockParameters(expressions=['ifn(x, x, ifn(x - 1, 0, ifn(x - 2, x - 1, 3 - x)))'], x_lim=(-1, 4))
         set_default_values(parameters)
+        _load_functions(parameters)
         inputs = _generate_inputs(parameters)
         graph = _generate_graphs(parameters, inputs)[0]
 
@@ -104,6 +106,7 @@ class TestComputeZeros(unittest.TestCase):
     def test_one_zero_interval_beginning(self):
         parameters = MockParameters(expressions=['1-rect(x - 0.5)'], x_lim=(0, 2))
         set_default_values(parameters)
+        _load_functions(parameters)
         inputs = _generate_inputs(parameters)
         graph = _generate_graphs(parameters, inputs)[0]
 
@@ -112,6 +115,7 @@ class TestComputeZeros(unittest.TestCase):
     def test_one_zero_interval_end(self):
         parameters = MockParameters(expressions=['1-rect(x - 0.5)'], x_lim=(-1, 1))
         set_default_values(parameters)
+        _load_functions(parameters)
         inputs = _generate_inputs(parameters)
         graph = _generate_graphs(parameters, inputs)[0]
 

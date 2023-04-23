@@ -6,7 +6,7 @@ logging.disable(logging.CRITICAL)
 import math
 import unittest
 
-from chplot.functions import FUNCTIONS
+from chplot.functions import FUNCTIONS, load_necessary_functions
 from chplot.functions.utils import FunctionDict
 from chplot.plot.plot_parameters import convert_parameters_expression, replace_implicit_variable_multiplication, set_default_values
 from mock_parameters import MockParameters
@@ -44,6 +44,7 @@ class TestConvertParametersLimits(unittest.TestCase):
 
     def test_xlim_expression(self):
         parameters = MockParameters(x_lim=("sqrt(2)", "pi + 1"))
+        load_necessary_functions(['2 sqrt'])
         set_default_values(parameters)
 
         convert_parameters_expression(parameters)
@@ -90,6 +91,7 @@ class TestConvertParametersLimits(unittest.TestCase):
 
     def test_ylim_expression(self):
         parameters = MockParameters(y_lim=("sqrt(2)", "pi + 1"))
+        load_necessary_functions(['2 sqrt'])
         set_default_values(parameters)
 
         convert_parameters_expression(parameters)
@@ -141,6 +143,7 @@ class TestConvertParametersConstants(unittest.TestCase):
     def test_three_complex_constants(self):
         parameters = MockParameters(constants=['a=sqrt(2)+1', 'b=pi/2-4', 'c=1/(1+4/7)'])
         set_default_values(parameters)
+        load_necessary_functions(['2 sqrt'])
 
         convert_parameters_expression(parameters)
 
@@ -165,6 +168,7 @@ class TestConvertParametersConstants(unittest.TestCase):
     def test_constant_equals_nan(self):
         parameters = MockParameters(constants=['a=1/0', 'b=zeta(1)'])
         set_default_values(parameters)
+        load_necessary_functions(['2 zeta'])
 
         convert_parameters_expression(parameters)
 

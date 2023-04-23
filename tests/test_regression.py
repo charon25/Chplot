@@ -5,9 +5,10 @@ import unittest
 
 import numpy as np
 
-from chplot.plot.regression import _get_unique_regression_parameters
-from chplot.plot.regression import _check_regression_expression, compute_regressions
+from chplot.plot.plot_parameters import set_default_values
 from chplot.plot.regression import  _get_fit_expression, _get_fit_rpn
+from chplot.plot.regression import _check_regression_expression, compute_regressions
+from chplot.plot.regression import _get_unique_regression_parameters
 from chplot.plot.utils import Graph, GraphType
 
 from mock_parameters import MockParameters
@@ -16,29 +17,36 @@ from mock_parameters import MockParameters
 class TestCheckRegressionExpression(unittest.TestCase):
 
     def test_correct_regression_expression(self):
-        parameters = MockParameters(regression_expression='_ra * x', variable='x')
+        parameters = MockParameters(regression_expression='_ra * x')
+        set_default_values(parameters)
         self.assertEqual(_check_regression_expression(parameters), '_ra x *')
 
     def test_mismatched_brackets(self):
-        parameters = MockParameters(regression_expression='(_ra * x', variable='x')
+        parameters = MockParameters(regression_expression='(_ra * x')
+        set_default_values(parameters)
         self.assertIsNone(_check_regression_expression(parameters))
 
     def test_no_regression_parameters(self):
-        parameters = MockParameters(regression_expression='x', variable='x')
+        parameters = MockParameters(regression_expression='x')
+        set_default_values(parameters)
         self.assertIsNone(_check_regression_expression(parameters))
 
-        parameters = MockParameters(regression_expression='_r*x', variable='x')
+        parameters = MockParameters(regression_expression='_r*x')
+        set_default_values(parameters)
         self.assertIsNone(_check_regression_expression(parameters))
 
     def test_invalid_regression_expression(self):
-        parameters = MockParameters(regression_expression='_ra * _unknown_func(x)', variable='x')
+        parameters = MockParameters(regression_expression='_ra * _unknown_func(x)')
+        set_default_values(parameters)
         self.assertIsNone(_check_regression_expression(parameters))
 
-        parameters = MockParameters(regression_expression='_ra * sin(x, 1)', variable='x')
+        parameters = MockParameters(regression_expression='_ra * sin(x, 1)')
+        set_default_values(parameters)
         self.assertIsNone(_check_regression_expression(parameters))
 
     def test_overlapping_parameters(self):
-        parameters = MockParameters(regression_expression='_ra * _rb', variable='x')
+        parameters = MockParameters(regression_expression='_ra * _rb')
+        set_default_values(parameters)
         self.assertIsNotNone(_check_regression_expression(parameters))
 
 
@@ -121,17 +129,20 @@ class TestComputeRegression(unittest.TestCase):
 
 
     def test_no_graphs(self):
-        parameters = MockParameters(n_points=10, regression_expression='_ra * x', variable='x')
+        parameters = MockParameters(n_points=10, regression_expression='_ra * x')
+        set_default_values(parameters)
         self.assertListEqual(compute_regressions(parameters, []), [])
 
     def test_error_in_regression_expression(self):
         regression_expressions = ('(_ra * x', 'x', '_ra * _unknown_func(x)', '_ra * sin(x, 1)')
         for expression in regression_expressions:
-            parameters = MockParameters(n_points=10, regression_expression=expression, variable='x')
+            parameters = MockParameters(n_points=10, regression_expression=expression)
+            set_default_values(parameters)
             self.assertListEqual(compute_regressions(parameters, [Graph(None, None, None, None, None)]), [])
 
     def test_linear_regression_10_points(self):
-        parameters = MockParameters(n_points=10, regression_expression='_ra * x', variable='x')
+        parameters = MockParameters(n_points=10, regression_expression='_ra * x')
+        set_default_values(parameters)
 
         inputs = np.linspace(1, 2, parameters.n_points)
         values = 3 * inputs
@@ -143,7 +154,8 @@ class TestComputeRegression(unittest.TestCase):
         self.assertRegressionGraphEqual(regression_graphs[0], inputs, f'Regression [{graph.expression}]', values)
 
     def test_cubic_regression_1000_points(self):
-        parameters = MockParameters(n_points=1000, regression_expression='_ra * x^3 + _rb * x^2 + _rc * x + _rd', variable='x')
+        parameters = MockParameters(n_points=1000, regression_expression='_ra * x^3 + _rb * x^2 + _rc * x + _rd')
+        set_default_values(parameters)
 
         inputs = np.linspace(1, 2, parameters.n_points)
         values = 3 * inputs**3 - 2 * inputs**2 + inputs - 5
@@ -155,7 +167,8 @@ class TestComputeRegression(unittest.TestCase):
         self.assertRegressionGraphEqual(regression_graphs[0], inputs, f'Regression [{graph.expression}]', values)
 
     def test_two_regressions_different_xlim_n_points_values(self):
-        parameters = MockParameters(n_points=10, regression_expression='_ra * x', variable='x')
+        parameters = MockParameters(n_points=10, regression_expression='_ra * x')
+        set_default_values(parameters)
 
         inputs1 = np.linspace(1, 2, parameters.n_points)
         values1 = 3 * inputs1
