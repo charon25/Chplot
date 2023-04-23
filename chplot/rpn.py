@@ -57,7 +57,9 @@ def compute_rpn_unsafe(rpn_tokens: list[str], x: float, variable: str = 'x') -> 
     stack: list[float] = []
 
     for token in rpn_tokens:
-        if token[0] in NUMBER_CHARS:
+        if type(token) in (int, float):
+            stack.append(token)
+        elif token[0] in NUMBER_CHARS:
             # Convert to float or int according to the presence of a dot
             stack.append(float(token) if '.' in token else int(token))
         elif token == variable:
@@ -84,10 +86,44 @@ def compute_rpn_unsafe(rpn_tokens: list[str], x: float, variable: str = 'x') -> 
     return stack[0] if not math.isinf(stack[0]) else math.nan
 
 
-def compute_rpn_list(rpn: str, inputs: Union[np.ndarray, list[float]], variable: str = 'x', progress_bar: bool = True) -> list[float]:
-    rpn_tokens = rpn.split()
+def pre_compute_rpn(rpn_tokens: list[str], variable: str = 'x') -> list[str]:
+    """Takes in RPN tokens and return RPN tokens with constant part computed.
+    Does not check if the RPN is valid first, use get_rpn_errors to do it first."""
+
+    if len(rpn_tokens) == 1:
+        return rpn_tokens
+
+    new_tokens: list[str] = []
+
+    # Each time it encouters a function, try to apply it to the previous tokens
+    # If it works, it was a constant, and the previous tokens are removed in favor of the result
+    for token in rpn_tokens:
+        if token[0] in NUMBER_CHARS or token == variable:
+            new_tokens.append(token)
+            continue
+
+        param_count, func = FUNCTIONS[token]
+        if param_count == 0:
+            new_tokens.append(float(func))
+            continue
+
+        parameters = new_tokens[-param_count:]
+        try:
+            result = float(func(*map(float, parameters)))
+            new_tokens = new_tokens[:-param_count]
+            new_tokens.append(result)
+        except Exception:
+            new_tokens.append(token)
+
+    return new_tokens
+
+
+def compute_rpn_list(rpn: str, inputs: np.ndarray, variable: str = 'x', progress_bar: bool = True) -> list[float]:
+    rpn_tokens = pre_compute_rpn(rpn.split(), variable=variable)
+
     if progress_bar:
         inputs_iter = tqdm(inputs, total=len(inputs), leave=False)
     else:
         inputs_iter = iter(inputs)
+
     return [compute_rpn_unsafe(rpn_tokens, float(x), variable) for x in inputs_iter]

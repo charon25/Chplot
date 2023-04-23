@@ -665,8 +665,7 @@ TODO: mettre à jour ça à la fin
 ## Graph and computations examples
 
 
-## Future improvements
+## Possible improvements
 
 - Parallelizing computation of expressions.
-- Pre-computing any constant part in the expressions.
 
