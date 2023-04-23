@@ -54,7 +54,7 @@ class TestRetrieveConstants(unittest.TestCase):
         self.assertListEqual(parameters.constants, ["x=1", "a=1", "y=2", "b=2", "c=3", "d=4", "z=3"])
 
 
-class TestRetrieveExperssions(unittest.TestCase):
+class TestRetrieveExpressions(unittest.TestCase):
     """The tests should be run (python -m unittest discover tests) from the parent directory in order for the filepaths to be correct."""
 
 
@@ -92,6 +92,11 @@ class TestRetrieveExperssions(unittest.TestCase):
         parameters = MockParameters(expressions=["x", fpe("expressions_1"), "x+1", fpe("expressions_3"), "x+2"])
         retrieve_expressions(parameters)
         self.assertListEqual(parameters.expressions, ["x", "x*2", "x+1", "x*3", "x*4", "x*5", "x+2"])
+
+    def test_comments(self):
+        parameters = MockParameters(expressions=[fpe("expressions_with_comments")])
+        retrieve_expressions(parameters)
+        self.assertListEqual(parameters.expressions, ["3x-1", "x+pi"])
 
 
 class TestGetDefaultRegressionExpression(unittest.TestCase):

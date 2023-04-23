@@ -54,7 +54,8 @@ def retrieve_expressions(parameters: PlotParameters) -> None:
     for expression in parameters.expressions:
         try:
             with open(expression, 'r', encoding='utf-8') as file:
-                final_expressions.extend(_get_non_empty_lines(file))
+                # Remove lines starting by a #
+                final_expressions.extend(filter(lambda line:line[0] != '#', _get_non_empty_lines(file)))
 
         # If the file is not found, it means it should be an expression
         except (FileNotFoundError, OSError):

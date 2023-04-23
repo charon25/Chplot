@@ -42,6 +42,8 @@ python -m chplot [expression1, [expression2, ...]] [additional-parameters...]
 
 Where all the additional parameters are documented in the [CLI options](#cli-options) section. Note that there can be no expression, as data can come from other sources.
 
+A lot of examples are given in the [Examples](#graph-and-computations-examples) section.
+
 #### Important note
 
 You need to surround any expression with double quotes (`"`) if it contains a space (` `). Furthermore, due to the working of the `argparse` Python module and the majority of shells, you may have to surround any expression with double quotes (`"`) if it contains a caret (`^`). Finally, if it starts with a dash (`-`) you may also need to add a space (` `) or a `0` before it.
@@ -76,7 +78,7 @@ No option is mandatory.
 
 | <div style="width:125px">CLI options</div> | `PlotParameters` class equivalent | Expected arguments | Effect |
 |---------------------|--------------------------------------------|---------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| $\emptyset$ | expressions: list[str] | Any number of expressions (including none of them) | The expressions of the mathematical functions to plot and do computations on. There can by none of them. |
+| $\emptyset$ | expressions: list[str] | Any number of expressions (including none of them) or filepaths | The expressions of the mathematical functions to plot and do computations on. If using the CLI, filepaths can also be provided, and  There can by none of them. |
 | `-v`<br>`--variable` | variable: str | One string | The variable going of the horizontal axis. Can be more than one character. Note that the variable will override any constant of function with the same name. Defaults to `x`. |
 | `--no-sn` | disable_scientific_notation: bool | $\emptyset$ | Disable the automatic conversion of scientific notation in every expression (e.g. `1.24e-1` to `1.24*10^(-1)`). Defaults to False. |
 | `-n`<br>`--n-points` | n_points: int | One positive integer (excluding zero) | The number of points on the horizontal axis for the plotting of the expressions. Defaults to 10001. |
