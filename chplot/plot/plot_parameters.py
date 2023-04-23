@@ -38,6 +38,7 @@ class PlotParameters:
     remove_legend: Optional[bool] = False
     no_plot: Optional[bool] = False
     markersize: Optional[int] = None
+    square_graph: Optional[bool] = False
 
     zeros_file: Optional[Union[Literal[0], str]] = None
     integral_file: Optional[Union[Literal[0], str]] = None

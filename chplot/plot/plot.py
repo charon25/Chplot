@@ -222,6 +222,10 @@ def _get_graph_parameters(parameters: PlotParameters, graph: Graph) -> dict[str,
 
 
 def _plot_graphs(parameters: PlotParameters, graphs: list[Graph]) -> None:
+    if parameters.square_graph:
+        plt.figure(figsize=(6, 6))
+        plt.gca().set_aspect('equal')
+
     for graph in graphs:
         graph_parameters = _get_graph_parameters(parameters, graph)
         plt.plot(graph.inputs, graph.values, label=graph.expression, **graph_parameters)
@@ -239,6 +243,7 @@ def _plot_graphs(parameters: PlotParameters, graphs: list[Graph]) -> None:
     plt.xlabel(parameters.x_label)
     plt.ylabel(parameters.y_label)
     plt.title(parameters.title)
+
 
     if not parameters.remove_legend:
         plt.legend(loc=0)
