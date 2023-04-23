@@ -218,7 +218,7 @@ def _get_graph_parameters(parameters: PlotParameters, graph: Graph) -> dict[str,
     if parameters.is_integer or parameters.markersize:
         return {'linestyle': ' ', 'marker': 'o', 'markersize': parameters.markersize or 3}
 
-    return {'linestyle': '-'}
+    return {'linestyle': '-', 'linewidth': parameters.line_width}
 
 
 def _plot_graphs(parameters: PlotParameters, graphs: list[Graph]) -> None:

@@ -15,6 +15,17 @@ def positive_integer(value):
 
     return value
 
+def positive_float(value):
+    try:
+        value = float(value)
+    except ValueError:
+        raise argparse.ArgumentTypeError(f"invalid int value: '{value}'")
+
+    if value <= 0:
+        raise argparse.ArgumentTypeError(f"invalid strictly positive integer: '{value}'")
+
+    return value
+
 
 def read_parameters() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="TODO")
@@ -39,6 +50,7 @@ def read_parameters() -> argparse.Namespace:
     parser.add_argument('--no-plot', action='store_true', dest='no_plot', help='If present, will not graph the functions at all.')
     parser.add_argument('--dis', nargs='?', const=1, type=positive_integer, dest='markersize', help='Remove line segment between points. Does nothing if the -i flag is present.')
     parser.add_argument('--square', action='store_true', dest='square_graph', help="Indicate if the graph should be forced to be a square.")
+    parser.add_argument('-lw', default=1, type=positive_float, dest='line_width', help='Width of the lines (default 1).')
 
     parser.add_argument('--zeros', nargs='?', const=0, dest='zeros_file', help='Indicate if the zeros of the functions should be computed. If no arguments are provided, will write to stdout, otherwise to the specified file.')
     parser.add_argument('--integral', nargs='?', const=0, dest='integral_file', help='Indicate if the integral of the functions should be computed. If no arguments are provided, will write to stdout, otherwise to the specified file.')

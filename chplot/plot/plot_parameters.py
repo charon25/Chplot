@@ -39,6 +39,7 @@ class PlotParameters:
     no_plot: Optional[bool] = False
     markersize: Optional[int] = None
     square_graph: Optional[bool] = False
+    line_width: Optional[float] = 1.5
 
     zeros_file: Optional[Union[Literal[0], str]] = None
     integral_file: Optional[Union[Literal[0], str]] = None
