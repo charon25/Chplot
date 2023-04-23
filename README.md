@@ -2,6 +2,10 @@
 
 Chplot is a Python >= 3.9 module to plot any arbitrary mathematical expressions as well as data series from files, and compute its derivatives and integrals, where it equals zero, and much more!
 
+<p align="center">
+  <img src="resources\logo.png">
+</p>
+
 ## Installation
 
 You can install `chplot` through Pypi, with the command:
