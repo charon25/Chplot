@@ -8,7 +8,7 @@ Chplot is a Python >= 3.9 module to plot any arbitrary mathematical expressions 
 
 ## Installation
 
-You can install `chplot` through Pypi, with the command:
+`chplot` is available [on Pypi](https://pypi.org/project/chplot/#files), and You can install it with the command:
 ```bash
 python -m pip install chplot
 ```
