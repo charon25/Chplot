@@ -3,7 +3,7 @@
 Chplot is a Python >= 3.9 module to plot any arbitrary mathematical expressions as well as data series from files, and compute its derivatives and integrals, where it equals zero, linear and non-linear regressions, and much more !
 
 <p align="center">
-  <img src="resources/images/logo.png">
+  <img src="https://raw.githubusercontent.com/charon25/Chplot/master/resources/images/logo.png">
 </p>
 
 ## Installation
@@ -688,8 +688,8 @@ python -m chplot x " -x+1" "x^2"
 ```
 
 <p align="center">
-  <img src="resources/images/01.png" width="45%" />
-  <img src="resources/images/02.png" width="45%" />
+  <img src="https://raw.githubusercontent.com/charon25/Chplot/master/resources/images/01.png" width="45%" />
+  <img src="https://raw.githubusercontent.com/charon25/Chplot/master/resources/images/02.png" width="45%" />
 </p>
 
 ```bash
@@ -697,7 +697,7 @@ python -m chplot resources/files/equations.txt
 ```
 
 <p align="center">
-  <img src="resources/images/03.png" width="45%" />
+  <img src="https://raw.githubusercontent.com/charon25/Chplot/master/resources/images/03.png" width="45%" />
 </p>
 
 ---
@@ -710,8 +710,8 @@ python -m chplot sin(var*3) -v var
 ```
 
 <p align="center">
-  <img src="resources/images/04.png" width="45%" />
-  <img src="resources/images/05.png" width="45%" />
+  <img src="https://raw.githubusercontent.com/charon25/Chplot/master/resources/images/04.png" width="45%" />
+  <img src="https://raw.githubusercontent.com/charon25/Chplot/master/resources/images/05.png" width="45%" />
 </p>
 
 ------
@@ -723,8 +723,8 @@ python -m chplot c -v c
 ```
 
 <p align="center">
-  <img src="resources/images/06.png" width="45%" />
-  <img src="resources/images/07.png" width="45%" />
+  <img src="https://raw.githubusercontent.com/charon25/Chplot/master/resources/images/06.png" width="45%" />
+  <img src="https://raw.githubusercontent.com/charon25/Chplot/master/resources/images/07.png" width="45%" />
 </p>
 
 ---
@@ -738,8 +738,8 @@ python -m chplot "x*1.2e-1" --no-sn
 ```
 
 <p align="center">
-  <img src="resources/images/38.png" width="45%" />
-  <img src="resources/images/39.png" width="45%" />
+  <img src="https://raw.githubusercontent.com/charon25/Chplot/master/resources/images/38.png" width="45%" />
+  <img src="https://raw.githubusercontent.com/charon25/Chplot/master/resources/images/39.png" width="45%" />
 </p>
 
 ---
@@ -753,8 +753,8 @@ python -m chplot x -x " -sqrt(2)" "zeta(3)"
 ```
 
 <p align="center">
-  <img src="resources/images/08.png" width="45%" />
-  <img src="resources/images/09.png" width="45%" />
+  <img src="https://raw.githubusercontent.com/charon25/Chplot/master/resources/images/08.png" width="45%" />
+  <img src="https://raw.githubusercontent.com/charon25/Chplot/master/resources/images/09.png" width="45%" />
 </p>
 
 Using expressions in the vertical axis bounds and restricting the graph:
@@ -764,8 +764,8 @@ python -m chplot fac(x) -x 0 6 -y 0.5 1.5
 ```
 
 <p align="center">
-  <img src="resources/images/10.png" width="45%" />
-  <img src="resources/images/11.png" width="45%" />
+  <img src="https://raw.githubusercontent.com/charon25/Chplot/master/resources/images/10.png" width="45%" />
+  <img src="https://raw.githubusercontent.com/charon25/Chplot/master/resources/images/11.png" width="45%" />
 </p>
 
 ---
@@ -779,8 +779,8 @@ python -m chplot cos(x) -x 0 10 -i
 ```
 
 <p align="center">
-  <img src="resources/images/12.png" width="45%" />
-  <img src="resources/images/13.png" width="45%" />
+  <img src="https://raw.githubusercontent.com/charon25/Chplot/master/resources/images/12.png" width="45%" />
+  <img src="https://raw.githubusercontent.com/charon25/Chplot/master/resources/images/13.png" width="45%" />
 </p>
 
 ---
@@ -791,8 +791,8 @@ python -m chplot sqrt(x) -x 0 10 --dis 10 -n 35
 ```
 
 <p align="center">
-  <img src="resources/images/14.png" width="45%" />
-  <img src="resources/images/15.png" width="45%" />
+  <img src="https://raw.githubusercontent.com/charon25/Chplot/master/resources/images/14.png" width="45%" />
+  <img src="https://raw.githubusercontent.com/charon25/Chplot/master/resources/images/15.png" width="45%" />
 </p>
 
 ---
@@ -805,8 +805,8 @@ python -m chplot "ln(x)" -x 1 100 -xlog
 ```
 
 <p align="center">
-  <img src="resources/images/16.png" width="45%" />
-  <img src="resources/images/17.png" width="45%" />
+  <img src="https://raw.githubusercontent.com/charon25/Chplot/master/resources/images/16.png" width="45%" />
+  <img src="https://raw.githubusercontent.com/charon25/Chplot/master/resources/images/17.png" width="45%" />
 </p>
 
 ---
@@ -819,8 +819,8 @@ python -m chplot "x" -x -5 -1 -xlog
 ```
 
 <p align="center">
-  <img src="resources/images/18.png" width="45%" />
-  <img src="resources/images/19.png" width="45%" />
+  <img src="https://raw.githubusercontent.com/charon25/Chplot/master/resources/images/18.png" width="45%" />
+  <img src="https://raw.githubusercontent.com/charon25/Chplot/master/resources/images/19.png" width="45%" />
 </p>
 
 The second command generates a warning:
@@ -842,8 +842,8 @@ python -m chplot "sin(x)+10" -x 1 10pi -z
 ```
 
 <p align="center">
-  <img src="resources/images/20.png" width="45%" />
-  <img src="resources/images/21.png" width="45%" />
+  <img src="https://raw.githubusercontent.com/charon25/Chplot/master/resources/images/20.png" width="45%" />
+  <img src="https://raw.githubusercontent.com/charon25/Chplot/master/resources/images/21.png" width="45%" />
 </p>
 
 ---
@@ -856,8 +856,8 @@ python -m chplot zeta(x) -x 1 10 -y 0 3 -xl "Variable x" -yl "Zeta(x)" -t "Zeta 
 ```
 
 <p align="center">
-  <img src="resources/images/22.png" width="45%" />
-  <img src="resources/images/23.png" width="45%" />
+  <img src="https://raw.githubusercontent.com/charon25/Chplot/master/resources/images/22.png" width="45%" />
+  <img src="https://raw.githubusercontent.com/charon25/Chplot/master/resources/images/23.png" width="45%" />
 </p>
 
 ---
@@ -870,8 +870,8 @@ python -m chplot cbrt(x) -lw 5
 ```
 
 <p align="center">
-  <img src="resources/images/24.png" width="45%" />
-  <img src="resources/images/25.png" width="45%" />
+  <img src="https://raw.githubusercontent.com/charon25/Chplot/master/resources/images/24.png" width="45%" />
+  <img src="https://raw.githubusercontent.com/charon25/Chplot/master/resources/images/25.png" width="45%" />
 </p>
 
 ---
@@ -885,8 +885,8 @@ python -m chplot "a*x^2-b*x+1" -c a=8pi/19 "b=a^2-1"
 ```
 
 <p align="center">
-  <img src="resources/images/26.png" width="45%" />
-  <img src="resources/images/27.png" width="45%" />
+  <img src="https://raw.githubusercontent.com/charon25/Chplot/master/resources/images/26.png" width="45%" />
+  <img src="https://raw.githubusercontent.com/charon25/Chplot/master/resources/images/27.png" width="45%" />
 </p>
 
 ---
@@ -898,8 +898,8 @@ python -m chplot "a*x^3+b*x^2+c*x+d" -c resources\files\constants.txt -x -10 10
 ```
 
 <p align="center">
-  <img src="resources/images/28.png" width="45%" />
-  <img src="resources/images/29.png" width="45%" />
+  <img src="https://raw.githubusercontent.com/charon25/Chplot/master/resources/images/28.png" width="45%" />
+  <img src="https://raw.githubusercontent.com/charon25/Chplot/master/resources/images/29.png" width="45%" />
 </p>
 
 ---
@@ -912,7 +912,7 @@ python -m chplot -f resources\files\data.csv
 ```
 
 <p align="center">
-  <img src="resources/images/30.png" width="45%" />
+  <img src="https://raw.githubusercontent.com/charon25/Chplot/master/resources/images/30.png" width="45%" />
 </p>
 
 ---
@@ -934,7 +934,7 @@ python -m chplot "frac(x)+3" "is_prime(x)" "rnd(x, x/2)" -p functions.py -x 0 10
 ```
 
 <p align="center">
-  <img src="resources/images/31.png" width="45%" />
+  <img src="https://raw.githubusercontent.com/charon25/Chplot/master/resources/images/31.png" width="45%" />
 </p>
 
 ---
@@ -1013,8 +1013,8 @@ python -m chplot "exp(x)" --deriv 1 4 7 -n 100000
 ```
 
 <p align="center">
-  <img src="resources/images/32.png" width="45%" />
-  <img src="resources/images/33.png" width="45%" />
+  <img src="https://raw.githubusercontent.com/charon25/Chplot/master/resources/images/32.png" width="45%" />
+  <img src="https://raw.githubusercontent.com/charon25/Chplot/master/resources/images/33.png" width="45%" />
 </p>
 
 ---
@@ -1058,7 +1058,7 @@ python -m chplot "sin(x)" " -exp(x)" --reg lin
 ```
 
 <p align="center">
-  <img src="resources/images/34.png" width="45%" />
+  <img src="https://raw.githubusercontent.com/charon25/Chplot/master/resources/images/34.png" width="45%" />
 </p>
 
 
@@ -1103,7 +1103,7 @@ python -m chplot "x" "x^2-3x+2" -x 1 2 --reg "_ra + _rb/x + _rc/x^2"
 ```
 
 <p align="center">
-  <img src="resources/images/35.png" width="45%" />
+  <img src="https://raw.githubusercontent.com/charon25/Chplot/master/resources/images/35.png" width="45%" />
 </p>
 
 
@@ -1150,7 +1150,7 @@ python -m chplot -f resources\files\data.csv --reg poly2
 ```
 
 <p align="center">
-  <img src="resources/images/37.png" width="45%" />
+  <img src="https://raw.githubusercontent.com/charon25/Chplot/master/resources/images/37.png" width="45%" />
 </p>
 
 ```bash
@@ -1197,7 +1197,7 @@ python -m chplot log2(x) -x 1 3 --deriv 1 --reg lin --zeros --integral
 ```
 
 <p align="center">
-  <img src="resources/images/36.png" width="45%" />
+  <img src="https://raw.githubusercontent.com/charon25/Chplot/master/resources/images/36.png" width="45%" />
 </p>
 
 ```bash
