@@ -28,51 +28,54 @@ def positive_float(value):
 
 
 def read_parameters() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="TODO")
-    parser.add_argument('expressions', metavar='EXPRESSION', nargs='*', help='The expression(s) to plot. Can also be files containing expressions.')
-    parser.add_argument('-v', metavar='VARIABLE', dest='variable', help="The name of the variable plotted on the x-axis (default: 'x').")
-    parser.add_argument('--no-sn', action='store_true', dest='disable_scientific_notation', help="Disable auto-conversion of scientific notation.")
+    parser = argparse.ArgumentParser(description="Chplot is a Python >= 3.9 module to plot any arbitrary mathematical expressions as well as data series from files, and compute its derivatives and integrals, where it equals zero, linear and non-linear regressions, and much more !\n\nDocumentation: https://github.com/charon25/Chplot")
+    parser.add_argument('expressions', metavar='EXPRESSIONS', nargs='*', help='The expressions of the mathematical functions to plot and do computations on. Can also be filepaths containing expressions, one by line (except for line starting with #).')
+    parser.add_argument('-v', '--variable', metavar='VARIABLE', dest='variable', help="The variable going of the horizontal axis. Can be more than one character. Note that the variable will override any constant of function with the same name. Defaults to 'x'.")
+    parser.add_argument('--no-sn', action='store_true', dest='disable_scientific_notation', help="Disable the automatic conversion of scientific notation in every expression (e.g. '1.24e-1' to '1.24*10^(-1)').")
 
-    parser.add_argument('-n', metavar='POINTS', type=positive_integer, dest='n_points', help='Number of points for each expression (default: 10001).')
-    parser.add_argument('-i', action='store_true', dest='is_integer', help='Indicate if the inputs should be forced as integers. Will have at most POINTS points, but it may have less if the x-axis bounds are too close.')
+    parser.add_argument('-n', '--n-points', metavar='POINTS', type=positive_integer, dest='n_points', help='The number of points on the horizontal axis for the plotting of the expressions. Defaults to 10001.')
+    parser.add_argument('-i', '--integers', action='store_true', dest='is_integer', help='Forces the points where the expressions are computed to be integers between the specified limits. The number of points will not exceed what is specified with the `-n` parameter. Defaults to False.')
 
-    parser.add_argument('-x', nargs=2, metavar=('X_MIN', 'X_MAX'), dest='x_lim', help='The x-axis bounds (default: [0, 1]). Any mathematical expression is valid as long as it is constant.')
-    parser.add_argument('-xlog', action='store_true', dest='is_x_log', help="Indicate if the x-axis scale should be logarithmic.")
+    parser.add_argument('-x', '--x-lim', nargs=2, metavar=('X_MIN', 'X_MAX'), dest='x_lim', help="The horizontal axis bounds (inclusive) where the expression are computed. First argument is the min, second is the max. Any expression (such as '2pi' or '1+exp(2)') is valid. It is also the graph default horizontal axis, but they can be automatically adjusted to accomodate the plotted data. Defaults to 0 1.")
+    parser.add_argument('-xlog', '-xlog', action='store_true', dest='is_x_log', help="	Forces a logarithmic scale on the horizontal axis. If some horizontal axis bounds are negative, will modify them. Defaults to False.")
 
-    parser.add_argument('-y', nargs=2, metavar=('Y_MIN', 'Y_MAX'), dest='y_lim', help='The y-axis bounds (default: adjust to the graphs). Any mathematical expression is valid as long as it is constant.')
-    parser.add_argument('-z', action='store_true', dest='must_contain_zero', help='Indicate if the y-axis should contain zero. If the -y parameter is present, it will be overriden as necessary.')
-    parser.add_argument('-ylog', action='store_true', dest='is_y_log', help="Indicate if the y-axis scale should be logarithmic.")
+    parser.add_argument('-y', '--y-lim', nargs=2, metavar=('Y_MIN', 'Y_MAX'), dest='y_lim', help="The vertical axis bounds (inclusive) of the graph. First argument is the min, second is the max. Any expression (such as '2pi' or '1+exp(2)') is valid. If not specified, will use matplotlib default ones to accomodate all data. Will restrict the graph to them is specified.")
+    parser.add_argument('-z', '--y-zero', action='store_true', dest='must_contain_zero', help='Forces the vertical axis to contain zero. Defaults to False.')
+    parser.add_argument('-ylog', '--ylog', action='store_true', dest='is_y_log', help="Forces a logarithmic scale on the vertical axis. If some vertical axis bounds are negative, will modify them. Defaults to False.")
 
-    parser.add_argument('-xl', metavar='X_LABEL', dest='x_label', help='The x-axis label.')
-    parser.add_argument('-yl', metavar='Y_LABEL', dest='y_label', help='The y-axis label.')
-    parser.add_argument('-t', metavar='TITLE', dest='title', help='The plot title.')
-    parser.add_argument('-rl', action='store_true', dest='remove_legend', help='Remove the plot legend.')
-    parser.add_argument('--no-plot', action='store_true', dest='no_plot', help='If present, will not graph the functions at all.')
-    parser.add_argument('--dis', nargs='?', const=1, type=positive_integer, dest='markersize', help='Remove line segment between points. Does nothing if the -i flag is present.')
-    parser.add_argument('--square', action='store_true', dest='square_graph', help="Indicate if the graph should be forced to be a square.")
-    parser.add_argument('-lw', default=1, type=positive_float, dest='line_width', help='Width of the lines (default 1).')
+    parser.add_argument('-xl', '--x-label', metavar='X_LABEL', dest='x_label', help='Label of the horizontal axis. Defaults to nothing.')
+    parser.add_argument('-yl', '--y-label', metavar='Y_LABEL', dest='y_label', help='Label of the vertical axis. Defaults to nothing.')
+    parser.add_argument('-t', '--title', metavar='TITLE', dest='title', help='Title of the graph. Defaults to nothing.')
+    parser.add_argument('-rl', '--remove-legend', action='store_true', dest='remove_legend', help='Removes the graph legend.')
+    parser.add_argument('--no-plot', action='store_true', dest='no_plot', help='Does not show the plot. However, does not prevent saving the figure.')
+    parser.add_argument('-dis', '--discontinuous', nargs='?', const=1, type=positive_integer, dest='markersize', help='Transforms the style of the graph from a continuous line to discrete points with the specified radius. If present without a value, will defaults to a radius of 1. If the --integer parameter is also present, will still affect the points radius.')
+    parser.add_argument('--square', action='store_true', dest='square_graph', help="Forces the graph to be a square (aspect ratio of 1).")
+    parser.add_argument('-lw', '--line-width', default=1, type=positive_float, dest='line_width', help='Width of the plotted functions. Will not affect regressions. Defaults to 1.5 (matplotlib defaut).')
 
-    parser.add_argument('--zeros', nargs='?', const=0, dest='zeros_file', help='Indicate if the zeros of the functions should be computed. If no arguments are provided, will write to stdout, otherwise to the specified file.')
-    parser.add_argument('--integral', nargs='?', const=0, dest='integral_file', help='Indicate if the integral of the functions should be computed. If no arguments are provided, will write to stdout, otherwise to the specified file.')
-    parser.add_argument('--deriv', nargs='+', dest='derivation_orders', type=positive_integer, help='Will add the derivative to the graph (and integral/zeros computation).')
-    parser.add_argument('--reg', dest='regression_expression', metavar='REGRESSION_EXPRESSION', help='Compute the best coefficients to get the best fit of file data series with the given expression. The coefficients must be of the form _rx where x is any string.')
+    parser.add_argument('--zeros', nargs='?', const=0, dest='zeros_file', help='Computes where the expressions equal zero. If not included, will not compute it (default behavior), else if included without argument, prints the results to the console, else writes it to the given file.')
+    parser.add_argument('-int', '--integral', nargs='?', const=0, dest='integral_file', help='Computes the integral of all functions on the entire interval where it is plotted. Note that it does not add the antideritive of the functions to the graph, but only computes the area under them on their definition interval. If not included, will not compute it (default behavior), else if included without argument, prints the results to the console, else writes it to the given file.')
+    parser.add_argument('-deriv', '--derivatives', nargs='+', dest='derivation_orders', type=positive_integer, help='Computes and adds to the graph the derivative of the specified orders of every other function. Note that the higher the order, the more inaccuracy and unstability it has. Furthermore, the derivative computation will shave off a few points on each side, so the derivatives are defined on a smaller interval.')
+    parser.add_argument('-reg', '--regression', dest='regression_expression', metavar='REGRESSION_EXPRESSION', help="Computes the coefficients of the given regression to get the best fit to every other function. The regression parameters should have the form _rX where X is any string made of digits, letters and underscores and starting with a letter (eg '_ra0'). The regressions will also be added in the final graph. It can also be one of a few default keywords (listed in the Regression default keywords section of the documentation).")
 
-    parser.add_argument('-c', nargs='+', dest='constants_arg', metavar=('CONSTANT', 'CONSTANT'), help='Constants to add to the computation, at least one and as much as needed. Either of the form "<name>=<expression>", or the name of a file containing this form of statement, one on each line.')
-    parser.add_argument('-f', nargs='+', dest='data_files', metavar=('CSV_FILE', 'CSV_FILE'), help='Filenames of CSV files to add points.')
-    parser.add_argument('-s', dest='save_figure_path', metavar='FIGURE_FILE', help='Save figure to file.')
-    parser.add_argument('-d', dest='save_data_path', metavar='DATA_FILE', help='Save all points to a csv file.')
-    parser.add_argument('-p', nargs='+', dest='python_files', metavar=('PYTHON_FILE', 'PYTHON_FILE'), help='Python file contaning @plottable decorated functions that can be used in the ploting step.')
+    parser.add_argument('-c', '--constants', nargs='+', dest='constants_arg', metavar=('CONSTANT', 'CONSTANT'), help="Adds constants which may be used by any other expressions (including axis bounds). They must either be of the form '<name>=<expression>' (eg 'a=4sin(pi/4))') or be filepath containing lines respecting this format. May override already existing constants and functions. If a constant refers to another one, it should be defined after. Defaults to nothing.")
+    parser.add_argument('-f', '--files', nargs='+', dest='data_files', metavar=('CSV_FILE', 'CSV_FILE'), help='Adds data contained in CSV files as new functions to the graph. See the CSV files format section of the documentation for more details.')
+    parser.add_argument('-s', '--save-graph', dest='save_figure_path', metavar='FIGURE_FILE', help='Saves the graph at the specified path.')
+    parser.add_argument('-d', '--save-data', dest='save_data_path', metavar='DATA_FILE', help='Saves the graph data (x and y values) at the specified path in CSV format.')
+    parser.add_argument('-p', '--python-files', nargs='+', dest='python_files', metavar=('PYTHON_FILE', 'PYTHON_FILE'), help='Adds functions contained in Python files. See the Additional Python function format section of the documentation for more details.')
 
-    parser.add_argument('--version', action='store_true', dest='version', help='Print the version.')
+    parser.add_argument('--version', action='store_true', dest='version', help='Only prints the version.')
 
     return parser.parse_args()
+
+
+VERSION = '1.0.0'
 
 
 if __name__ == '__main__':
     parameters = read_parameters()
 
     if parameters.version:
-        print('1.0.0')
+        print(VERSION)
         exit()
 
     retrieve_constants(parameters)

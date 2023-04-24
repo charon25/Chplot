@@ -11,10 +11,10 @@ setuptools.setup(
 	long_description=long_description,
     long_description_content_type='text/markdown',
 	python_requires=">=3.9",
-	url="TODO",
+	url="https://www.github.com/charon25/Chplot",
 	license="MIT",
 	packages=setuptools.find_packages(),
-	download_url="TODO",
+	download_url="https://github.com/charon25/Chplot/archive/refs/tags/v1.0.0.tar.gz",
 	install_requires=[
 		'matplotlib>=3.6.1',
 		'mpmath>=1.2.1',

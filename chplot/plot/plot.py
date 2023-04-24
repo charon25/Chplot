@@ -327,7 +327,7 @@ def _save_figure(parameters: PlotParameters):
 
 
 def plot(parameters: PlotParameters) -> None:
-    """_summary_ TODO
+    """_summary_ Plots the expression and does all the computations specified in the parameters. See the documentation (https://github.com/charon25/Chplot) for more informations.
 
     Args:
         parameters (PlotParameters): Object containing all the plot parameters.
