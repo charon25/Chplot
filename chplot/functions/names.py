@@ -119,43 +119,46 @@ MPMATH_FUNCTION_NAMES: FunctionNames = [
 
 
 PROBABILITY_FUNCTION_NAMES: FunctionNames = [
-    ('normpdf', 3, '_norm_pdf'), ('normcdf', 3, '_norm_cdf'),
-    ('unormpdf', 1, '_unit_norm_pdf'), ('unormcdf', 1, '_unit_norm_cdf'),
+    ('normpdf', 3, 'norm_pdf'), ('normcdf', 3, 'norm_cdf'),
+    ('unormpdf', 1, 'unit_norm_pdf'), ('unormcdf', 1, 'unit_norm_cdf'),
 
-    ('tripdf', 4, '_triangle_pdf'), ('tricdf', 4, '_triangle_cdf'),
+    ('tripdf', 4, 'triangle_pdf'), ('tricdf', 4, 'triangle_cdf'),
 
-    ('uniformpdf', 3, '_uniform_pdf'), ('uniformcdf', 3, '_uniform_cdf'),
+    ('uniformpdf', 3, 'uniform_pdf'), ('uniformcdf', 3, 'uniform_cdf'),
 
-    ('exppdf', 2, '_expon_pdf'), ('expcdf', 2, '_expon_cdf'),
+    ('exppdf', 2, 'expon_pdf'), ('expcdf', 2, 'expon_cdf'),
 
-    ('studentpdf', 2, '_student_pdf'), ('studentcdf', 2, '_student_cdf'),
+    ('studentpdf', 2, 'student_pdf'), ('studentcdf', 2, 'student_cdf'),
 
-    ('betapdf', 3, '_beta_pdf'), ('betacdf', 3, '_beta_cdf'),
+    ('betapdf', 3, 'beta_pdf'), ('betacdf', 3, 'beta_cdf'),
 
-    ('chi2pdf', 2, '_chi2_pdf'), ('chi2cdf', 2, '_chi2_cdf'),
-    ('khi2pdf', 2, '_chi2_pdf'), ('khi2cdf', 2, '_chi2_cdf'),
+    ('chi2pdf', 2, 'chi2_pdf'), ('chi2cdf', 2, 'chi2_cdf'),
+    ('khi2pdf', 2, 'chi2_pdf'), ('khi2cdf', 2, 'chi2_cdf'),
 
-    ('gammapdf', 3, '_gamma_pdf'), ('gammacdf', 3, '_gamma_cdf'),
+    ('gammapdf', 3, 'gamma_pdf'), ('gammacdf', 3, 'gamma_cdf'),
 
-    ('cauchypdf', 3, '_cauchy_pdf'), ('cauchycdf', 3, '_cauchy_cdf'),
+    ('cauchypdf', 3, 'cauchy_pdf'), ('cauchycdf', 3, 'cauchy_cdf'),
 ]
 
 
 OTHER_FUNCTION_NAMES: FunctionNames = [
-    ('relu', 1, '_relu'), ('lrelu', 2, '_leaky_relu'),
+    ('relu', 1, None), ('lrelu', 2, 'leaky_relu'),
 
-    ('sigm', 1, '_sigmoid'), ('sigmoid', 1, '_sigmoid'),
+    ('sigmoid', 1, None), ('sigm', 1, 'sigmoid'), 
 
-    ('sign', 1, '_sign'), ('sgn', 1, '_sign'),
+    ('sign', 1, None), ('sgn', 1, 'sign'),
 
-    ('lerp', 5, '_lerp'), ('lerpt', 3, '_lerpt'),
+    ('lerp', 5, None), ('lerpt', 3, None),
 
-    ('heaviside', 1, '_heaviside'),
-    ('ramp', 1, '_relu'),
-    ('rect', 1, '_rect'),
-    ('triangle', 1, '_triangle'),
-    ('tri', 1, '_triangle'),
+    ('heaviside', 1, None),
+    ('ramp', 1, 'relu'),
+    ('rect', 1, None),
+    ('triangle', 1, None), ('tri', 1, 'triangle'),
 
-    ('if', 3, '_if'), ('ifn', 3, '_ifn'), ('ifz', 3, '_ifz'),
-    ('in', 5, '_in'), ('out', 5, '_out'),
+    ('sawtooth', 1, None),
+    ('squarewave', 1, None), ('sqwave', 1, 'squarewave'),
+    ('trianglewave', 1, None), ('triwave', 1, 'trianglewave'),
+
+    ('if', 3, '_if'), ('ifn', 3, None), ('ifz', 3, None),
+    ('in', 5, '_in'), ('out', 5, None),
 ]

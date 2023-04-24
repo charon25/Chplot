@@ -571,6 +571,8 @@ To use the ( $k, \theta$ ) parametrization of the gamma distribution, just apply
 
 ### Other functions
 
+In this table, $\{x\}$ represents the fractional part of $x$.
+
 | `chplot` name | Arguments | Expression |
 |---------------|:---------:|:----------:|
 | `relu`<br>`ramp` | $x$ | $0 \text{ if } x < 0$ <br> $x \text{ if } 0\leq x$ |
@@ -582,6 +584,9 @@ To use the ( $k, \theta$ ) parametrization of the gamma distribution, just apply
 | `heaviside` | $x$ | $0 \text{ if } x < 0$ <br> $\frac{1}{2} \text{ if } x = 0$ <br> $1 \text{ if } x > 0$ |
 | `rect` | $x$ | $0 \text{ if } x < -\frac{1}{2} \text{ or } x > \frac{1}{2}$ <br> $1 \text{ if } -\frac{1}{2} \leq x \leq \frac{1}{2}$ |
 | `triangle`<br>`tri` | $x$ | $0 \text{ if } x < -1 \text{ or } x > 1$ <br> $1 - \|x\|; \text{ if } -1 \leq x \leq 1$ |
+| `sawtooth` | $x$ | $2\{x - \frac{1}{2}\} - 1$ |
+| `squarewave`<br>`sqwave` | $x$ | $\frac{1}{2} \text{ if } \{x\} = 0 \text{ or } \{x\} = \frac{1}{2}$ <br> $1 \text{ if } \{x\} < \frac{1}{2}$ <br> $0 \text{ if } \frac{1}{2} < \{x\}$ |
+| `trianglewave`<br>`triwave` | $x$ | $4\{x\} \text{ if } \{x\} < \frac{1}{4}$ <br> $2-4\{x\} \text{ if } \frac{1}{4} \leq \{x\} < \frac{3}{4}$ <br> $4\{x\} + 4 \text{ if } \frac{3}{4} < \{x\}$ |
 | `abs` | $x$ | $\|x\|$ |
 | `min` | $a, b$ | $\min(a,b)$ |
 | `min3` | $a, b, c$ | $\min(a,b,c)$ |
