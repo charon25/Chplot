@@ -1,5 +1,5 @@
 import math
-from typing import Optional, Union
+from typing import Optional
 
 import numpy as np
 from tqdm import tqdm

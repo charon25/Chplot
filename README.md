@@ -841,6 +841,405 @@ python -m chplot zeta(x) -x 1 10 -y 0 3 -xl "Variable x" -yl "Zeta(x)" -t "Zeta 
   <img src="resources/images/23.png" width="45%" />
 </p>
 
+---
+
+#### `-square`, `-lw` parameters
+
+```bash
+python -m chplot cbrt(x) --square
+python -m chplot cbrt(x) -lw 5
+```
+
+<p align="center">
+  <img src="resources/images/24.png" width="45%" />
+  <img src="resources/images/25.png" width="45%" />
+</p>
+
+---
+
+#### `-c` parameter
+
+If a constants require another one, define it after:
+```bash
+python -m chplot a*x+b -c a=2 b=7
+python -m chplot "a*x^2-b*x+1" -c a=8pi/19 "b=a^2-1"
+```
+
+<p align="center">
+  <img src="resources/images/26.png" width="45%" />
+  <img src="resources/images/27.png" width="45%" />
+</p>
+
+---
+
+Constants can also be an expression, or come from a file:
+```bash
+python -m chplot cos(a*x) -c "a=(sqrt(2) - zeta(3)) / sin(1.5)" -x 0 50
+python -m chplot "a*x^3+b*x^2+c*x+d" -c resources\files\constants.txt -x -10 10
+```
+
+<p align="center">
+  <img src="resources/images/28.png" width="45%" />
+  <img src="resources/images/29.png" width="45%" />
+</p>
+
+---
+
+#### `-f` parameter
+
+All the CSV format are summarized in the [CSV files format](#csv-files-format) section.
+```bash
+python -m chplot -f resources\files\data.csv
+```
+
+<p align="center">
+  <img src="resources/images/30.png" width="45%" />
+</p>
+
+---
+
+#### `-d` parameter
+
+```bash
+python -m chplot x "x(x+1)" "x(x+1)(x+2)/2" "x(x+1)(x+2)(x+3)/6" -s resources\files\saved_data.csv
+```
+The data can be found in [the saved_data.csv file](resources\files\saved_data.csv).
+
+---
+
+#### `-p` parameter
+
+The file `functions.py` must be in the directory from where the command is executed.
+```bash
+python -m chplot "frac(x)+3" "is_prime(x)" "rnd(x, x/2)" -p functions.py -x 0 10
+```
+
+<p align="center">
+  <img src="resources/images/31.png" width="45%" />
+</p>
+
+---
+
+#### `--zeros`
+
+```bash
+python -m chplot sin(x) -x -7 7 --zeros
+python -m chplot "x^2-2" "in(x, 0.2, 0.3, 0, -2x+1)" -x 0 2 --zeros
+```
+
+The result of these commands (besides the plot) are the following. The first are the zeros of the function $\sin(x)$ on [-7 ; 7]: $\pm 2\pi$, $\pm \pi$ and $0$. Then the zero of $x^2-2$ is $\sqrt{2}$. Finally the last expression is completely zero on the interval [0.2 ; 0.3] and at $1/2$.
+```bash
+===== ZEROS OF THE FUNCTIONS =====
+Note that non-continuous functions may give false zeros. Furthermore, some zeros may be missing if the graph is tangent to the x-axis.
+
+- On the interval [-7.0 ; 7.0], the function f(x) = sin(x) equals zero...
+    at x = -6.2831853072
+    at x = -3.1415926536
+    at x = 0.0
+    at x = 3.1415926536
+    at x = 6.2831853072
+```
+```bash
+===== ZEROS OF THE FUNCTIONS =====
+Note that non-continuous functions may give false zeros. Furthermore, some zeros may be missing if the graph is tangent to the x-axis.
+
+- On the interval [0.0 ; 2.0], the function f(x) = x^2-2 equals zero...
+    at x = 1.4142135624
+
+- On the interval [0.0 ; 2.0], the function f(x) = in(x, 0.2, 0.3, 0, -2x+1) equals zero...
+    on [0.2 ; 0.3]
+    at x = 0.5
+```
+
+---
+
+#### `--integral`
+
+```bash
+python -m chplot "1/x" -x 1 e --integral
+python -m chplot "x^2" "exp(x)" --integral
+```
+
+The result of these commands (besides the plot) are the following.$$\int_1^e\frac{dx}{x} = 1$$
+$$\int_0^1x^2dx = \frac{1}{3}$$
+$$\int_0^1\exp(x)dx=e - 1$$
+
+```bash
+===== INTEGRALS OF THE FUNCTIONS =====
+Note that the more points, the smallest the error and that floating point numbers may introduce errors. Furthermore, discontinuous functions may indicate really huge error margins.
+
+- ∫f(x)dx = 1.0000000021279944
+    where f(x) = 1/x on [1.0 ; 2.718]
+```
+```bash
+===== INTEGRALS OF THE FUNCTIONS =====
+Note that the more points, the smallest the error and that floating point numbers may introduce errors. Furthermore, discontinuous functions may indicate really huge error margins.
+
+- ∫f(x)dx = 0.33333333499999834
+    where f(x) = x^2 on [0.0 ; 1.0]
+
+
+- ∫f(x)dx = 1.7182818298909472
+    where f(x) = exp(x) on [0.0 ; 1.0]
+```
+
+---
+
+#### `--deriv` parameter
+
+The second command illustrates the instability of the higher order derivatives.
+```bash
+python -m chplot "sin(x)" --deriv 1 2 3 4 -x 0 4pi
+python -m chplot "exp(x)" --deriv 1 4 7 -n 100000
+```
+
+<p align="center">
+  <img src="resources/images/32.png" width="45%" />
+  <img src="resources/images/33.png" width="45%" />
+</p>
+
+---
+
+Synergy between `--deriv` and `--zeros`/`--integral`.
+```bash
+python -m chplot "x^2+2" -x -3 3 --deriv 1 --zeros --integral
+```
+
+```bash
+===== ZEROS OF THE FUNCTIONS =====
+Note that non-continuous functions may give false zeros. Furthermore, some zeros may be missing if the graph is tangent to the x-axis.
+
+Furthermore, on derivatives and file data, zeros are approximated using linear interpolation, and may be far from their real values.
+- On the interval [-3.0 ; 3.0], the function f(x) = x^2+2 never equals zero.
+
+- On the interval [-2.998 ; 2.998], the function f(x) = d/dx * (x^2+2) equals zero...
+    at x = 0.0
+
+
+
+===== INTEGRALS OF THE FUNCTIONS =====
+Note that the more points, the smallest the error and that floating point numbers may introduce errors. Furthermore, discontinuous functions may indicate really huge error margins.
+The x-axis limits on derivatives are slightly tighter because of the algorithm used. This may be counteracted by adding more points.
+
+- ∫f(x)dx = 30.000000359996804
+    where f(x) = x^2+2 on [-3.0 ; 3.0]
+
+
+- ∫f(x)dx = 6.18809004038144e-14
+    where f(x) = d/dx * (x^2+2) on [-2.998 ; 2.998]
+```
+
+---
+
+#### `--reg`
+
+Default keyword usable in the CLI.
+```bash
+python -m chplot "sin(x)" " -exp(x)" --reg lin
+```
+
+<p align="center">
+  <img src="resources/images/34.png" width="45%" />
+</p>
+
+
+```bash
+===== REGRESSION COEFFICIENTS OF THE FUNCTIONS =====
+
+Regression function: reg(x) = a * x + b
+
+- Function f(x) = sin(x)
+  Coefficients:
+    a = 0.85583 (exact 0.8558336726408089)
+    b = 0.03178 (exact 0.031776961574734974)
+
+  Accuracy on [0.000 ; 1.000]:
+    R2 = 0.9948573993162803
+    |err| <= 0.046139649407647365
+    |rel err| <= 317.625449951033
+
+  Copyable expression:
+    f(x) = (0.8558336726408089) * x + (0.031776961574734974)
+
+
+- Function f(x) =  -exp(x)
+  Coefficients:
+    a = -1.69032 (exact -1.6903174201716293)
+    b = -0.87314 (exact -0.8731372047610497)
+
+  Accuracy on [0.000 ; 1.000]:
+    R2 = 0.9837173025833181
+    |err| <= 0.15482720352636603
+    |rel err| <= 0.12686279523895028
+
+  Copyable expression:
+    f(x) = (-1.6903174201716293) * x + (-0.8731372047610497)
+```
+
+---
+
+Arbitrary expression for regression (here: $a + \frac{b}{x} + \frac{c}{x^2}$).
+```bash
+python -m chplot "x" "x^2-3x+2" -x 1 2 --reg "_ra + _rb/x + _rc/x^2" 
+```
+
+<p align="center">
+  <img src="resources/images/35.png" width="45%" />
+</p>
+
+
+```bash
+===== REGRESSION COEFFICIENTS OF THE FUNCTIONS =====
+
+Regression function: reg(x) = a + b/x + c/x^2
+
+- Function f(x) = x
+  Coefficients:
+    a = 4.32347 (exact 4.323472460240034)
+    b = -6.08251 (exact -6.082510526066791)
+    c = 2.7852 (exact 2.7852046542434103)
+
+  Accuracy on [1.000 ; 2.000]:
+    R2 = 0.9990492201082051
+    |err| <= 0.026166588416653536
+    |rel err| <= 0.026166588416653536
+
+  Copyable expression:
+    f(x) = (4.323472460240034) + (-6.082510526066791)/x + (2.7852046542434103)/x^2
+
+
+- Function f(x) = x^2-3x+2
+  Coefficients:
+    a = 1.70398 (exact 1.7039810825081398)
+    b = -5.44646 (exact -5.446461246934391)
+    c = 3.8091 (exact 3.809103050454299)
+
+  Accuracy on [1.000 ; 2.000]:
+    R2 = 0.8852455638434826
+    |err| <= 0.06697377834548113
+    |rel err| <= 669.2141410779176
+
+  Copyable expression:
+    f(x) = (1.7039810825081398) + (-5.446461246934391)/x + (3.809103050454299)/x^2
+```
+
+---
+
+Regression on file data.
+```bash
+python -m chplot -f resources\files\data.csv --reg poly2
+```
+
+<p align="center">
+  <img src="resources/images/37.png" width="45%" />
+</p>
+
+```bash
+===== REGRESSION COEFFICIENTS OF THE FUNCTIONS =====
+
+Regression function: reg(x) = a2 * x^2 + a1 * x + a0
+
+- Function f(x) = data.csv - vy(t)
+  Coefficients:
+    a2 = 0.0 (exact -5.0979039530237654e-08)
+    a1 = -9.81 (exact -9.809999897491432)
+    a0 = 10.0 (exact 9.999999965897445)
+
+  Accuracy on [0.000 ; 2.030]:
+    R2 = 1.0
+    |err| <= 3.608967524826312e-08
+    |rel err| <= 2.809290005481242e-06
+
+  Copyable expression:
+    f(x) = (-5.0979039530237654e-08) * x^2 + (-9.809999897491432) * x + (9.999999965897445)
+
+
+- Function f(x) = data.csv - y(t)
+  Coefficients:
+    a2 = -4.905 (exact -4.904999983961847)
+    a1 = 10.0 (exact 9.999999961872113)
+    a0 = 0.0 (exact 1.7338066957762713e-08)
+
+  Accuracy on [0.000 ; 2.030]:
+    R2 = 1.0
+    |err| <= 1.7338066957762713e-08
+    |rel err| <= 1.7041982824835924e-07
+
+  Copyable expression:
+    f(x) = (-4.904999983961847) * x^2 + (9.999999961872113) * x + (1.7338066957762713e-08)
+```
+
+---
+
+Synergy between `--reg` and `--deriv`/`--zeros`/`--integral`.
+
+```bash
+python -m chplot log2(x) -x 1 3 --deriv 1 --reg lin --zeros --integral
+```
+
+<p align="center">
+  <img src="resources/images/36.png" width="45%" />
+</p>
+
+```bash
+===== REGRESSION COEFFICIENTS OF THE FUNCTIONS =====
+
+Regression function: reg(x) = a * x + b
+
+- Function f(x) = log2(x)
+  Coefficients:
+    a = 0.76193 (exact 0.7619286641417374)
+    b = -0.58912 (exact -0.5891228449973627)
+
+  Accuracy on [1.000 ; 3.000]:
+    R2 = 0.9808243468285833
+    |err| <= 0.17280581914437476
+    |rel err| <= 598.4874010749205
+
+  Copyable expression:
+    f(x) = (0.7619286641417374) * x + (-0.5891228449973627)
+
+
+
+===== ZEROS OF THE FUNCTIONS =====
+Note that non-continuous functions may give false zeros. Furthermore, some zeros may be missing if the graph is tangent to the x-axis.
+
+Furthermore, on derivatives and file data, zeros are approximated using linear interpolation, and may be far from their real values.
+- On the interval [1.0 ; 3.0], the function f(x) = log2(x) equals zero...
+    at x = 1.0
+
+- On the interval [1.0 ; 3.0], the function f(x) = Regression [log2(x)] never equals zero.
+
+- On the interval [1.001 ; 2.999], the function f(x) = d/dx * (log2(x)) never equals zero.
+
+- On the interval [1.001 ; 2.999], the function f(x) = d/dx * (Regression [log2(x)]) never equals zero.
+
+
+
+===== INTEGRALS OF THE FUNCTIONS =====
+Note that the more points, the smallest the error and that floating point numbers may introduce errors. Furthermore, discontinuous functions may indicate really huge error margins.
+The x-axis limits on derivatives are slightly tighter because of the algorithm used. This may be counteracted by adding more points.
+
+- ∫f(x)dx = 1.8694974171793488
+    where f(x) = log2(x) on [1.0 ; 3.0]
+
+
+- ∫f(x)dx = 1.8694689665720188
+    where f(x) = Regression [log2(x)] on [1.0 ; 3.0]
+
+
+- ∫f(x)dx = 1.583424040388957
+    where f(x) = d/dx * (log2(x)) on [1.001 ; 2.999]
+
+
+- ∫f(x)dx = 1.5226382424208345
+    where f(x) = d/dx * (Regression [log2(x)]) on [1.001 ; 2.999]
+```
+
+
+
+
+
 
 
 ## Possible improvements
