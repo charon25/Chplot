@@ -1,6 +1,6 @@
 # Chplot - Arbitrary functions plotting and computations
 
-Chplot is a Python >= 3.9 module to plot any arbitrary mathematical expressions as well as data series from files, and compute its derivatives and integrals, where it equals zero, and much more!
+Chplot is a Python >= 3.9 module to plot any arbitrary mathematical expressions as well as data series from files, and compute its derivatives and integrals, where it equals zero, linear and non-linear regressions, and much more !
 
 <p align="center">
   <img src="resources/images/logo.png">
@@ -721,6 +721,21 @@ python -m chplot c -v c
 <p align="center">
   <img src="resources/images/06.png" width="45%" />
   <img src="resources/images/07.png" width="45%" />
+</p>
+
+---
+
+#### `--no-sn`
+
+The expression in the first command is interpreted as $x\times1.2\cdot10^{-1}=0.12x$, and as $1.2\mathrm{e}\cdot x - 1$ in the second.
+```bash
+python -m chplot "x*1.2e-1"
+python -m chplot "x*1.2e-1" --no-sn
+```
+
+<p align="center">
+  <img src="resources/images/38.png" width="45%" />
+  <img src="resources/images/39.png" width="45%" />
 </p>
 
 ---

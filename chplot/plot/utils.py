@@ -27,7 +27,7 @@ class Graph:
 
 ZerosList = list[tuple[float, float]]
 # Characters that won't appear in the RPN but are recognized
-NORMAL_UNRECOGNIZED_CHARACTERS = '( ),;'
+NORMAL_UNRECOGNIZED_CHARACTERS = '( ),;e'
 
 
 def plottable(arg_count: int = 1) -> Callable:
