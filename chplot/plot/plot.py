@@ -223,7 +223,6 @@ def _get_graph_parameters(parameters: PlotParameters, graph: Graph) -> dict[str,
 
 def _plot_graphs(parameters: PlotParameters, graphs: list[Graph]) -> None:
     if parameters.square_graph:
-        plt.figure(figsize=(6, 6))
         plt.gca().set_aspect('equal')
 
     for graph in graphs:

@@ -3,7 +3,7 @@
 Chplot is a Python >= 3.9 module to plot any arbitrary mathematical expressions as well as data series from files, and compute its derivatives and integrals, where it equals zero, and much more!
 
 <p align="center">
-  <img src="resources\logo.png">
+  <img src="resources/images/logo.png">
 </p>
 
 ## Installation
@@ -93,7 +93,7 @@ No option is mandatory.
 | `-z`<br>`--y-zero` | must_contain_zero: bool | $\emptyset$ | Forces the vertical axis to contain zero. Defaults to False. |
 | `-ylog`<br>`--ylog` | is_y_log: bool | $\emptyset$ | Forces a logarithmic scale on the vertical axis. If some vertical axis bounds are negative, will modify them. Defaults to False. |
 | `-xl`<br>`--x-label` | x_label: str | One string | Label of the horizontal axis. Defaults to nothing. |
-| `-y`<br>`--y-label` | y_label: str | One string | Label of the vertical axis. Defaults to nothing. |
+| `-yl`<br>`--y-label` | y_label: str | One string | Label of the vertical axis. Defaults to nothing. |
 | `-t`<br>`--title` | title: str | One string | Title of the graph. Defaults to nothing. |
 | `-rl`<br>`--remove-legend` | remove_legend: bool | $\emptyset$ | Removes the graph legend. Defaults to False. |
 | `--no-plot` | no_plot: bool | $\emptyset$ | Does not show the plot. However, does not prevent saving the figure. Defaults to False. |
@@ -671,6 +671,176 @@ TODO: mettre à jour ça à la fin
 
 
 ## Graph and computations examples
+
+Every file referenced in any commands can be found in the [resources](resources/files) folder.
+
+### CLI parameters
+
+#### Expressions
+
+```bash
+python -m chplot x
+python -m chplot x " -x+1" "x^2"
+```
+
+<p align="center">
+  <img src="resources/images/01.png" width="45%" />
+  <img src="resources/images/02.png" width="45%" />
+</p>
+
+```bash
+python -m chplot resources/files/equations.txt
+```
+
+<p align="center">
+  <img src="resources/images/03.png" width="45%" />
+</p>
+
+---
+
+#### `-v` parameter
+
+```bash
+python -m chplot t(t-1) -v t
+python -m chplot sin(var*3) -v var
+```
+
+<p align="center">
+  <img src="resources/images/04.png" width="45%" />
+  <img src="resources/images/05.png" width="45%" />
+</p>
+
+------
+
+Overriding constant with variable:
+```bash
+python -m chplot c
+python -m chplot c -v c
+```
+
+<p align="center">
+  <img src="resources/images/06.png" width="45%" />
+  <img src="resources/images/07.png" width="45%" />
+</p>
+
+---
+
+#### `-x`, `-y` parameters
+
+Using expressions in the horizontal axis bounds:
+```bash
+python -m chplot "x^2+x" -x -3 3
+python -m chplot x -x " -sqrt(2)" "zeta(3)"
+```
+
+<p align="center">
+  <img src="resources/images/08.png" width="45%" />
+  <img src="resources/images/09.png" width="45%" />
+</p>
+
+Using expressions in the vertical axis bounds and restricting the graph:
+```bash
+python -m chplot fac(x) -x 0 6
+python -m chplot fac(x) -x 0 6 -y 0.5 1.5
+```
+
+<p align="center">
+  <img src="resources/images/10.png" width="45%" />
+  <img src="resources/images/11.png" width="45%" />
+</p>
+
+---
+
+#### `-n`, `-i`, `--dis` parameters
+
+The `-i` parameter removes the line between points.
+```bash
+python -m chplot cos(x) -x 0 10 -n 20
+python -m chplot cos(x) -x 0 10 -i
+```
+
+<p align="center">
+  <img src="resources/images/12.png" width="45%" />
+  <img src="resources/images/13.png" width="45%" />
+</p>
+
+---
+
+```bash
+python -m chplot sqrt(x) -x 0 100 -i
+python -m chplot sqrt(x) -x 0 10 --dis 10 -n 35
+```
+
+<p align="center">
+  <img src="resources/images/14.png" width="45%" />
+  <img src="resources/images/15.png" width="45%" />
+</p>
+
+---
+
+#### `-xlog`, `-ylog` parameters
+
+```bash
+python -m chplot "2^x" -x 1 100 -ylog
+python -m chplot "ln(x)" -x 1 100 -xlog
+```
+
+<p align="center">
+  <img src="resources/images/16.png" width="45%" />
+  <img src="resources/images/17.png" width="45%" />
+</p>
+
+---
+
+Log axis will adjust the bounds to remove negative points:
+```bash
+python -m chplot "x^3.5" -x 1 100 -xlog -ylog
+python -m chplot "x" -x -5 5 -xlog
+python -m chplot "x" -x -5 -1 -xlog
+```
+
+<p align="center">
+  <img src="resources/images/18.png" width="45%" />
+  <img src="resources/images/19.png" width="45%" />
+</p>
+
+The second command generates a warning:
+```
+[CHPLOT] WARNING: x-axis scale is logarithmic, but its lower bound (-5.0) is negative, x-axis will be truncated to positive values
+```
+The third command generates en error:
+```
+[CHPLOT] CRITICAL: x-axis scale is logarithmic, but both its lower (-5.0) and upper (-1.0) bounds are negative, cannot graph anything
+```
+
+---
+
+#### `-z` parameter
+
+```bash
+python -m chplot "sin(x)+10" -x 1 10pi
+python -m chplot "sin(x)+10" -x 1 10pi -z
+```
+
+<p align="center">
+  <img src="resources/images/20.png" width="45%" />
+  <img src="resources/images/21.png" width="45%" />
+</p>
+
+---
+
+#### `-xl`, `-yl`, `-t`, `-rl` parameters
+
+```bash
+python -m chplot zeta(x) -x 1 10 -y 0 3
+python -m chplot zeta(x) -x 1 10 -y 0 3 -xl "Variable x" -yl "Zeta(x)" -t "Zeta function on [1 ; 10]" -rl
+```
+
+<p align="center">
+  <img src="resources/images/22.png" width="45%" />
+  <img src="resources/images/23.png" width="45%" />
+</p>
+
 
 
 ## Possible improvements
