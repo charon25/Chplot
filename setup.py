@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as file:
 
 setuptools.setup(
 	name="chplot",
-	version="1.0.0",
+	version="1.0.0-1",
 	author="Paul 'charon25' Kern",
 	description="Fast plot any math expression",
 	long_description=long_description,
