@@ -5,9 +5,9 @@ with open("README.md", "r", encoding="utf-8") as file:
 
 setuptools.setup(
 	name="chplot",
-	version="1.0.0-1",
+	version="1.0.1",
 	author="Paul 'charon25' Kern",
-	description="Fast plot any math expression",
+	description="Plot abritrary math expressions, and compute zeros, derivatives, integrals, regression and more!",
 	long_description=long_description,
     long_description_content_type='text/markdown',
 	python_requires=">=3.9",
