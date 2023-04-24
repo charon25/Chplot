@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as file:
 
 setuptools.setup(
 	name="chplot",
-	version="1.0.1",
+	version="1.0.1-1",
 	author="Paul 'charon25' Kern",
 	description="Plot abritrary math expressions, and compute zeros, derivatives, integrals, regression and more!",
 	long_description=long_description,

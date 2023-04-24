@@ -878,7 +878,7 @@ python -m chplot cbrt(x) -lw 5
 
 #### `-c` parameter
 
-If a constants require another one, define it after:
+If a constant requires another one, define it after:
 ```bash
 python -m chplot a*x+b -c a=2 b=7
 python -m chplot "a*x^2-b*x+1" -c a=8pi/19 "b=a^2-1"
@@ -920,9 +920,9 @@ python -m chplot -f resources\files\data.csv
 #### `-d` parameter
 
 ```bash
-python -m chplot x "x(x+1)" "x(x+1)(x+2)/2" "x(x+1)(x+2)(x+3)/6" -s resources\files\saved_data.csv
+python -m chplot x "x(x+1)" "x(x+1)(x+2)/2" "x(x+1)(x+2)(x+3)/6" -d resources\files\saved_data.csv
 ```
-The data can be found in [the saved_data.csv file](resources\files\saved_data.csv).
+The data can be found in [the saved_data.csv file](https://github.com/charon25/Chplot/blob/master/resources/files/saved_data.csv).
 
 ---
 
